@@ -1,26 +1,24 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg fixed-top">
-      <div class="container-fluid">
+    <nav class="navbar">
+      <div class="container">
         <a class="navbar-brand" href="#">
           <img src="@/assets/locksify-logo.png" height="50" class="d-inline-block align-top" alt="">
         </a>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-          <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-              <li class="nav-item">
+          <div class="nav-items">
+            <ul class="navbar-links">
+              <li class="nav-link">
                 <router-link to="/">Home</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-link">
                 <router-link to="/Login">Login</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-link">
                 <router-link to="/SignUp">Sign Up</router-link>
               </li>
             </ul>
           </div>
         </div>
-      </div>
     </nav>
 
     <router-view/>
@@ -52,15 +50,20 @@ nav {
 
   a {
     font-weight: bold;
-    color: #4e5d6cb2;
+    color: #2c3e5098;
 
     &.router-link-exact-active {
       color: #005792;
     }
   }
-  li.nav-item {
+  li.nav-link {
       padding: 10px 5px;
+      
     }
+}
+
+.container{
+  display: flex;
 }
 
 </style>
