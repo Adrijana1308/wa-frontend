@@ -46,7 +46,7 @@
 <style lang="scss">
 
 body {
-	background: linear-gradient(-45deg, #fff, #fff, #aee9ff, #e6e6e6);
+	background: linear-gradient(-45deg, #d2ebff, #fff, #c7f0ff, #fff);
 	background-size: 400% 400%;
   animation: gradient 15s ease infinite;
 	height: 100vh;
@@ -96,6 +96,14 @@ nav {
     display: none;
   }
 
+  .navbar-toggler{
+    color: #005792;
+    border-color: #005792;
+  }
+  .navbar-toggler-icon{
+    color: #005792;
+  }
+
   .toggler {
     display: block;
     width: 60px;
@@ -132,6 +140,7 @@ nav {
   .bi-moon {
     right: 5px;
     bottom: -11px;
+    color: #005792;
   }
 
   .dark {
@@ -151,11 +160,11 @@ nav {
   }
 
   .dark .toggler {
-    border-color: #FAF9F6;
+    border-color: #005792;
   }
 
   .dark .bi-sun {
-    color: #FAF9F6;
+    color: #005792;
   }
 
   .dark .navbar-toggler{

@@ -11,18 +11,6 @@
   </div>
 </template>
 
-<script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
-
-export default {
-  name: 'HomeView',
-  components: {
-    HelloWorld
-  }
-}
-</script>
-
 <style scoped>
 .home{
   margin-top: 10%;
@@ -48,13 +36,13 @@ export default {
   padding: 10px;
   font-size: 18px;
   background: transparent;
-  color: white;
+  color: #2c3e50;
+  width: 640px;
 }
 
 #search-box::placeholder {
-  color: #f5f2f2;
+  color: #005792;
 }
-
 
 #search-button {
   background-color: #005792;
@@ -65,12 +53,20 @@ export default {
 }
 
 #search-button:hover {
-  background-color: #555;
+  background-color: #0094f8;
   color: white;
 }
 
 .bi-search {
   color: white;
 }
+/* dovrsiti
+@media (max-width: 768px) {
+    #search-box{
+      width: 100%;
+      border-radius: 20px;
+      margin-right: 0;
+    }
+  }*/ 
 
 </style>
