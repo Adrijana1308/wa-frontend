@@ -46,9 +46,23 @@
 <style lang="scss">
 
 body {
+	background: linear-gradient(-45deg, #fff, #fff, #aee9ff, #e6e6e6);
 	background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
 	height: 100vh;
   transition: 0.5s;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 100%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 #app {
@@ -63,6 +77,7 @@ nav {
   padding: 30px;
   text-align: left;
   font-size: 18px;
+  background-color: #fff;
 
   a {
     font-weight: bold;
@@ -121,7 +136,9 @@ nav {
 
   .dark {
     transition: 0.5s;
+    background: linear-gradient(-45deg, #000000, #301934, #1b1212, #023020);
     background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
     height: 100vh;
   }
 
