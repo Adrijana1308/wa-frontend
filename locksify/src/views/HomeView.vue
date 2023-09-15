@@ -62,6 +62,28 @@
   color: white;
 }
 
+.dark p{
+  color: #FAF9F6;
+  text-shadow: none;
+}
+
+.dark #search-box {
+  border: 1px solid #FAF9F6;
+  color: #FAF9F6;
+}
+
+.dark #search-box::placeholder {
+  color: #FAF9F6;
+}
+
+.dark #search-button {
+  background-color: #FAF9F6;
+}
+
+.dark .bi-search {
+  color: #005792;
+}
+
 @media (max-width: 1440px){
     p{
       font-size: 200px;

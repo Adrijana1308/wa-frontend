@@ -146,7 +146,7 @@ nav {
 
   .dark {
     transition: 0.5s;
-    background: linear-gradient(-45deg, #000000, #301934, #1b1212, #023020);
+    background: linear-gradient(-45deg, #000000, #17153f, #080e36, #020430);
     background-size: 400% 400%;
     animation: gradient 15s ease infinite;
     height: 100vh;
@@ -168,9 +168,6 @@ nav {
     color: #005792;
   }
 
-  .dark .navbar-toggler{
-    background-color: #2c3e50;
-  }
   #checkbox:checked + .ball {
     transform: translate(29px, -50%);
   }
@@ -178,10 +175,17 @@ nav {
     padding-right: 15px;
   }
 
-  @media (max-width: 1440px){
-    p{
-      font-size: 200px;
-    }
-}
+  .dark .offcanvas-body{
+    background-color:#17153f;
+  }
+
+  .dark .offcanvas-header{
+    background-color:#17153f;
+    color:#FAF9F6;
+  }
+
+  .dark .nav-item{
+    color: #FAF9F6;
+  }
 
 </style>
