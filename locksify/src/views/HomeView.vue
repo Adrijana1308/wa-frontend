@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1>Book local beauty and wellness services</h1>
+    <p>Book local beauty and wellness services</p>
     <div class="search-container">
       <form action="/" method="get">
         <input type="text" id="search-box" placeholder="Search...">
@@ -12,13 +12,14 @@
 </template>
 
 <style scoped>
+
 .home{
-  margin-top: 10%;
+  margin-top: 13%;
   margin-left: 20%;
   margin-right: 20%;
 }
-.home h1 {
-  font-size: 90px;
+.home p {
+  font-size: 60px;
   padding: 10px;
   text-shadow: 1px 1px 2px #fff;
 }
@@ -60,13 +61,23 @@
 .bi-search {
   color: white;
 }
-/* dovrsiti
-@media (max-width: 768px) {
-    #search-box{
-      width: 100%;
-      border-radius: 20px;
-      margin-right: 0;
+
+@media (max-width: 1440px){
+    p{
+      font-size: 200px;
     }
-  }*/ 
+}
+
+@media (max-width: 1024px) {
+    #search-box{
+      width: 450px;
+    }
+}
+
+@media (max-width: 780px) {
+    #search-box{
+      width: 350px;
+    }
+}
 
 </style>

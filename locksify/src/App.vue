@@ -14,7 +14,7 @@
                   <i class="bi bi-moon"></i>
               </label>
             </form> 
-          <button class="navbar-toggler " type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
         </div>
@@ -44,6 +44,10 @@
 </template>
 
 <style lang="scss">
+
+html, body {
+  overflow: hidden;
+}
 
 body {
 	background: linear-gradient(-45deg, #d2ebff, #fff, #c7f0ff, #fff);
@@ -99,9 +103,6 @@ nav {
   .navbar-toggler{
     color: #005792;
     border-color: #005792;
-  }
-  .navbar-toggler-icon{
-    color: #005792;
   }
 
   .toggler {
@@ -176,5 +177,11 @@ nav {
   #lightOrDark{
     padding-right: 15px;
   }
+
+  @media (max-width: 1440px){
+    p{
+      font-size: 200px;
+    }
+}
 
 </style>
