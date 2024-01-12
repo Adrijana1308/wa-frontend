@@ -7,19 +7,18 @@
         <button type="submit" id="search-button"><i class="bi bi-search"></i></button>
       </form>
     </div>
-
   </div>
 </template>
 
 <style scoped>
 
 .home{
-  margin-top: 13%;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-top: 15%;
+  margin-left: 19%;
+  margin-right: 19%;
 }
 .home p {
-  font-size: 60px;
+  font-size: 80px;
   padding: 10px;
   text-shadow: 1px 1px 2px #fff;
 }
@@ -33,12 +32,12 @@
 #search-box {
   border: 1px solid #005792;
   border-radius: 20px 0 0 20px;
-  height: 50px;
+  height: 75px;
   padding: 10px;
-  font-size: 18px;
+  font-size: 17px;
   background: transparent;
   color: #2c3e50;
-  width: 640px;
+  width: 740px;
 }
 
 #search-box::placeholder {
@@ -49,7 +48,7 @@
   background-color: #005792;
   border: none;
   border-radius: 0 20px 20px 0;
-  height: 50px;
+  height: 75px;
   padding: 0 20px;
 }
 
