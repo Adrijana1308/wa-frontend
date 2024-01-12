@@ -32,12 +32,12 @@
 #search-box {
   border: 1px solid #005792;
   border-radius: 20px 0 0 20px;
-  height: 75px;
+  height: 70px;
   padding: 10px;
   font-size: 17px;
   background: transparent;
   color: #2c3e50;
-  width: 740px;
+  width: 1040px;
 }
 
 #search-box::placeholder {
@@ -48,7 +48,7 @@
   background-color: #005792;
   border: none;
   border-radius: 0 20px 20px 0;
-  height: 75px;
+  height: 70px;
   padding: 0 20px;
 }
 
