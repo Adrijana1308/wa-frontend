@@ -78,10 +78,12 @@ body {
 
 .ball1{
   background: #d890f5;
+  z-index: -1;
 }
 
 .ball2{
   background: #a570ef;
+  z-index: -1;
 }
 
 .home{
@@ -103,12 +105,11 @@ body {
 }
 
 #search-box {
-  border: 1px solid #005792;
-  border-radius: 20px 0 0 20px;
+  border: 10px solid #fafafa;
+  border-radius: 50px 0 0 50px;
   height: 70px;
   padding: 10px;
   font-size: 17px;
-  background: transparent;
   color: #2c3e50;
   width: 1040px;
 }
@@ -118,9 +119,9 @@ body {
 }
 
 #search-button {
-  background-color: #005792;
+  background-color: #fafafa;
   border: none;
-  border-radius: 0 20px 20px 0;
+  border-radius: 0 50px 50px 0;
   height: 70px;
   padding: 0 20px;
 }
@@ -131,7 +132,7 @@ body {
 }
 
 .bi-search {
-  color: white;
+  color: #005792;
 }
 
 .dark p{
