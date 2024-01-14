@@ -50,14 +50,14 @@ html, body {
 }
 
 body {
-	background: linear-gradient(-45deg, #d2ebff, #fff, #c7f0ff, #fff);
+	/*background: linear-gradient(-45deg, #d2ebff, #fff, #c7f0ff, #fff);*/
 	background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
+  /*animation: gradient 15s ease infinite;*/
 	height: 100vh;
   transition: 0.5s;
 }
 
-@keyframes gradient {
+/*@keyframes gradient {
 	0% {
 		background-position: 0% 100%;
 	}
@@ -67,7 +67,7 @@ body {
 	100% {
 		background-position: 0% 50%;
 	}
-}
+}*/
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
