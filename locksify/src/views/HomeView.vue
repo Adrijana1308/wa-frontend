@@ -55,6 +55,8 @@ export default {
 
 <style scoped>
 
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3&display=swap');
+
 body {
       margin: 0;
       overflow: hidden;
@@ -70,8 +72,8 @@ body {
 
 .shadow {
     position: absolute;
-    width: 450px;
-    height: 450px;
+    width: 350px;
+    height: 350px;
     border-radius: 50%;
     filter: blur(150px);
 }
@@ -90,12 +92,12 @@ body {
   margin-top: 15%;
   margin-left: 19%;
   margin-right: 19%;
-  position: relative;
 }
 .home p {
   font-size: 80px;
   padding: 10px;
   text-shadow: 1px 1px 2px #fff;
+  font-family: 'Caprasimo', serif;
 }
 .search-container {
   display: flex;
