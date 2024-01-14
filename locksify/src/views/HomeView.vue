@@ -2,8 +2,8 @@
   <div class="home">
     <p>Book local beauty and wellness services</p>
     <div class="balls-container">
-      <div ref="ball1" class="shadow ball"></div>
-      <div ref="ball2" class="shadow ball"></div>
+      <div ref="ball1" class="shadow ball ball1"></div>
+      <div ref="ball2" class="shadow ball ball2"></div>
     </div>
     <div class="search-container">
       <form action="/" method="get">
@@ -74,6 +74,14 @@ body {
     height: 450px;
     border-radius: 50%;
     filter: blur(150px);
+}
+
+.ball1{
+  background: #d890f5;
+}
+
+.ball2{
+  background: #a570ef;
 }
 
 .home{
