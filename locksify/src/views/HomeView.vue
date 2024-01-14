@@ -2,8 +2,8 @@
   <div class="home">
     <p>Book local beauty and wellness services</p>
     <div class="balls-container">
-      <div ref="ball1" class="shadow ball" :style="ball1Style"></div>
-      <div ref="ball2" class="shadow ball" :style="ball2Style"></div>
+      <div ref="ball1" class="shadow ball"></div>
+      <div ref="ball2" class="shadow ball"></div>
     </div>
     <div class="search-container">
       <form action="/" method="get">
@@ -16,22 +16,8 @@
 
 <script>
 export default {
-  data() {
-    return {
-      ball1Style: {
-        transition: "transform 5s ease-in-out",
-        transform: "translate(0px, 0px)",
-      },
-      ball2Style: {
-        transition: "transform 5s ease-in-out",
-        transform: "translate(0px, 0px)",
-      },
-    };
-  },
   mounted() {
-    this.$nextTick(() => {
-      this.animateBalls();
-    });
+    this.animateBalls();
   },
   methods: {
     getRandomPosition() {
@@ -43,18 +29,18 @@ export default {
 
       return { x: randomX, y: randomY };
     },
-    setRandomPosition(refName, style) {
+    setRandomPosition(refName) {
       const ball = this.$refs[refName];
-      if (ball && ball.$el) {
+      if (ball) {
         const { x, y } = this.getRandomPosition();
-        ball.$el.style.transition = style.transition;
-        ball.$el.style.transform = `translate(${x}px, ${y}px)`;
+        ball.style.transition = "transform 5s ease-in-out";
+        ball.style.transform = `translate(${x}px, ${y}px)`;
       }
     },
     animateBalls() {
       const moveBalls = () => {
-        this.setRandomPosition("ball1", this.ball1Style);
-        this.setRandomPosition("ball2", this.ball2Style);
+        this.setRandomPosition("ball1");
+        this.setRandomPosition("ball2");
 
         setTimeout(() => {
           requestAnimationFrame(moveBalls);
