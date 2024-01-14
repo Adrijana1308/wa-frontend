@@ -29,12 +29,14 @@ export default {
     };
   },
   mounted() {
-    this.animateBalls();
+    this.$nextTick(() => {
+      this.animateBalls();
+    });
   },
   methods: {
     getRandomPosition() {
-      const maxX = window.innerWidth - 250;
-      const maxY = window.innerHeight - 250;
+      const maxX = window.innerWidth - 550;
+      const maxY = window.innerHeight - 550;
 
       const randomX = Math.random() * (maxX - 0) + 0;
       const randomY = Math.random() * (maxY - 0) + 0;
@@ -42,9 +44,12 @@ export default {
       return { x: randomX, y: randomY };
     },
     setRandomPosition(refName, style) {
-      const { x, y } = this.getRandomPosition();
-      this.$refs[refName].style.transition = style.transition;
-      this.$refs[refName].style.transform = `translate(${x}px, ${y}px)`;
+      const ball = this.$refs[refName];
+      if (ball && ball.$el) {
+        const { x, y } = this.getRandomPosition();
+        ball.$el.style.transition = style.transition;
+        ball.$el.style.transform = `translate(${x}px, ${y}px)`;
+      }
     },
     animateBalls() {
       const moveBalls = () => {
@@ -65,33 +70,24 @@ export default {
 <style scoped>
 
 body {
-        margin: 0;
-        overflow: hidden;
+      margin: 0;
+      overflow: hidden;
 }
 
 .balls-container {
-  position: absolute;
-  width: 20%;
-  height: 40%;
-  top: 0;
-  left: 0;
+    position: absolute;
+    width: 20%;
+    height: 40%;
+    top: 0;
+    left: 0;
 }
 
 .shadow {
     position: absolute;
-    width: 250px;
-    height: 250px;
-    background-color: #3498db;
+    width: 450px;
+    height: 450px;
     border-radius: 50%;
-    filter: blur(50px);
-}
-
-#ball1{
-    background-color: #ae34eb;
-}
-
-#ball2{
-    background-color: #8334eb;
+    filter: blur(150px);
 }
 
 .home{
