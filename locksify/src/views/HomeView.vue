@@ -1,6 +1,10 @@
 <template>
   <div class="home">
     <p>Book local beauty and wellness services</p>
+    <div class="balls-container">
+      <div ref="ball1" class="shadow ball" :style="ball1Style"></div>
+      <div ref="ball2" class="shadow ball" :style="ball2Style"></div>
+    </div>
     <div class="search-container">
       <form action="/" method="get">
         <input type="text" id="search-box" placeholder="Search...">
@@ -10,12 +14,91 @@
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      ball1Style: {
+        transition: "transform 5s ease-in-out",
+        transform: "translate(0px, 0px)",
+      },
+      ball2Style: {
+        transition: "transform 5s ease-in-out",
+        transform: "translate(0px, 0px)",
+      },
+    };
+  },
+  mounted() {
+    this.animateBalls();
+  },
+  methods: {
+    getRandomPosition() {
+      const maxX = window.innerWidth - 250;
+      const maxY = window.innerHeight - 250;
+
+      const randomX = Math.random() * (maxX - 0) + 0;
+      const randomY = Math.random() * (maxY - 0) + 0;
+
+      return { x: randomX, y: randomY };
+    },
+    setRandomPosition(refName, style) {
+      const { x, y } = this.getRandomPosition();
+      this.$refs[refName].style.transition = style.transition;
+      this.$refs[refName].style.transform = `translate(${x}px, ${y}px)`;
+    },
+    animateBalls() {
+      const moveBalls = () => {
+        this.setRandomPosition("ball1", this.ball1Style);
+        this.setRandomPosition("ball2", this.ball2Style);
+
+        setTimeout(() => {
+          requestAnimationFrame(moveBalls);
+        }, 5000);
+      };
+
+      requestAnimationFrame(moveBalls);
+    },
+  },
+};
+</script>
+
 <style scoped>
+
+body {
+        margin: 0;
+        overflow: hidden;
+}
+
+.balls-container {
+  position: absolute;
+  width: 20%;
+  height: 40%;
+  top: 0;
+  left: 0;
+}
+
+.shadow {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background-color: #3498db;
+    border-radius: 50%;
+    filter: blur(50px);
+}
+
+#ball1{
+    background-color: #ae34eb;
+}
+
+#ball2{
+    background-color: #8334eb;
+}
 
 .home{
   margin-top: 15%;
   margin-left: 19%;
   margin-right: 19%;
+  position: relative;
 }
 .home p {
   font-size: 80px;
@@ -100,5 +183,4 @@
       width: 350px;
     }
 }
-
 </style>
