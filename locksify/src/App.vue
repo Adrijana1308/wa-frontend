@@ -148,8 +148,10 @@ nav {
     transition: 0.5s;
     background: linear-gradient(-45deg, #000000, #17153f, #080e36, #020430);
     background-size: 400% 400%;
-    animation: gradient 15s ease infinite;
+    //animation: gradient 15s ease infinite;
     height: 100vh;
+    background-image: url("assets/PanoramicPurple.jpeg");
+    background-size: cover;
   }
 
   .dark > * {
