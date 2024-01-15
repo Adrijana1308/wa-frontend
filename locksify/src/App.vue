@@ -70,7 +70,7 @@ nav {
   padding: 30px;
   text-align: left;
   font-size: 20px;
-  background-color: #fff;
+  background-color: transparent;
   font-family: 'Caprasimo', serif;
 
   a {
