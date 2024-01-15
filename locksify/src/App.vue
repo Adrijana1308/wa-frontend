@@ -45,29 +45,18 @@
 
 <style lang="scss">
 
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3&display=swap');
+
+
 html, body {
   overflow: hidden;
 }
 
 body {
-	/*background: linear-gradient(-45deg, #d2ebff, #fff, #c7f0ff, #fff);*/
 	background-size: 400% 400%;
-  /*animation: gradient 15s ease infinite;*/
 	height: 100vh;
   transition: 0.5s;
 }
-
-/*@keyframes gradient {
-	0% {
-		background-position: 0% 100%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
-}*/
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -80,15 +69,17 @@ body {
 nav {
   padding: 30px;
   text-align: left;
-  font-size: 18px;
+  font-size: 20px;
   background-color: #fff;
+  font-family: 'Caprasimo', serif;
 
   a {
     font-weight: bold;
-    color: #005792;
+    color: #333;
+    text-decoration: none;
 
     &.router-link-exact-active {
-      color: #0094f8;
+      color: #a570ef;
     }
   }
   li.nav-item {
@@ -101,15 +92,15 @@ nav {
   }
 
   .navbar-toggler{
-    color: #005792;
-    border-color: #005792;
+    color: #333;
+    border-color: #333;
   }
 
   .toggler {
     display: block;
     width: 60px;
     height: 31px;
-    border: 1px solid #005792;
+    border: 1px solid #333;
     border-radius: 30px;
     position: relative;
     cursor: pointer;
@@ -125,7 +116,7 @@ nav {
     display: inline-block;
     width: 26px;
     height: 26px;
-    background-color: #005792;
+    background-color: #333;
     border-radius: 50%;
     left: 1px;
     z-index: 10;
@@ -141,7 +132,7 @@ nav {
   .bi-moon {
     right: 5px;
     bottom: -11px;
-    color: #005792;
+    color: #333;
   }
 
   .dark {

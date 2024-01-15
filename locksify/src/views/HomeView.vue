@@ -55,8 +55,6 @@ export default {
 
 <style scoped>
 
-@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3&display=swap');
-
 body {
       margin: 0;
       overflow: hidden;
