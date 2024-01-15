@@ -105,7 +105,7 @@ body {
 }
 
 #search-box {
-  border: 10px solid #fafafa;
+  border: 10px solid #d890f530;
   border-radius: 50px 0 0 50px;
   height: 70px;
   padding: 10px;
@@ -115,11 +115,11 @@ body {
 }
 
 #search-box::placeholder {
-  color: #005792;
+  color: #2c3e50;
 }
 
 #search-button {
-  background-color: #fafafa;
+  background-color: #2c3e50;
   border: none;
   border-radius: 0 50px 50px 0;
   height: 70px;
@@ -127,12 +127,15 @@ body {
 }
 
 #search-button:hover {
-  background-color: #0094f8;
-  color: white;
+  background-color: white;
 }
 
 .bi-search {
-  color: #005792;
+  color: white;
+}
+
+.bi-search:hover {
+  color: #2c3e50;
 }
 
 .dark p{

@@ -75,7 +75,7 @@ nav {
 
   a {
     font-weight: bold;
-    color: #333;
+    color: #2c3e50;
     text-decoration: none;
 
     &.router-link-exact-active {
@@ -92,15 +92,15 @@ nav {
   }
 
   .navbar-toggler{
-    color: #333;
-    border-color: #333;
+    color: #2c3e50;
+    border-color: #2c3e50;
   }
 
   .toggler {
     display: block;
     width: 60px;
     height: 31px;
-    border: 1px solid #333;
+    border: 1px solid #2c3e50;
     border-radius: 30px;
     position: relative;
     cursor: pointer;
@@ -116,7 +116,7 @@ nav {
     display: inline-block;
     width: 26px;
     height: 26px;
-    background-color: #333;
+    background-color: #2c3e50;
     border-radius: 50%;
     left: 1px;
     z-index: 10;
@@ -132,7 +132,7 @@ nav {
   .bi-moon {
     right: 5px;
     bottom: -11px;
-    color: #333;
+    color: #2c3e50;
   }
 
   .dark {
