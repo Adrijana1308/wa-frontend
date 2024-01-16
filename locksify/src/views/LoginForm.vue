@@ -2,6 +2,7 @@
   <div class="login-container">
     <div class="login-window">
       <h1 class="heading">Login</h1>
+      <p class="Welcome">Welcome back, glad to see you again!</p>
       <form @submit.prevent="login" class="login-form">
       <!--  <label for="username">Username:</label> --> <!-- Labeli su zakomentirani radi testiranja i provjere -->
         <input v-model="username" type="text" id="email" placeholder="Email" required>
@@ -10,12 +11,19 @@
         <input v-model="password" type="password" id="password" placeholder="Password" required>
 
         <button type="submit">Sign in</button>
+        <button type="submit" class="register">Register now!</button>
       </form>
     </div>
   </div>
 </template>
 
 <style scoped>
+
+@keyframes pulse {
+  0% {transform: scale(1);}
+  50% {transform: scale(1.1);}
+  100% {transform: scale(1);}
+}
  .login-container{
   display: flex;
   align-items: center;
@@ -106,12 +114,27 @@ button {
   padding: 15px;
   border: none;
   border-radius: 5px;
+  transition: .5s;
   text-align: center;
 }
+
+.register {
+  background-color: #d890f530;
+}
+
+.dark .register{
+  background-color: #a570ef;
+}
+
 button:hover{
   color: rgba(255, 255, 255, .4);
   transform: scale(1.1);
   transition: .1s ease-in-out; 
+}
+
+.register:hover{
+  color: black;
+  animation: pulse 1s infinite;
 }
 
 </style>
