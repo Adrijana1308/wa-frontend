@@ -154,7 +154,7 @@ body {
   width: 80%;
   margin-left: 10px;
   font-size: 20px;
-  font-family: 'Caprasimo', serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .search-box::placeholder {
@@ -167,6 +167,7 @@ body {
   border: none;
   border-radius: 50px;
   padding: 10px 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
 .search-button:hover {

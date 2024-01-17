@@ -46,7 +46,7 @@
 <style lang="scss">
 
 @import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
 html, body {
   overflow: hidden;
@@ -71,7 +71,7 @@ nav {
   text-align: left;
   font-size: 20px;
   background-color: transparent;
-  font-family: 'Caprasimo', serif;
+  font-family: 'Poppins', sans-serif;
 
   a {
     font-weight: bold;
