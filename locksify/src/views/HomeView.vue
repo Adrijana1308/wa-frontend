@@ -134,8 +134,9 @@ body {
 }
 
 .input-container{
-  width: 200px;
-  height: 60px;
+  width: 21%;
+  height: 30px;
+  border-right: 1px solid #2c3e5069;
 }
 
 .form{
@@ -213,6 +214,7 @@ body {
     .input-container{
         width: 100%;
         height: 60px;
+        border: none;
     }
 
     .form{
