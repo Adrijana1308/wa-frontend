@@ -168,10 +168,6 @@ nav {
     padding-right: 15px;
   }
 
-/*  .dark .offcanvas-body{
-    background-color:#17153f;  //Adri ovo rješava problem sa linijom Dark mode-a, ti vidi dali brišemo ili ne
-  }*/
-
   .dark .offcanvas-header{
     background-color:#17153f;
     color:#FAF9F6;
