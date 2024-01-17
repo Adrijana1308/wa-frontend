@@ -9,25 +9,25 @@
        <div class="input-container"> 
           <form class="form" action="/" method="get">
             <i class="bi bi-search"></i>
-            <input type="text" class="search-box" placeholder="Search...">
+            <input type="text" class="search-box" placeholder="Any treatment or venue">
           </form>
         </div>
         <div class="input-container"> 
           <form class="form" action="/" method="get">
-            <i class="bi bi-search"></i>
-            <input type="text" class="search-box" placeholder="Search...">
+            <i class="bi bi-geo-alt-fill"></i>
+            <input type="text" class="search-box" placeholder="Current location">
           </form>
         </div>
         <div class="input-container"> 
           <form class="form" action="/" method="get">
-            <i class="bi bi-search"></i>
-            <input type="text" class="search-box" placeholder="Search...">
+            <i class="bi bi-calendar"></i>
+            <input type="text" class="search-box" placeholder="Any date">
           </form>
         </div>
         <div class="input-container"> 
           <form class="form" action="/" method="get">
-            <i class="bi bi-search"></i>
-            <input type="text" class="search-box" placeholder="Search...">
+            <i class="bi bi-clock-fill"></i>
+            <input type="text" class="search-box" placeholder="Any time">
           </form>
         </div>
         <button type="submit" class="search-button">Search</button>
@@ -158,22 +158,14 @@ body {
 
 .search-button {
   background-color: #2c3e50;
+  color: #fff;
   border: none;
-  border-radius: 0 50px 50px 0;
-  height: 70px;
-  padding: 0 20px;
+  border-radius: 50px;
+  padding: 10px 20px;
 }
 
 .search-button:hover {
   background-color: white;
-}
-
-.bi-search {
-  color: white;
-}
-
-.bi-search:hover {
-  color: #2c3e50;
 }
 
 .dark p{
@@ -199,20 +191,71 @@ body {
 }
 
 @media (max-width: 1440px){
+    .search-container{
+        flex-direction: column;
+        gap: 10px;
+        width: 60%;
+        height: 60%;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .input-container{
+        width: 100%;
+        height: 60px;
+    }
+
+    .form{
+        border: 1px solid #2c3e5069;
+        border-radius: 10px;
+        height: 80%;
+    }
+
+    .search-box{
+        margin-left: 20px;
+        border: none;
+    }
+
+    .search-button{
+        border-radius: 10px;
+        padding: 10px 20px;
+        width: 100%;
+    }
+
     p{
       font-size: 200px;
     }
 }
 
 @media (max-width: 1024px) {
-    #search-box{
-      width: 450px;
+    .search-container{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 60%;
+        height: 60%;
+        border-radius: 20px;
+    }
+
+    .input-container{
+        width: 100%;
+        height: 60px;
     }
 }
 
 @media (max-width: 780px) {
-    #search-box{
-      width: 350px;
+    .search-container{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 60%;
+        height: 60%;
+        border-radius: 20px;
+    }
+
+    .input-container{
+        width: 100%;
+        height: 60px;
     }
 }
 </style>
