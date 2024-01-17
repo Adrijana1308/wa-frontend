@@ -109,8 +109,9 @@ body {
 
 .home{
   margin-top: 15%;
-  margin-left: 19%;
+  margin-left: 10%;
   margin-right: 19%;
+  width: 80%;
 }
 .home p {
   font-size: 80px;
@@ -121,11 +122,12 @@ body {
 .search-container {
   display: flex;
   gap: 10px;
-  width: 60%;
-  height: 70px;
+  width: 100%;
+  height: 90px;
   margin: auto;
-  border: 10px solid #d890f530;
+  border: 7px solid #af74c636;
   border-radius: 50px;
+  background: #fff;
   padding: 5px;
   justify-content: space-evenly;
   align-items: center;
@@ -143,6 +145,7 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  background: #fff;
 }
 
 .search-box {
@@ -150,6 +153,8 @@ body {
   height: 80%;
   width: 80%;
   margin-left: 10px;
+  font-size: 20px;
+  font-family: 'Caprasimo', serif;
 }
 
 .search-box::placeholder {
@@ -166,6 +171,10 @@ body {
 
 .search-button:hover {
   background-color: white;
+}
+
+.bi{
+  font-size: 20px;
 }
 
 .dark p{
