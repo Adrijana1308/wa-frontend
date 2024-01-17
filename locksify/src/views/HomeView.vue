@@ -24,7 +24,7 @@
             <input type="text" class="search-box" placeholder="Any date">
           </form>
         </div>
-        <div class="input-container"> 
+        <div class="input-container time"> 
           <form class="form" action="/" method="get">
             <i class="bi bi-clock-fill"></i>
             <input type="text" class="search-box" placeholder="Any time">
@@ -114,8 +114,9 @@ body {
   width: 80%;
 }
 .home p {
-  font-size: 80px;
+  font-size: 100px;
   padding: 10px;
+  padding-top: 0;
   text-shadow: 1px 1px 2px #fff;
   font-family: 'Caprasimo', serif;
 }
@@ -137,6 +138,10 @@ body {
   width: 21%;
   height: 30px;
   border-right: 1px solid #2c3e5069;
+}
+
+.time{
+  border-right: none;
 }
 
 .form{
@@ -163,12 +168,13 @@ body {
 }
 
 .search-button {
-  background-color: #2c3e50;
+  background-color: #000;
   color: #fff;
   border: none;
   border-radius: 50px;
-  padding: 10px 20px;
+  padding: 15px 30px;
   font-family: 'Poppins', sans-serif;
+  font-size: 19px;
 }
 
 .search-button:hover {
