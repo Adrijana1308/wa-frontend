@@ -39,7 +39,7 @@
  }
 
 .dark .login-window {
-  padding: 125px;
+  padding: 90px;
   background-color: rgba(173, 216, 230, 0.1); /* Adjust the color and opacity as needed */
   border: rgba(173, 216, 230, 0.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -48,7 +48,7 @@
 }
 
 .login-window{
-  padding: 125px;
+  padding: 90px;
   background-color: blanchedalmond;
   border: 10px solid #d890f530;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
