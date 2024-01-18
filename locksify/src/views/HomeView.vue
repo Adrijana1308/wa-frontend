@@ -6,10 +6,31 @@
       <div ref="ball2" class="shadow ball ball2"></div>
     </div>
     <div class="search-container">
-      <form action="/" method="get">
-        <input type="text" id="search-box" placeholder="Search...">
-        <button type="submit" id="search-button"><i class="bi bi-search"></i></button>
-      </form>
+       <div class="input-container"> 
+          <form class="form" action="/" method="get">
+            <i class="bi bi-search"></i>
+            <input type="text" class="search-box" placeholder="Any treatment or venue">
+          </form>
+        </div>
+        <div class="input-container"> 
+          <form class="form" action="/" method="get">
+            <i class="bi bi-geo-alt-fill"></i>
+            <input type="text" class="search-box" placeholder="Current location">
+          </form>
+        </div>
+        <div class="input-container"> 
+          <form class="form" action="/" method="get">
+            <i class="bi bi-calendar"></i>
+            <input type="text" class="search-box" placeholder="Any date">
+          </form>
+        </div>
+        <div class="input-container time"> 
+          <form class="form" action="/" method="get">
+            <i class="bi bi-clock-fill"></i>
+            <input type="text" class="search-box" placeholder="Any time">
+          </form>
+        </div>
+        <button type="submit" class="search-button">Search</button>
     </div>
   </div>
 </template>
@@ -88,54 +109,80 @@ body {
 
 .home{
   margin-top: 15%;
-  margin-left: 19%;
+  margin-left: 10%;
   margin-right: 19%;
+  width: 80%;
 }
 .home p {
-  font-size: 80px;
+  font-size: 100px;
   padding: 10px;
+  padding-top: 0;
   text-shadow: 1px 1px 2px #fff;
   font-family: 'Caprasimo', serif;
 }
 .search-container {
   display: flex;
-  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 90px;
+  margin: auto;
+  border: 7px solid #af74c636;
+  border-radius: 50px;
+  background: #fff;
+  padding: 5px;
+  justify-content: space-evenly;
   align-items: center;
+}
+
+.input-container{
+  width: 21%;
+  height: 30px;
+  border-right: 1px solid #2c3e5069;
+}
+
+.time{
+  border-right: none;
+}
+
+.form{
+  display: flex;
+  width: 100%;
   height: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
 }
 
-#search-box {
-  border: 10px solid #d890f530;
-  border-radius: 50px 0 0 50px;
-  height: 70px;
-  padding: 10px;
-  font-size: 17px;
-  color: #2c3e50;
-  width: 1040px;
-}
-
-#search-box::placeholder {
-  color: #2c3e50;
-}
-
-#search-button {
-  background-color: #2c3e50;
+.search-box {
   border: none;
-  border-radius: 0 50px 50px 0;
-  height: 70px;
-  padding: 0 20px;
+  height: 80%;
+  width: 80%;
+  margin-left: 10px;
+  font-size: 20px;
+  font-family: 'Poppins', sans-serif;
 }
 
-#search-button:hover {
+.search-box::placeholder {
+  color: #2c3e50;
+}
+
+.search-button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 15px 30px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 19px;
+}
+
+.search-button:hover {
   background-color: white;
 }
 
-.bi-search {
-  color: white;
-}
-
-.bi-search:hover {
-  color: #2c3e50;
+.bi{
+  font-size: 20px;
 }
 
 .dark p{
@@ -161,20 +208,72 @@ body {
 }
 
 @media (max-width: 1440px){
+    .search-container{
+        flex-direction: column;
+        gap: 10px;
+        width: 60%;
+        height: 60%;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .input-container{
+        width: 100%;
+        height: 60px;
+        border: none;
+    }
+
+    .form{
+        border: 1px solid #2c3e5069;
+        border-radius: 10px;
+        height: 80%;
+    }
+
+    .search-box{
+        margin-left: 20px;
+        border: none;
+    }
+
+    .search-button{
+        border-radius: 10px;
+        padding: 10px 20px;
+        width: 100%;
+    }
+
     p{
       font-size: 200px;
     }
 }
 
 @media (max-width: 1024px) {
-    #search-box{
-      width: 450px;
+    .search-container{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 60%;
+        height: 60%;
+        border-radius: 20px;
+    }
+
+    .input-container{
+        width: 100%;
+        height: 60px;
     }
 }
 
 @media (max-width: 780px) {
-    #search-box{
-      width: 350px;
+    .search-container{
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 60%;
+        height: 60%;
+        border-radius: 20px;
+    }
+
+    .input-container{
+        width: 100%;
+        height: 60px;
     }
 }
 </style>
