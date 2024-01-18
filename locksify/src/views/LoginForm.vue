@@ -5,7 +5,12 @@
       <p class="Welcome">Welcome back, glad to see you again!</p>
       <form @submit.prevent="login" class="login-form">
         <input v-model="username" type="text" id="email" placeholder="Email" required>
-        <input v-model="password" type="password" id="password" placeholder="Password" required>
+        <div class="password-container">
+          <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
+          <span @click="togglePasswordvisibility" class="password-toggle">
+            <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
+          </span>
+        </div>
         <button type="submit">Sign in</button>
         <button type="submit" class="register">Register now!</button>
       </form>
@@ -140,6 +145,18 @@ button:hover{
   animation: pulse 1s infinite;
 }
 
+.password-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 36%;
+  right: 10px;
+  transform: translate(-50%);
+  cursor: pointer;
+}
+
 </style>
 
 <script>
@@ -149,11 +166,21 @@ export default {
     return {
       username: "",
       password: "",
+      showPassword: false,
     };
   },
   methods: {
-    
-    
+    togglePasswordvisibility(){
+      this.showPassword = !this.showPassword;
+    },
+    mounted(){
+      this.$nextTick(() => {
+        const passwordInput = document.getElementById('password');
+        if(passwordInput){
+          passwordInput.setAttribute('autocomplete', 'off');
+        }
+      });
+    },
     login() {
       // Handle login logic here
     },
