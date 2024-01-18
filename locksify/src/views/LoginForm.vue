@@ -4,19 +4,19 @@
       <h1 class="heading">Login</h1>
       <p class="Welcome">Welcome back, glad to see you again!</p>
       <form @submit.prevent="login" class="login-form">
-      <!--  <label for="username">Username:</label> --> <!-- Labeli su zakomentirani radi testiranja i provjere -->
         <input v-model="username" type="text" id="email" placeholder="Email" required>
-
-      <!--  <label for="password">Password:</label> -->
-        <input v-model="password" type="password" id="password" placeholder="Password" required>
-
+        <div class="password-container">
+          <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
+          <span @click="togglePasswordvisibility" class="password-toggle">
+            <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
+          </span>
+        </div>
         <button type="submit">Sign in</button>
         <button type="submit" class="register">Register now!</button>
       </form>
     </div>
   </div>
 </template>
-
 <style scoped>
 
 @keyframes pulse {
@@ -61,10 +61,6 @@
   flex-direction: column;
 }
 
-label {
-  margin-bottom: 5px;
-}
-
 .dark input{
   width: 100%;
   height: 35px;
@@ -73,10 +69,12 @@ label {
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.3);
   border: none;
-  color: #ffffff;
+  color: #000000;
   padding: 15px;
   transition: .5s;
   text-transform: capitalize;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 input{
@@ -87,20 +85,30 @@ input{
   border-radius: 5px;
   background: rgba(255, 255, 255, 1);
   border: none;
-  color: #ffffff;
+  color: #000000;
   padding: 15px;
   transition: .5s;
   text-transform: capitalize;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 input:hover{
-  color: rgba(255, 255, 255, .4);
+  color: rgba(0, 0, 0, 1);
   transform: scale(1.1);
   transition: .1s ease-in-out;
+  line-height: 1;
+}
+
+.dark input:hover{
+  color: rgba(0, 0, 0, 1);
+  transform: scale(1.1);
+  transition: .1s ease-in-out;
+  line-height: 1;
 }
 
 .dark input::placeholder{
-  color: white;
+  color: black;
 }
 
  input::placeholder{
@@ -137,6 +145,18 @@ button:hover{
   animation: pulse 1s infinite;
 }
 
+.password-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 36%;
+  right: 10px;
+  transform: translate(-50%);
+  cursor: pointer;
+}
+
 </style>
 
 <script>
@@ -146,9 +166,21 @@ export default {
     return {
       username: "",
       password: "",
+      showPassword: false,
     };
   },
   methods: {
+    togglePasswordvisibility(){
+      this.showPassword = !this.showPassword;
+    },
+    mounted(){
+      this.$nextTick(() => {
+        const passwordInput = document.getElementById('password');
+        if(passwordInput){
+          passwordInput.setAttribute('autocomplete', 'off');
+        }
+      });
+    },
     login() {
       // Handle login logic here
     },
