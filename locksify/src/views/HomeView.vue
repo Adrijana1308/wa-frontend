@@ -9,13 +9,13 @@
        <div class="input-container"> 
           <form class="form" action="/" method="get">
             <i class="bi bi-search"></i>
-            <input type="text" class="search-box" placeholder="Any treatment or venue">
+            <input type="text" class="search-box" placeholder="Any salon">
           </form>
         </div>
         <div class="input-container"> 
           <form class="form" action="/" method="get">
             <i class="bi bi-geo-alt-fill"></i>
-            <input type="text" class="search-box" placeholder="Current location">
+            <input type="text" class="search-box" placeholder="Any location">
           </form>
         </div>
         <div class="input-container"> 
@@ -78,7 +78,7 @@ export default {
 
 body {
       margin: 0;
-      overflow: hidden;
+      overflow-y: auto;
 }
 
 .balls-container {
@@ -108,10 +108,9 @@ body {
 }
 
 .home{
-  margin-top: 15%;
-  margin-left: 10%;
-  margin-right: 19%;
-  width: 80%;
+  width: 100%;
+  padding: 10%;
+  overflow-y: auto;
 }
 .home p {
   font-size: 100px;
@@ -124,7 +123,7 @@ body {
   display: flex;
   gap: 10px;
   width: 100%;
-  height: 90px;
+  height: auto;
   margin: auto;
   border: 7px solid #af74c636;
   border-radius: 50px;
@@ -165,6 +164,10 @@ body {
 
 .search-box::placeholder {
   color: #2c3e50;
+}
+
+.search-box:focus {
+  outline: none;
 }
 
 .search-button {
@@ -212,7 +215,7 @@ body {
         flex-direction: column;
         gap: 10px;
         width: 60%;
-        height: 60%;
+        height: auto;
         border-radius: 10px;
         padding: 20px;
     }
@@ -226,7 +229,7 @@ body {
     .form{
         border: 1px solid #2c3e5069;
         border-radius: 10px;
-        height: 80%;
+        height: 100%;
     }
 
     .search-box{
@@ -251,13 +254,16 @@ body {
         flex-direction: column;
         gap: 10px;
         width: 60%;
-        height: 60%;
+        height: auto;
         border-radius: 20px;
     }
 
     .input-container{
         width: 100%;
         height: 60px;
+    }
+    .home p{
+      font-size: 70px;
     }
 }
 
@@ -267,13 +273,53 @@ body {
         flex-direction: column;
         gap: 10px;
         width: 60%;
-        height: 60%;
+        height: auto;
         border-radius: 20px;
     }
 
     .input-container{
         width: 100%;
         height: 60px;
+    }
+    .home p{
+      font-size: 50px;
+    }
+
+    .search-box{
+      font-size: 15px;
+    }
+
+    .search-button{
+      font-size: 15px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    .home{
+      margin-top: 10%;
+    }
+
+    .home p{
+      font-size: 30px;
+    }
+
+    .search-container{
+        width: 100%;
+        height: auto;
+        border-radius: 20px;
+    }
+
+    .bi{
+        font-size: 12px;
+    }
+
+    .search-box{
+      font-size: 12px;
+    }
+
+    .search-button{
+      font-size: 12px;
     }
 }
 </style>
