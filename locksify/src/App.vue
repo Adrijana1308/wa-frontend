@@ -177,4 +177,23 @@ nav {
     color: #FAF9F6;
   }
 
+@media (max-width: 426px){
+  
+  nav {
+    padding: 30px;
+    text-align: left;
+  }
+
+  .d-inline-block{
+    height: 40px;
+  }
+
+  .nav-item{
+    font-size: 15px;
+  }
+  
+  .navbar-toggler{
+    height: 40px;
+  }
+}
 </style>
