@@ -166,6 +166,10 @@ body {
   color: #2c3e50;
 }
 
+.search-box:focus {
+  outline: none;
+}
+
 .search-button {
   background-color: #000;
   color: #fff;
@@ -287,6 +291,35 @@ body {
 
     .search-button{
       font-size: 15px;
+    }
+}
+
+@media (max-width: 426px) {
+
+    .home{
+      margin-top: 10%;
+    }
+
+    .home p{
+      font-size: 30px;
+    }
+
+    .search-container{
+        width: 100%;
+        height: auto;
+        border-radius: 20px;
+    }
+
+    .bi{
+        font-size: 12px;
+    }
+
+    .search-box{
+      font-size: 12px;
+    }
+
+    .search-button{
+      font-size: 12px;
     }
 }
 </style>
