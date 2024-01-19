@@ -1,52 +1,215 @@
 <template>
-    <div class="container">
-     <div class="row">
-         <div class="col-sm">
-           <form class="row g-3">
-               <div class="col-md-6">
-               <label for="inputEmail4" class="form-label">Email</label>
-               <input type="email" class="form-control" id="inputEmail4">
-               </div>
-               <div class="col-md-6">
-               <label for="inputPassword4" class="form-label">Password</label>
-               <input type="password" class="form-control" id="inputPassword4">
-               </div>
-               <div class="col-12">
-               <label for="inputAddress" class="form-label">Address</label>
-               <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-               </div>
-               <div class="col-12">
-               <label for="inputAddress2" class="form-label">Address 2</label>
-               <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-               </div>
-               <div class="col-md-6">
-               <label for="inputCity" class="form-label">City</label>
-               <input type="text" class="form-control" id="inputCity">
-               </div>
-               <div class="col-md-4">
-               <label for="inputState" class="form-label">State</label>
-               <select id="inputState" class="form-select">
-                   <option selected>Choose...</option>
-                   <option>...</option>
-               </select>
-               </div>
-               <div class="col-md-2">
-               <label for="inputZip" class="form-label">Zip</label>
-               <input type="text" class="form-control" id="inputZip">
-               </div>
-               <div class="col-12">
-               <div class="form-check">
-                   <input class="form-check-input" type="checkbox" id="gridCheck">
-                   <label class="form-check-label" for="gridCheck">
-                   Check me out
-                   </label>
-               </div>
-               </div>
-               <div class="col-12">
-               <button type="submit" class="btn btn-primary">Sign in</button>
-               </div>
-           </form>
-           </div>
-       </div>
-   </div>
+  <div class="login-container">
+    <div class="login-window">
+      <h1 class="heading">Register</h1>
+      <p class="Welcome">Welcome, let's get you set up!</p>
+      <form @submit.prevent="signup" class="signup-form">
+        <input v-model="name" type="text" id="name" placeholder="Full Name" required>
+        
+        <div class="password-container">
+          <input v-model="email" type="email" id="email" placeholder="Email" required>
+          <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
+          <span @click="togglePasswordvisibility" class="password-toggle">
+            <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
+          </span>
+          
+          <input v-model="passwordConfirmation" :type="showPasswordConfirmation ? 'text' : 'passwordConfirmation'" id="password-confirmation" placeholder="Confirm Password" required>
+          <span @click="togglePasswordConfirmationvisibility" class="password-toggle">
+            <i :class="['bi', showPasswordConfirmation ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
+          </span>
+          
+        </div>
+        <button type="submit">Sign in</button>
+        <button type="submit" class="register">Register now!</button>
+      </form>
+    </div>
+  </div>
 </template>
+<style scoped>
+
+@keyframes pulse {
+  0% {transform: scale(1);}
+  50% {transform: scale(1.1);}
+  100% {transform: scale(1);}
+}
+.login-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.dark .login-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.dark .login-window {
+  padding: 90px;
+  background-color: rgba(173, 216, 230, 0.1); /* Adjust the color and opacity as needed */
+  border: rgba(173, 216, 230, 0.1);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px); /* Adjust the blur radius as needed */
+  border-radius: 15px;
+}
+
+.login-window{
+  padding: 90px;
+  background-color: blanchedalmond;
+  border: 10px solid #d890f530;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+
+.login-form {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.dark input{
+  width: 100%;
+  height: 35px;
+  display: block;
+  margin: 20px auto;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: #000000;
+  padding: 15px;
+  transition: .5s;
+  text-transform: capitalize;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+input{
+  width: 100%;
+  height: 35px;
+  display: block;
+  margin: 20px auto;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  border: none;
+  color: #000000;
+  padding: 15px;
+  transition: .5s;
+  text-transform: capitalize;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+input:hover{
+  color: rgba(0, 0, 0, 1);
+  transform: scale(1.1);
+  transition: .1s ease-in-out;
+  line-height: 1;
+}
+
+.dark input:hover{
+  color: rgba(0, 0, 0, 1);
+  transform: scale(1.1);
+  transition: .1s ease-in-out;
+  line-height: 1;
+}
+
+.dark input::placeholder{
+  color: black;
+}
+
+input::placeholder{
+  color: black;
+}
+
+button {
+  margin: 10px auto;
+  display: block;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  transition: .5s;
+  text-align: center;
+}
+
+.register {
+  background-color: #d890f530;
+}
+
+.dark .register{
+  background-color: #a570ef;
+}
+
+button:hover{
+  color: rgba(255, 255, 255, .4);
+  transform: scale(1.1);
+  transition: .1s ease-in-out;
+}
+
+.register:hover{
+  color: black;
+  animation: pulse 1s infinite;
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 36%;
+  right: 10px;
+  transform: translate(-50%);
+  cursor: pointer;
+  z-index: 1;
+}
+
+#password {
+  padding-right: 20%;
+  box-sizing: border-box;
+}
+
+#password-confirmation{
+  padding-right: 20%;
+  box-sizing: border-box;
+}
+
+</style>
+
+<script>
+export default {
+  name: "signup",
+  data() {
+    return {
+      username: "",
+      password: "",
+      passwordConfirmation: "",
+      showPassword: false,
+      showPasswordConfirmation: false,
+    };
+  },
+  methods: {
+    togglePasswordvisibility(){
+      this.showPassword = !this.showPassword;
+    },
+    togglePasswordConfirmationvisibility() {
+      this.showPasswordConfirmation = !this.showPasswordConfirmation
+    },
+    mounted(){
+      this.$nextTick(() => {
+        const passwordInput = document.getElementById('password');
+        const passwordConfInput = document.getElementById('password-confirmation');
+        if(passwordInput && passwordConfInput){
+          passwordInput.setAttribute('autocomplete', 'new-password'),
+          passwordConfInput.setAttribute('autocomplete', 'new-password');
+        }
+      });
+    },
+    login() {
+      // Handle login logic here
+    },
+  },
+};
+</script>

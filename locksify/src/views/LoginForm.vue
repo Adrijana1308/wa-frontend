@@ -155,6 +155,12 @@ button:hover{
   right: 10px;
   transform: translate(-50%);
   cursor: pointer;
+  z-index: 1;
+}
+
+#password {
+  padding-right: 20%;
+  box-sizing: border-box;
 }
 
 </style>
