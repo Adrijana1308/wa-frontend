@@ -260,10 +260,10 @@ body {
 
     .input-container{
         width: 100%;
-        height: 60px;
+        height: 50px;
     }
     .home p{
-      font-size: 70px;
+      font-size: 60px;
     }
 }
 
@@ -320,6 +320,9 @@ body {
 
     .search-button{
       font-size: 12px;
+    }
+    .input-container{
+        height: 40px;
     }
 }
 </style>
