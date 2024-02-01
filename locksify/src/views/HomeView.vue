@@ -30,10 +30,10 @@
             <input type="text" class="search-box" placeholder="Any time">
           </form>
         </div>
-        <button type="submit" class="search-button">Search</button>
+        <button @click="toggleCards" type="submit" class="search-button">Search</button>
     </div>
   </div>
-  <Cards />
+  <Cards v-show="showCards" />
 </template>
 
 
@@ -43,6 +43,11 @@ import Cards from '@/components/Cards.vue';
 export default {
   components: {
     Cards
+  },
+  data() {
+    return {
+      showCards: false
+    };
   },
   mounted() {
     this.animateBalls();
@@ -76,6 +81,9 @@ export default {
       };
 
       requestAnimationFrame(moveBalls);
+    },
+    toggleCards() {
+      this.showCards = !this.showCards;
     },
   },
 };
@@ -185,10 +193,6 @@ body {
   padding: 15px 30px;
   font-family: 'Poppins', sans-serif;
   font-size: 19px;
-}
-
-.search-button:hover {
-  background-color: white;
 }
 
 .bi{

@@ -67,6 +67,15 @@ body {
   color: #000;
 }
 
+body::-webkit-scrollbar {
+  width: 1px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+
 nav {
   padding: 30px;
   text-align: left;
