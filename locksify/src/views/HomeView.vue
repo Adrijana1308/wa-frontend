@@ -33,10 +33,17 @@
         <button type="submit" class="search-button">Search</button>
     </div>
   </div>
+  <Cards />
 </template>
 
+
 <script>
+import Cards from '@/components/Cards.vue';
+
 export default {
+  components: {
+    Cards
+  },
   mounted() {
     this.animateBalls();
   },
@@ -204,10 +211,6 @@ body {
 
 .dark #search-button {
   background-color: #FAF9F6;
-}
-
-.dark .bi-search {
-  color: #005792;
 }
 
 @media (max-width: 1440px){
