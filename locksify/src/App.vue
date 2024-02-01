@@ -50,6 +50,8 @@
 
 html, body {
   overflow: hidden;
+  scroll-behavior: smooth;
+  transition: scroll-behavior 0.5s ease-in-out;
 }
 
 body {

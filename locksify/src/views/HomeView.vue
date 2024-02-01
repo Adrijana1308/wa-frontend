@@ -30,10 +30,10 @@
             <input type="text" class="search-box" placeholder="Any time">
           </form>
         </div>
-        <button @click="toggleCards" type="submit" class="search-button">Search</button>
+        <button @click="toggleCards" type="submit" class="search-button"><a href="#cards">Search</a></button>
     </div>
   </div>
-  <Cards v-show="showCards" />
+  <Cards id="cards" v-show="showCards" />
 </template>
 
 
@@ -126,6 +126,7 @@ body {
   width: 100%;
   padding: 10%;
   overflow-y: auto;
+  transition: transform 0.5s ease-in-out;
 }
 .home p {
   font-size: 100px;
@@ -193,6 +194,11 @@ body {
   padding: 15px 30px;
   font-family: 'Poppins', sans-serif;
   font-size: 19px;
+}
+
+.search-button a{
+  text-decoration: none;
+  color: #fff;
 }
 
 .bi{
