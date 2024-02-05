@@ -30,13 +30,25 @@
             <input type="text" class="search-box" placeholder="Any time">
           </form>
         </div>
-        <button type="submit" class="search-button">Search</button>
+        <button @click="toggleCards" type="submit" class="search-button"><a href="#cards">Search</a></button>
     </div>
   </div>
+  <Cards id="cards" v-show="showCards" />
 </template>
 
+
 <script>
+import Cards from '@/components/Cards.vue';
+
 export default {
+  components: {
+    Cards
+  },
+  data() {
+    return {
+      showCards: false
+    };
+  },
   mounted() {
     this.animateBalls();
   },
@@ -69,6 +81,9 @@ export default {
       };
 
       requestAnimationFrame(moveBalls);
+    },
+    toggleCards() {
+      this.showCards = !this.showCards;
     },
   },
 };
@@ -111,6 +126,7 @@ body {
   width: 100%;
   padding: 10%;
   overflow-y: auto;
+  transition: transform 0.5s ease-in-out;
 }
 .home p {
   font-size: 100px;
@@ -180,8 +196,9 @@ body {
   font-size: 19px;
 }
 
-.search-button:hover {
-  background-color: white;
+.search-button a{
+  text-decoration: none;
+  color: #fff;
 }
 
 .bi{
@@ -204,10 +221,6 @@ body {
 
 .dark #search-button {
   background-color: #FAF9F6;
-}
-
-.dark .bi-search {
-  color: #005792;
 }
 
 @media (max-width: 1440px){
@@ -260,10 +273,10 @@ body {
 
     .input-container{
         width: 100%;
-        height: 60px;
+        height: 50px;
     }
     .home p{
-      font-size: 70px;
+      font-size: 60px;
     }
 }
 
@@ -320,6 +333,9 @@ body {
 
     .search-button{
       font-size: 12px;
+    }
+    .input-container{
+        height: 40px;
     }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top ">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
           <img src="@/assets/locksify-logo.png" height="50" class="d-inline-block align-top" alt="">
@@ -50,12 +50,15 @@
 
 html, body {
   overflow: hidden;
+  scroll-behavior: smooth;
+  transition: scroll-behavior 0.5s ease-in-out;
 }
 
 body {
 	background-size: 400% 400%;
 	height: 100vh;
   transition: 0.5s;
+  overflow-y: auto;
 }
 
 #app {
@@ -66,12 +69,22 @@ body {
   color: #000;
 }
 
+body::-webkit-scrollbar {
+  width: 1px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+
 nav {
   padding: 30px;
   text-align: left;
   font-size: 20px;
   background-color: transparent;
   font-family: 'Poppins', sans-serif;
+  transition: background-color 0.3s ease;
 
   a {
     font-weight: bold;
@@ -150,15 +163,15 @@ nav {
   }
 
   .dark .ball {
-    background-color: #005792;
+    background-color: #2c3e50;
   }
 
   .dark .toggler {
-    border-color: #005792;
+    border-color: #2c3e50;
   }
 
   .dark .bi-sun {
-    color: #005792;
+    color: #2c3e50;
   }
 
   #checkbox:checked + .ball {
