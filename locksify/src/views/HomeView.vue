@@ -30,7 +30,7 @@
             <input type="text" class="search-box" placeholder="Any time">
           </form>
         </div>
-        <button @click="toggleCards" type="submit" class="search-button"><a href="#cards">Search</a></button>
+        <a href="#cards"><button @click="toggleCards" type="submit" class="search-button">Search</button></a>
     </div>
   </div>
   <Cards id="cards" v-show="showCards" />
@@ -147,6 +147,7 @@ body {
   padding: 5px;
   justify-content: space-evenly;
   align-items: center;
+  margin-top: 80px;
 }
 
 .input-container{
@@ -262,6 +263,9 @@ body {
 }
 
 @media (max-width: 1024px) {
+    p{
+      margin-top: 20px;
+    }
     .search-container{
         display: flex;
         flex-direction: column;
@@ -281,6 +285,9 @@ body {
 }
 
 @media (max-width: 780px) {
+    p{
+      margin-top: 0;
+    }
     .search-container{
         display: flex;
         flex-direction: column;
@@ -288,6 +295,7 @@ body {
         width: 60%;
         height: auto;
         border-radius: 20px;
+        margin-top: 0;
     }
 
     .input-container{

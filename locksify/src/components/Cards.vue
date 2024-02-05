@@ -6,7 +6,16 @@
           <img src="../assets/salon_1.jpg" class="card-img-top" alt="Frizerski salon">
           <div class="card-body">
             <h5 class="card-title">Ime salona</h5>
-            <p class="card-text">Kratki opis salona</p>
+            <p class="card-text">
+              <span class="card-rew">5 </span>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <i class="bi bi-star-fill"></i>
+              <span class="card-num-rew"> (6) • </span>
+              <span class="card-city">Zagreb</span>
+            </p>
             <a href="#" class="btn btn-dark">See more</a>
           </div>
         </div>
@@ -16,7 +25,11 @@
           <img src="../assets/salon_1.jpg" class="card-img-top" alt="Frizerski salon">
           <div class="card-body">
             <h5 class="card-title">Ime salona</h5>
-            <p class="card-text">Kratki opis salona</p>
+            <p class="card-text">
+              <span class="card-rew">5 </span>
+              <span class="card-num-rew">(6) • </span>
+              <span class="card-city">Zagreb</span>
+            </p>
             <a href="#" class="btn btn-dark">See more</a>
           </div>
         </div>
@@ -26,7 +39,11 @@
           <img src="../assets/salon_1.jpg" class="card-img-top" alt="Frizerski salon">
           <div class="card-body">
             <h5 class="card-title">Ime salona</h5>
-            <p class="card-text">Kratki opis salona</p>
+            <p class="card-text">
+              <span class="card-rew">5 </span>
+              <span class="card-num-rew">(6) • </span>
+              <span class="card-city">Zagreb</span>
+            </p>
             <a href="#" class="btn btn-dark">See more</a>
           </div>
         </div>
@@ -36,7 +53,11 @@
           <img src="../assets/salon_1.jpg" class="card-img-top" alt="Frizerski salon">
           <div class="card-body">
             <h5 class="card-title">Ime salona</h5>
-            <p class="card-text">Kratki opis salona</p>
+            <p class="card-text">
+              <span class="card-rew">5 </span>
+              <span class="card-num-rew">(6) • </span>
+              <span class="card-city">Zagreb</span>
+            </p>
             <a href="#" class="btn btn-dark">See more</a>
           </div>
         </div>
