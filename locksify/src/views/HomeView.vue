@@ -147,7 +147,7 @@ body {
   border: 7px solid #af74c636;
   border-radius: 50px;
   background: #fff;
-  padding: 5px;
+  padding: 10px;
   justify-content: space-evenly;
   align-items: center;
   margin-top: 80px;
