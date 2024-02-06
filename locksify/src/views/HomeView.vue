@@ -218,6 +218,10 @@ body {
 
 /* START DARK MODE */
 
+.dark .ball1{
+  background: rgb(108, 243, 255);
+}
+
 .dark p{
   color: #FAF9F6;
   text-shadow: none;
