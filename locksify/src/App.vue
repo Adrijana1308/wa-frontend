@@ -93,7 +93,7 @@ nav {
     text-decoration: none;
 
     &.router-link-exact-active {
-      color: #a570ef;
+      color: #d890f5;
     }
   }
   li.nav-item {
