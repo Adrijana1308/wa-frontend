@@ -130,12 +130,13 @@ body {
   transition: transform 0.5s ease-in-out;
 }
 .title {
-  font-size: 100px;
+  font-size: 110px;
   padding: 10px;
   padding-top: 0;
   text-shadow: 1px 1px 2px #fff;
-  font-family: 'Caprasimo', serif;
+  font-family: 'Playfair Display', serif;
   text-align: left;
+  line-height: 120%;
 }
 .search-container {
   display: flex;
@@ -208,24 +209,6 @@ body {
   font-size: 20px;
 }
 
-.dark p{
-  color: #FAF9F6;
-  text-shadow: none;
-}
-
-.dark #search-box {
-  border: 1px solid #FAF9F6;
-  color: #FAF9F6;
-}
-
-.dark #search-box::placeholder {
-  color: #FAF9F6;
-}
-
-.dark #search-button {
-  background-color: #FAF9F6;
-}
-
 .salon-p{
   font-size: 25px;
   padding: 10px;
@@ -238,6 +221,38 @@ body {
   font-weight: bold;
 }
 
+
+/* START DARK MODE */
+
+.dark p{
+  color: #FAF9F6;
+  text-shadow: none;
+}
+
+.dark .search-container{
+  background: transparent;
+  border-color: #aa45d26f;
+}
+
+.dark .search-button{
+  background: #d890f5;
+  color: #2c3e50;
+  font-weight: bold;
+}
+
+.dark .form{
+  background: transparent;
+  color:#FAF9F6;
+}
+.dark .search-box{
+  background: transparent;
+  color:#FAF9F6;
+}
+.dark .search-box::placeholder {
+  color: #FAF9F6;
+}
+
+/* END DARK MODE */
 
 @media (max-width: 1024px) {
     .title{
@@ -328,7 +343,7 @@ body {
     }
 
     .title{
-      font-size: 30px;
+      font-size: 35px;
     }
 
     .search-container{

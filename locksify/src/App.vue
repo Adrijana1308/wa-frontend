@@ -20,7 +20,7 @@
         </div>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
           <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Izbornik</h5>
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
           </div>
           <div class="offcanvas-body">
@@ -47,6 +47,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap');
 
 html, body {
   overflow: hidden;
@@ -101,7 +102,7 @@ nav {
     }
 }
 
-#checkbox {
+  #checkbox {
     display: none;
   }
 
@@ -156,14 +157,15 @@ nav {
     color: #2c3e50;
   }
 
+  /* START DARK MODE */
+
   .dark {
     transition: 0.5s;
-    background: linear-gradient(-45deg, #000000, #17153f, #080e36, #020430);
+    background: linear-gradient(-45deg, #000000, #020430);
     background-size: 400% 400%;
-    //animation: gradient 15s ease infinite;
+    animation: gradient 15s ease infinite;
     height: 100vh;
-    background-image: url("assets/PanoramicPurple.jpeg");
-    background-size: cover;
+    //background: #1a1625;
   }
 
   .dark > * {
@@ -171,15 +173,15 @@ nav {
   }
 
   .dark .ball {
-    background-color: #2c3e50;
+    background-color: #d890f5;
   }
 
   .dark .toggler {
-    border-color: #2c3e50;
+    border-color: #d890f5;
   }
 
   .dark .bi-sun {
-    color: #2c3e50;
+    color: #d890f5;
   }
 
   #checkbox:checked + .ball {
@@ -190,13 +192,34 @@ nav {
   }
 
   .dark .offcanvas-header{
-    background-color:#17153f;
+    background-color:#1a1625;
     color:#FAF9F6;
   }
 
-  .dark .nav-item{
+  .dark .nav-item a{
     color: #FAF9F6;
+
+    &.router-link-exact-active {
+      color: #d890f5;
+    }
   }
+
+  .dark .navbar-toggler{
+    border-color: #d890f5;
+    background: #d890f5;
+  }
+
+  .dark span{
+    color: #d890f5;
+  }
+
+/* END DARK MODE */
+@media (max-width: 768px){
+  .dark .offcanvas-body{
+    background:#1a1625;
+    color:#FAF9F6;
+  }
+}
 
 @media (max-width: 426px){
   
