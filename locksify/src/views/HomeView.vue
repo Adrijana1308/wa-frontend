@@ -96,7 +96,6 @@ body {
       margin: 0;
       overflow-y: auto;
 }
-
 .balls-container {
     position: absolute;
     width: 20%;
@@ -104,7 +103,6 @@ body {
     top: 0;
     left: 0;
 }
-
 .shadow {
     position: absolute;
     width: 350px;
@@ -112,17 +110,14 @@ body {
     border-radius: 50%;
     filter: blur(150px);
 }
-
 .ball1{
   background: rgb(255, 196, 108);
   z-index: -1;
 }
-
 .ball2{
   background: #d890f5;
   z-index: -1;
 }
-
 .home{
   width: 100%;
   padding: 10%;
@@ -152,7 +147,6 @@ body {
   align-items: center;
   margin-top: 80px;
 }
-
 .input-container{
   width: 21%;
   height: 30px;
@@ -224,6 +218,10 @@ body {
 
 /* START DARK MODE */
 
+.dark .ball1{
+  background: rgb(108, 243, 255);
+}
+
 .dark p{
   color: #FAF9F6;
   text-shadow: none;
@@ -233,7 +231,9 @@ body {
   background: transparent;
   border-color: #aa45d26f;
 }
-
+.dark .input-container{
+  border-right: 1px solid #FAF9F6;
+}
 .dark .search-button{
   background: #d890f5;
   color: #2c3e50;
