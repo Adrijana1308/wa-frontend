@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <p>Book local beauty and wellness services</p>
+    <p class="title">Book local beauty and wellness services</p>
     <div class="balls-container">
       <div ref="ball1" class="shadow ball ball1"></div>
       <div ref="ball2" class="shadow ball ball2"></div>
@@ -32,6 +32,7 @@
         </div>
         <a href="#cards" class="search-button-link"><button @click="toggleCards" type="submit" class="search-button">Search</button></a>
     </div>
+    <p class="salon-p"> View over <span> 500 </span> salons on the app!</p>
   </div>
   <Cards id="cards" v-show="showCards" />
 </template>
@@ -113,12 +114,12 @@ body {
 }
 
 .ball1{
-  background: #d890f5;
+  background: rgb(255, 196, 108);
   z-index: -1;
 }
 
 .ball2{
-  background: #a570ef;
+  background: #d890f5;
   z-index: -1;
 }
 
@@ -128,12 +129,13 @@ body {
   overflow-y: auto;
   transition: transform 0.5s ease-in-out;
 }
-.home p {
+.title {
   font-size: 100px;
   padding: 10px;
   padding-top: 0;
   text-shadow: 1px 1px 2px #fff;
   font-family: 'Caprasimo', serif;
+  text-align: left;
 }
 .search-container {
   display: flex;
@@ -224,15 +226,30 @@ body {
   background-color: #FAF9F6;
 }
 
+.salon-p{
+  font-size: 25px;
+  padding: 10px;
+  margin-top: 6%;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+}
+
+.salon-p span{
+  font-weight: bold;
+}
+
 
 @media (max-width: 1024px) {
-    p{
+    .title{
       margin-top: 20px;
+      font-size: 60px;
+      text-align: center;
     }
     .search-container{
         display: flex;
         flex-direction: column;
         gap: 10px;
+        margin-top: 5px;
         width: 60%;
         height: auto;
         border-radius: 20px;
@@ -244,7 +261,6 @@ body {
         height: 50px;
         border: none;
     }
-
     .form{
         border: 1px solid #2c3e5069;
         border-radius: 10px;
@@ -266,14 +282,15 @@ body {
       width: 100%;
     }
 
-    .home p{
-      font-size: 60px;
+    .salon-p{
+      font-size: 20px;
     }
 }
 
 @media (max-width: 780px) {
-    p{
+    .title{
       margin-top: 0;
+      font-size: 50px;
     }
     .search-container{
         display: flex;
@@ -287,10 +304,7 @@ body {
 
     .input-container{
         width: 100%;
-        height: 60px;
-    }
-    .home p{
-      font-size: 50px;
+        height: 40px;
     }
 
     .search-box{
@@ -300,6 +314,11 @@ body {
     .search-button{
       font-size: 15px;
     }
+
+    .salon-p{
+      font-size: 15px;
+      margin-top: 3%;
+    }
 }
 
 @media (max-width: 426px) {
@@ -308,7 +327,7 @@ body {
       margin-top: 10%;
     }
 
-    .home p{
+    .title{
       font-size: 30px;
     }
 
@@ -316,6 +335,7 @@ body {
         width: 100%;
         height: auto;
         border-radius: 20px;
+        padding: 10px;
     }
 
     .bi{
@@ -331,6 +351,10 @@ body {
     }
     .input-container{
         height: 40px;
+    }
+
+    .salon-p{
+      margin-top: 5%;
     }
 }
 </style>
