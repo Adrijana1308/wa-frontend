@@ -86,6 +86,7 @@ nav {
   font-family: 'Poppins', sans-serif;
   transition: background-color 0.3s ease;
 
+
   a {
     font-weight: bold;
     color: #2c3e50;
@@ -111,6 +112,7 @@ nav {
 
   .toggler {
     display: block;
+    padding: 15px;
     width: 60px;
     height: 31px;
     border: 1px solid #2c3e50;
@@ -119,7 +121,13 @@ nav {
     cursor: pointer;
   }
 
-  .ball, .bi-sun, .bi-moon {
+  .bi-sun, .bi-moon {
+    position: absolute;
+    top: 48%;
+    transform: translateY(-50%);
+  }
+
+  .ball {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
