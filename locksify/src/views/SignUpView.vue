@@ -13,14 +13,13 @@
             <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
           </span>
           
-          <input v-model="passwordConfirmation" :type="showPasswordConfirmation ? 'text' : 'passwordConfirmation'" id="password-confirmation" placeholder="Confirm Password" required>
-          <span @click="togglePasswordConfirmationvisibility" class="password-toggle">
+          <input v-model="passwordConfirmation" :type="showPasswordConfirmation ? 'text' : 'password'" id="password-confirmation" name="user-confirmation" placeholder="Confirm Password" required>
+          <span @click="togglePasswordConfirmationvisibility" class="passwordConf-toggle">
             <i :class="['bi', showPasswordConfirmation ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
           </span>
           
         </div>
-        <button type="submit">Sign in</button>
-        <button type="submit" class="register">Register now!</button>
+        <button type="submit" class="register">Sign Up!</button>
       </form>
     </div>
   </div>
@@ -63,11 +62,11 @@
   border-radius: 15px;
 }
 
-.login-form {
+/*.login-form {
   text-align: left;
-  display: flex;
+  display: flex;            vidjet cemo kasnije
   flex-direction: column;
-}
+}*/
 
 .dark input{
   width: 100%;
@@ -143,7 +142,7 @@ button {
 }
 
 button:hover{
-  color: rgba(255, 255, 255, .4);
+  color: black;
   transform: scale(1.1);
   transition: .1s ease-in-out;
 }
@@ -159,7 +158,16 @@ button:hover{
 
 .password-toggle {
   position: absolute;
-  top: 36%;
+  top: 43%;
+  right: 10px;
+  transform: translate(-50%);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.passwordConf-toggle {
+  position: absolute;
+  top: 81%;
   right: 10px;
   transform: translate(-50%);
   cursor: pointer;
@@ -183,7 +191,8 @@ export default {
   name: "signup",
   data() {
     return {
-      username: "",
+      name: "",
+      email: "",
       password: "",
       passwordConfirmation: "",
       showPassword: false,
@@ -195,14 +204,14 @@ export default {
       this.showPassword = !this.showPassword;
     },
     togglePasswordConfirmationvisibility() {
-      this.showPasswordConfirmation = !this.showPasswordConfirmation
+      this.showPasswordConfirmation = !this.showPasswordConfirmation;
     },
     mounted(){
       this.$nextTick(() => {
         const passwordInput = document.getElementById('password');
-        const passwordConfInput = document.getElementById('password-confirmation');
+        const passwordConfInput = document.getElementById('passwordConfirmation');
         if(passwordInput && passwordConfInput){
-          passwordInput.setAttribute('autocomplete', 'new-password'),
+          passwordInput.setAttribute('autocomplete', 'new-password');
           passwordConfInput.setAttribute('autocomplete', 'new-password');
         }
       });
