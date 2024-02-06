@@ -30,7 +30,7 @@
             <input type="text" class="search-box" placeholder="Any time">
           </form>
         </div>
-        <a href="#cards" class="search-button"><button @click="toggleCards" type="submit" class="search-button">Search</button></a>
+        <a href="#cards" class="search-button-link"><button @click="toggleCards" type="submit" class="search-button">Search</button></a>
     </div>
   </div>
   <Cards id="cards" v-show="showCards" />
@@ -197,7 +197,7 @@ body {
   font-size: 19px;
 }
 
-.search-button a{
+.search-button-link{
   text-decoration: none;
   color: #fff;
 }
@@ -223,44 +223,7 @@ body {
 .dark #search-button {
   background-color: #FAF9F6;
 }
-/*
-@media (max-width: 1440px){
-    .search-container{
-        flex-direction: column;
-        gap: 10px;
-        width: 60%;
-        height: auto;
-        border-radius: 10px;
-        padding: 20px;
-    }
 
-    .input-container{
-        width: 100%;
-        height: 60px;
-        border: none;
-    }
-
-    .form{
-        border: 1px solid #2c3e5069;
-        border-radius: 10px;
-        height: 100%;
-    }
-
-    .search-box{
-        margin-left: 20px;
-        border: none;
-    }
-
-    .search-button{
-        border-radius: 10px;
-        padding: 10px 20px;
-        width: 100%;
-    }
-
-    p{
-      font-size: 200px;
-    }
-}*/
 
 @media (max-width: 1024px) {
     p{
@@ -297,6 +260,10 @@ body {
         border-radius: 10px;
         padding: 10px 20px;
         width: 100%;
+    }
+
+    .search-button-link{
+      width: 100%;
     }
 
     .home p{
