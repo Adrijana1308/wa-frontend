@@ -163,27 +163,15 @@ nav {
 
 .dark {
   transition: 0.5s;
-  background: linear-gradient(-45deg, #000000, #020430);
   background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
   height: 100vh;
-  //background: #1a1625;
+  background-image: url(../src/assets/PanoramicPurple.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .dark > * {
   color: #FAF9F6;
-}
-
-.dark .ball {
-  background-color: #d890f5;
-}
-
-.dark .toggler {
-  border-color: #d890f5;
-}
-
-.dark .bi-sun {
-  color: #d890f5;
 }
 
 #checkbox:checked + .ball {
@@ -200,17 +188,13 @@ nav {
 }
 
 .dark .nav-item a{
-  color: #FAF9F6;
+  color: #2c3e50;
 
   &.router-link-exact-active {
-    color: #d890f5;
+    color: #cd61f7;
   }
 }
 
-.dark .navbar-toggler{
-  border-color: #d890f5;
-  background: #d890f5;
-}
 
 .dark span{
   color: #d890f5;
