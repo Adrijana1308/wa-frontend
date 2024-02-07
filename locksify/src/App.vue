@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg fixed-top ">
+    <nav class="navbar navbar-expand-lg fixed-top " :class="{ 'scrolled': isScrolled }">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
           <img src="@/assets/locksify-logo.png" height="50" class="d-inline-block align-top" alt="">
@@ -43,6 +43,27 @@
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      isScrolled: false,
+    };
+  },
+  methods: {
+    handleScroll(event) {
+      this.isScrolled = event.deltaY > 0;
+    },
+  },
+  mounted() {
+    window.addEventListener('wheel', this.handleScroll);
+  },
+  beforeDestroy() {
+    window.removeEventListener('wheel', this.handleScroll);
+  },
+};
+</script>
+
 <style lang="scss">
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
@@ -77,7 +98,6 @@ body::-webkit-scrollbar-thumb {
   background-color: transparent;
 }
 
-
 nav {
   padding: 30px;
   text-align: left;
@@ -85,6 +105,11 @@ nav {
   background-color: transparent;
   font-family: 'Poppins', sans-serif;
   transition: background-color 0.3s ease;
+
+  &.scrolled {
+    background: white;
+    box-shadow: 0px 2.98256px 7.4564px rgba(0, 0, 0, 0.1);
+  }
 
   a {
     font-weight: bold;
