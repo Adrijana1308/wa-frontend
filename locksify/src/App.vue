@@ -151,14 +151,30 @@ nav {
     bottom: -11px;
   }
 
+
+.dark {
+  transition: 0.5s;
+  background-size: 400% 400%;
+  height: 100vh;
+  background-image: url(../src/assets/PanoramicPurple.jpeg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
   .bi-moon {
     right: 5px;
     bottom: -11px;
     color: #2c3e50;
   }
 
+
   /* START DARK MODE */
 
+
+#checkbox:checked + .ball {
+  transform: translate(29px, -50%);
+}
+=======
   .dark {
     transition: 0.5s;
     background-size: 400% 400%;
@@ -180,6 +196,7 @@ nav {
     padding-right: 15px;
   }
 
+
   .dark .offcanvas-header{
     background-color:#1a1625;
     color:#FAF9F6;
@@ -187,6 +204,20 @@ nav {
 
   .dark .nav-item a{
     color: #2c3e50;
+
+
+.dark .nav-item a{
+  color: #2c3e50;
+
+  &.router-link-exact-active {
+    color: #cd61f7;
+  }
+}
+
+
+.dark span{
+  color: #d890f5;
+}
 
     &.router-link-exact-active {
       color: #c75bf2;
@@ -196,6 +227,7 @@ nav {
   .dark span{
     color: #d890f5;
   }
+
 
 /* END DARK MODE */
 
