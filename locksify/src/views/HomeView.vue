@@ -231,13 +231,7 @@ body {
 
 .dark .search-container{
   background: transparent;
-  border-color: #aa45d26f;
-}
-
-.dark .search-button{
-  background: #d890f5;
-  color: #2c3e50;
-  font-weight: bold;
+  border-color: #2f14396f;
 }
 
 .dark .form{
