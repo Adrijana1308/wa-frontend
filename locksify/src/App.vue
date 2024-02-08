@@ -100,7 +100,6 @@ body::-webkit-scrollbar-thumb {
 }
 
 nav {
-  padding: 30px;
   text-align: left;
   font-size: 20px;
   background-color: transparent;
@@ -124,6 +123,10 @@ nav {
   li.nav-item {
       padding: 10px 5px;
     }
+}
+
+.container-fluid{
+  padding: 15px;
 }
 
   #checkbox {
