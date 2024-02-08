@@ -66,6 +66,7 @@ export default {
 
 <style lang="scss">
 
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap');
 
@@ -125,66 +126,55 @@ nav {
     }
 }
 
-.navbar{
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
+  #checkbox {
+    display: none;
+  }
 
-#checkbox {
-  display: none;
-}
+  .navbar-toggler{
+    color: #2c3e50;
+    border-color: #2c3e50;
+  }
 
-.navbar-toggler{
-  color: #2c3e50;
-  border-color: #2c3e50;
-}
+  .toggler {
+    display: block;
+    padding: 15px;
+    width: 60px;
+    height: 31px;
+    border: 1px solid #2c3e50;
+    border-radius: 30px;
+    position: relative;
+    cursor: pointer;
+  }
 
-.toggler {
-  display: block;
-  padding: 15px;
-  width: 60px;
-  height: 31px;
-  border: 1px solid #2c3e50;
-  border-radius: 30px;
-  position: relative;
-  cursor: pointer;
-}
+  .bi-sun, .bi-moon {
+    position: absolute;
+    top: 48%;
+    transform: translateY(-50%);
+  }
 
-.bi-sun, .bi-moon {
-  position: absolute;
-  top: 48%;
-  transform: translateY(-50%);
-}
+  .ball {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 
-.ball {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
+  .ball {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    background-color: #2c3e50;
+    border-radius: 50%;
+    left: 1px;
+    z-index: 10;
+    transition: 0.3s;
+    
+  }
 
-.ball {
-  display: inline-block;
-  width: 26px;
-  height: 26px;
-  background-color: #2c3e50;
-  border-radius: 50%;
-  left: 1px;
-  z-index: 10;
-  transition: 0.3s; 
-}
+  .bi-sun {
+    left: 5px;
+    bottom: -11px;
+  }
 
-.bi-sun {
-  left: 5px;
-  bottom: -11px;
-}
-
-.bi-moon {
-  right: 5px;
-  bottom: -11px;
-  color: #2c3e50;
-}
-
-/* START DARK MODE */
 
 .dark {
   transition: 0.5s;
@@ -195,22 +185,50 @@ nav {
   background-size: cover;
 }
 
-.dark > * {
-  color: #FAF9F6;
-}
+  .bi-moon {
+    right: 5px;
+    bottom: -11px;
+    color: #2c3e50;
+  }
+
+
+  /* START DARK MODE */
+
 
 #checkbox:checked + .ball {
   transform: translate(29px, -50%);
 }
 
-#lightOrDark{
-  padding-right: 15px;
-}
+  .dark {
+    transition: 0.5s;
+    background-size: 400% 400%;
+    height: 100vh;
+    background-image: url(../src/assets/PanoramicPurple.jpeg);
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
 
-.dark .offcanvas-header{
-  background-color:#1a1625;
-  color:#FAF9F6;
-}
+  .dark > * {
+    color: #FAF9F6;
+  }
+
+  #checkbox:checked + .ball {
+    transform: translate(29px, -50%);
+  }
+
+  #lightOrDark{
+    padding-right: 15px;
+  }
+
+
+  .dark .offcanvas-header{
+    background-color:#1a1625;
+    color:#FAF9F6;
+  }
+
+  .dark .nav-item a{
+    color: #2c3e50;
+
 
 .dark .nav-item a{
   color: #2c3e50;
@@ -224,6 +242,16 @@ nav {
 .dark span{
   color: #d890f5;
 }
+
+    &.router-link-exact-active {
+      color: #c75bf2;
+    }
+  }
+
+  .dark span{
+    color: #d890f5;
+  }
+
 
 /* END DARK MODE */
 

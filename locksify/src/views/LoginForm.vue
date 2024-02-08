@@ -5,14 +5,16 @@
       <p class="Welcome">Welcome back, glad to see you again!</p>
       <form @submit.prevent="login" class="login-form">
         <input v-model="username" type="text" id="email" placeholder="Email" required>
+        
         <div class="password-container">
           <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
           <span @click="togglePasswordvisibility" class="password-toggle">
             <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
           </span>
         </div>
+        
         <button type="submit">Sign in</button>
-        <button type="submit" class="register">Register now!</button>
+        <button type="submit" class="register"><router-link class="register-link" to="/SignUp">Register now!</router-link></button>
       </form>
     </div>
   </div>
@@ -130,14 +132,24 @@ button {
   background-color: #d890f530;
 }
 
+.register-link{
+  text-decoration: none;
+  color: black;
+}
+
 .dark .register{
   background-color: #a570ef;
 }
 
+.dark .register-link{
+  text-decoration: none;
+  color: black;
+}
+
 button:hover{
-  color: rgba(255, 255, 255, .4);
+  color: rgba(0, 0, 0, 1);
   transform: scale(1.1);
-  transition: .1s ease-in-out; 
+  transition: .1s ease-in-out;
 }
 
 .register:hover{
@@ -155,6 +167,12 @@ button:hover{
   right: 10px;
   transform: translate(-50%);
   cursor: pointer;
+  z-index: 1;
+}
+
+#password {
+  padding-right: 20%;
+  box-sizing: border-box;
 }
 
 </style>
