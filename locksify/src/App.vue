@@ -194,7 +194,6 @@ nav {
 
   /* START DARK MODE */
 
-
 #checkbox:checked + .ball {
   transform: translate(29px, -50%);
 }
