@@ -126,6 +126,7 @@ body {
 .home{
   width: 100%;
   padding: 10%;
+  padding-bottom: 0;
   overflow-y: auto;
   transition: transform 0.5s ease-in-out;
 }
