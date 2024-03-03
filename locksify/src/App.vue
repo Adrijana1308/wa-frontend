@@ -1,27 +1,52 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand-lg fixed-top " :class="{ 'scrolled': isScrolled }">
+    <nav
+      class="navbar navbar-expand-lg fixed-top"
+      :class="{ scrolled: isScrolled }"
+    >
       <div class="container-fluid">
         <a class="navbar-brand" href="#">
-          <img src="@/assets/locksify-logo.png" height="50" class="d-inline-block align-top" alt="">
+          <img
+            src="@/assets/locksify-logo.png"
+            height="50"
+            class="d-inline-block align-top"
+            alt=""
+          />
         </a>
         <div class="d-flex">
-            <form class="d-flex mt-1" id="lightOrDark" role="search">
-              <label for="checkbox" class="toggler">
-                  <input type="checkbox" id="checkbox">
-                  <span class="ball"></span>
-                  <i class="bi bi-sun"></i>
-                  <i class="bi bi-moon"></i>
-              </label>
-            </form> 
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+          <form class="d-flex mt-1" id="lightOrDark" role="search">
+            <label for="checkbox" class="toggler">
+              <input type="checkbox" id="checkbox" />
+              <span class="ball"></span>
+              <i class="bi bi-sun"></i>
+              <i class="bi bi-moon"></i>
+            </label>
+          </form>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasNavbar"
+            aria-controls="offcanvasNavbar"
+            aria-label="Toggle navigation"
+          >
             <span class="navbar-toggler-icon"></span>
           </button>
         </div>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+        <div
+          class="offcanvas offcanvas-end"
+          tabindex="-1"
+          id="offcanvasNavbar"
+          aria-labelledby="offcanvasNavbarLabel"
+        >
           <div class="offcanvas-header">
             <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+              aria-label="Close"
+            ></button>
           </div>
           <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
@@ -39,7 +64,7 @@
         </div>
       </div>
     </nav>
-    <router-view/>  
+    <router-view />
   </div>
 </template>
 
@@ -56,29 +81,29 @@ export default {
     },
   },
   mounted() {
-    window.addEventListener('wheel', this.handleScroll);
+    window.addEventListener("wheel", this.handleScroll);
   },
   beforeDestroy() {
-    window.removeEventListener('wheel', this.handleScroll);
+    window.removeEventListener("wheel", this.handleScroll);
   },
 };
 </script>
 
 <style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@900&display=swap');
-
-html, body {
+html,
+body {
   overflow: hidden;
   scroll-behavior: smooth;
   transition: scroll-behavior 0.5s ease-in-out;
 }
 
 body {
-	background-size: 400% 400%;
-	height: 100vh;
+  background-size: 400% 400%;
+  height: 100vh;
   transition: 0.5s;
   overflow-y: auto;
 }
@@ -103,7 +128,7 @@ nav {
   text-align: left;
   font-size: 20px;
   background-color: transparent;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   transition: background-color 0.3s ease;
 
   &.scrolled {
@@ -121,63 +146,62 @@ nav {
     }
   }
   li.nav-item {
-      padding: 10px 5px;
-    }
+    padding: 10px 5px;
+  }
 }
 
-.container-fluid{
+.container-fluid {
   padding: 15px;
 }
 
-  #checkbox {
-    display: none;
-  }
+#checkbox {
+  display: none;
+}
 
-  .navbar-toggler{
-    color: #2c3e50;
-    border-color: #2c3e50;
-  }
+.navbar-toggler {
+  color: #2c3e50;
+  border-color: #2c3e50;
+}
 
-  .toggler {
-    display: block;
-    padding: 15px;
-    width: 60px;
-    height: 31px;
-    border: 1px solid #2c3e50;
-    border-radius: 30px;
-    position: relative;
-    cursor: pointer;
-  }
+.toggler {
+  display: block;
+  padding: 15px;
+  width: 60px;
+  height: 31px;
+  border: 1px solid #2c3e50;
+  border-radius: 30px;
+  position: relative;
+  cursor: pointer;
+}
 
-  .bi-sun, .bi-moon {
-    position: absolute;
-    top: 48%;
-    transform: translateY(-50%);
-  }
+.bi-sun,
+.bi-moon {
+  position: absolute;
+  top: 48%;
+  transform: translateY(-50%);
+}
 
-  .ball {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-  }
+.ball {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
-  .ball {
-    display: inline-block;
-    width: 26px;
-    height: 26px;
-    background-color: #2c3e50;
-    border-radius: 50%;
-    left: 1px;
-    z-index: 10;
-    transition: 0.3s;
-    
-  }
+.ball {
+  display: inline-block;
+  width: 26px;
+  height: 26px;
+  background-color: #2c3e50;
+  border-radius: 50%;
+  left: 1px;
+  z-index: 10;
+  transition: 0.3s;
+}
 
-  .bi-sun {
-    left: 5px;
-    bottom: -11px;
-  }
-
+.bi-sun {
+  left: 5px;
+  bottom: -11px;
+}
 
 .dark {
   transition: 0.5s;
@@ -188,98 +212,92 @@ nav {
   background-size: cover;
 }
 
-  .bi-moon {
-    right: 5px;
-    bottom: -11px;
-    color: #2c3e50;
-  }
+.bi-moon {
+  right: 5px;
+  bottom: -11px;
+  color: #2c3e50;
+}
 
-
-  /* START DARK MODE */
+/* START DARK MODE */
 
 #checkbox:checked + .ball {
   transform: translate(29px, -50%);
 }
 
-  .dark {
-    transition: 0.5s;
-    background-size: 400% 400%;
-    height: 100vh;
-    background-image: url(../src/assets/PanoramicPurple.jpeg);
-    background-size: cover;
-    background-repeat: no-repeat;
-  }
+.dark {
+  transition: 0.5s;
+  background-size: 400% 400%;
+  height: 100vh;
+  background-image: url(../src/assets/PanoramicPurple.jpeg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 
-  .dark > * {
-    color: #FAF9F6;
-  }
+.dark > * {
+  color: #faf9f6;
+}
 
-  #checkbox:checked + .ball {
-    transform: translate(29px, -50%);
-  }
+#checkbox:checked + .ball {
+  transform: translate(29px, -50%);
+}
 
-  #lightOrDark{
-    padding-right: 15px;
-  }
+#lightOrDark {
+  padding-right: 15px;
+}
 
+.dark .offcanvas-header {
+  background-color: #1a1625;
+  color: #faf9f6;
+}
 
-  .dark .offcanvas-header{
-    background-color:#1a1625;
-    color:#FAF9F6;
-  }
-
-  .dark .nav-item a{
-    color: #2c3e50;
-
-
-.dark .nav-item a{
+.dark .nav-item a {
   color: #2c3e50;
 
-  &.router-link-exact-active {
-    color: #cd61f7;
-  }
-}
-
-
-.dark span{
-  color: #d890f5;
-}
+  .dark .nav-item a {
+    color: #2c3e50;
 
     &.router-link-exact-active {
-      color: #c75bf2;
+      color: #cd61f7;
     }
   }
 
-  .dark span{
+  .dark span {
     color: #d890f5;
   }
 
-
-/* END DARK MODE */
-
-@media (max-width: 768px){
-  .dark .offcanvas-body{
-    background:#1a1625;
-    color:#FAF9F6;
+  &.router-link-exact-active {
+    color: #c75bf2;
   }
 }
 
-@media (max-width: 426px){
-  
+.dark span {
+  color: #d890f5;
+}
+
+/* END DARK MODE */
+
+@media (max-width: 768px) {
+  .dark .offcanvas-body {
+    background: #1a1625;
+    color: #faf9f6;
+  }
+}
+
+@media (max-width: 426px) {
   nav {
     padding: 30px;
     text-align: left;
   }
 
-  .d-inline-block{
+  .d-inline-block {
     height: 40px;
   }
 
-  .nav-item{
+  .nav-item {
     font-size: 15px;
   }
-  
-  .navbar-toggler{
+
+  .navbar-toggler {
     height: 40px;
   }
 }
