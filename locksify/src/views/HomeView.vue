@@ -6,52 +6,58 @@
       <div ref="ball2" class="shadow ball ball2"></div>
     </div>
     <div class="search-container">
-       <div class="input-container"> 
-          <form class="form" action="/" method="get">
-            <i class="bi bi-search"></i>
-            <input type="text" class="search-box" placeholder="Any salon">
-          </form>
-        </div>
-        <div class="input-container"> 
-          <form class="form" action="/" method="get">
-            <i class="bi bi-geo-alt-fill"></i>
-            <input type="text" class="search-box" placeholder="Any location">
-          </form>
-        </div>
-        <div class="input-container"> 
-          <form class="form" action="/" method="get">
-            <i class="bi bi-calendar"></i>
-            <input type="text" class="search-box" placeholder="Any date">
-          </form>
-        </div>
-        <div class="input-container time"> 
-          <form class="form" action="/" method="get">
-            <i class="bi bi-clock-fill"></i>
-            <input type="text" class="search-box" placeholder="Any time">
-          </form>
-        </div>
-        <a href="#cards" class="search-button-link"><button @click="toggleCards" type="submit" class="search-button">Search</button></a>
+      <div class="input-container">
+        <form class="form" action="/" method="get">
+          <i class="bi bi-search"></i>
+          <input type="text" class="search-box" placeholder="Any salon" />
+        </form>
+      </div>
+      <div class="input-container">
+        <form class="form" action="/" method="get">
+          <i class="bi bi-geo-alt-fill"></i>
+          <input type="text" class="search-box" placeholder="Any location" />
+        </form>
+      </div>
+      <div class="input-container">
+        <form class="form" action="/" method="get">
+          <i class="bi bi-calendar"></i>
+          <input type="text" class="search-box" placeholder="Any date" />
+        </form>
+      </div>
+      <div class="input-container time">
+        <form class="form" action="/" method="get">
+          <i class="bi bi-clock-fill"></i>
+          <input type="text" class="search-box" placeholder="Any time" />
+        </form>
+      </div>
+      <a href="#cards" class="search-button-link"
+        ><button @click="toggleCards" type="submit" class="search-button">
+          Search
+        </button></a
+      >
     </div>
-    <p class="salon-p"> View over <span> 500 </span> salons on the app!</p>
+    <p class="salon-p">View over <span> 500 </span> salons on the app!</p>
   </div>
-  <Cards id="cards" v-show="showCards" />
+  <Cards id="cards" v-show="showCards" :posts="posts" />
 </template>
 
-
 <script>
-import Cards from '@/components/Cards.vue';
+import Cards from "@/components/Cards.vue";
+import axios from "axios";
 
 export default {
   components: {
-    Cards
+    Cards,
   },
   data() {
     return {
-      showCards: false
+      showCards: false,
+      posts: [],
     };
   },
   mounted() {
     this.animateBalls();
+    this.fetchData();
   },
   methods: {
     getRandomPosition() {
@@ -86,44 +92,53 @@ export default {
     toggleCards() {
       this.showCards = !this.showCards;
     },
+    fetchData() {
+      axios
+        .get("http://localhost:3000/posts")
+        .then((response) => {
+          this.posts = response.data;
+        })
+        .catch((error) => {
+          console.error("Greška prilikom dohvaćanja podataka:", error);
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
-
 body {
-      margin: 0;
-      overflow-y: auto;
+  margin: 0;
+  overflow-y: auto;
 }
 
 .balls-container {
-    position: absolute;
-    width: 20%;
-    height: 40%;
-    top: 0;
-    left: 0;
+  position: absolute;
+  width: 20%;
+  height: 40%;
+  top: 0;
+  left: 0;
 }
 
 .shadow {
-    position: absolute;
-    width: 350px;
-    height: 350px;
-    border-radius: 50%;
-    filter: blur(150px);
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  filter: blur(150px);
 }
 
-.ball1{
+.ball1 {
   background: rgb(255, 196, 108);
   z-index: -1;
 }
 
-.ball2{
+.ball2 {
   background: #d890f5;
   z-index: -1;
 }
 
-.home{
+.home {
   width: 100%;
   padding: 10%;
   padding-bottom: 0;
@@ -135,7 +150,7 @@ body {
   padding: 10px;
   padding-top: 0;
   text-shadow: 1px 1px 2px #fff;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   text-align: left;
   line-height: 120%;
 }
@@ -154,17 +169,17 @@ body {
   margin-top: 80px;
 }
 
-.input-container{
+.input-container {
   width: 21%;
   height: 30px;
   border-right: 1px solid #2c3e5069;
 }
 
-.time{
+.time {
   border-right: none;
 }
 
-.form{
+.form {
   display: flex;
   width: 100%;
   height: 100%;
@@ -180,7 +195,7 @@ body {
   width: 80%;
   margin-left: 10px;
   font-size: 20px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .search-box::placeholder {
@@ -197,174 +212,172 @@ body {
   border: none;
   border-radius: 50px;
   padding: 15px 30px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 19px;
 }
 
-.search-button-link{
+.search-button-link {
   text-decoration: none;
   color: #fff;
 }
 
-.bi{
+.bi {
   font-size: 20px;
 }
 
-.salon-p{
+.salon-p {
   font-size: 25px;
   padding: 10px;
   margin-top: 6%;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   text-align: center;
 }
 
-.salon-p span{
+.salon-p span {
   font-weight: bold;
 }
 
-
 /* START DARK MODE */
 
-.dark p{
-  color: #FAF9F6;
+.dark p {
+  color: #faf9f6;
   text-shadow: none;
 }
 
-.dark .search-container{
+.dark .search-container {
   background: transparent;
   border-color: #2f14396f;
 }
 
-.dark .form{
+.dark .form {
   background: transparent;
-  color:#FAF9F6;
+  color: #faf9f6;
 }
-.dark .search-box{
+.dark .search-box {
   background: transparent;
-  color:#FAF9F6;
+  color: #faf9f6;
 }
 .dark .search-box::placeholder {
-  color: #FAF9F6;
+  color: #faf9f6;
 }
 
 /* END DARK MODE */
 
 @media (max-width: 1024px) {
-    .title{
-      margin-top: 20px;
-      font-size: 60px;
-      text-align: center;
-    }
-    .search-container{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 5px;
-        width: 60%;
-        height: auto;
-        border-radius: 20px;
-        padding: 20px;
-    }
+  .title {
+    margin-top: 20px;
+    font-size: 60px;
+    text-align: center;
+  }
+  .search-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 5px;
+    width: 60%;
+    height: auto;
+    border-radius: 20px;
+    padding: 20px;
+  }
 
-    .input-container{
-        width: 100%;
-        height: 50px;
-        border: none;
-    }
-    .form{
-        border: 1px solid #2c3e5069;
-        border-radius: 10px;
-        height: 100%;
-    }
+  .input-container {
+    width: 100%;
+    height: 50px;
+    border: none;
+  }
+  .form {
+    border: 1px solid #2c3e5069;
+    border-radius: 10px;
+    height: 100%;
+  }
 
-    .search-box{
-        margin-left: 20px;
-        border: none;
-    }
+  .search-box {
+    margin-left: 20px;
+    border: none;
+  }
 
-    .search-button{
-        border-radius: 10px;
-        padding: 10px 20px;
-        width: 100%;
-    }
+  .search-button {
+    border-radius: 10px;
+    padding: 10px 20px;
+    width: 100%;
+  }
 
-    .search-button-link{
-      width: 100%;
-    }
+  .search-button-link {
+    width: 100%;
+  }
 
-    .salon-p{
-      font-size: 20px;
-    }
+  .salon-p {
+    font-size: 20px;
+  }
 }
 
 @media (max-width: 780px) {
-    .title{
-      margin-top: 0;
-      font-size: 50px;
-    }
-    .search-container{
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 60%;
-        height: auto;
-        border-radius: 20px;
-        margin-top: 0;
-    }
+  .title {
+    margin-top: 0;
+    font-size: 50px;
+  }
+  .search-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 60%;
+    height: auto;
+    border-radius: 20px;
+    margin-top: 0;
+  }
 
-    .input-container{
-        width: 100%;
-        height: 40px;
-    }
+  .input-container {
+    width: 100%;
+    height: 40px;
+  }
 
-    .search-box{
-      font-size: 15px;
-    }
+  .search-box {
+    font-size: 15px;
+  }
 
-    .search-button{
-      font-size: 15px;
-    }
+  .search-button {
+    font-size: 15px;
+  }
 
-    .salon-p{
-      font-size: 15px;
-      margin-top: 3%;
-    }
+  .salon-p {
+    font-size: 15px;
+    margin-top: 3%;
+  }
 }
 
 @media (max-width: 426px) {
+  .home {
+    margin-top: 10%;
+  }
 
-    .home{
-      margin-top: 10%;
-    }
+  .title {
+    font-size: 35px;
+  }
 
-    .title{
-      font-size: 35px;
-    }
+  .search-container {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    padding: 10px;
+  }
 
-    .search-container{
-        width: 100%;
-        height: auto;
-        border-radius: 20px;
-        padding: 10px;
-    }
+  .bi {
+    font-size: 12px;
+  }
 
-    .bi{
-        font-size: 12px;
-    }
+  .search-box {
+    font-size: 12px;
+  }
 
-    .search-box{
-      font-size: 12px;
-    }
+  .search-button {
+    font-size: 12px;
+  }
+  .input-container {
+    height: 40px;
+  }
 
-    .search-button{
-      font-size: 12px;
-    }
-    .input-container{
-        height: 40px;
-    }
-
-    .salon-p{
-      margin-top: 5%;
-    }
+  .salon-p {
+    margin-top: 5%;
+  }
 }
 </style>
