@@ -1,18 +1,16 @@
 <template>
   <div class="sort">
-    <div class="test">
-      <button
-        class="sort-btn"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseExample"
-        aria-expanded="false"
-        aria-controls="collapseExample"
-      >
-        <i class="bi bi-filter"></i>
-        Sort by
-      </button>
-    </div>
+    <button
+      class="sort-btn"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#collapseExample"
+      aria-expanded="false"
+      aria-controls="collapseExample"
+    >
+      <i class="bi bi-filter"></i>
+      Sort by
+    </button>
 
     <div class="collapse" id="collapseExample">
       <div class="card card-body">
@@ -225,12 +223,8 @@ export default {
   margin-bottom: 30px;
 }
 
-.test {
-  display: flex;
-  justify-content: flex-start;
-}
-
 .sort-btn {
+  position: relative;
   border: 1px solid #2c3e50;
   border-radius: 10px;
   background: #000;
@@ -238,6 +232,9 @@ export default {
   padding: 10px 20px;
   font-size: 18px;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-start;
+  z-index: 1000;
 }
 
 .label-btn {
@@ -268,4 +265,27 @@ export default {
 .reset-btn:hover {
   background: rgb(235, 176, 78);
 }
+
+/* START DARK MODE */
+.dark .card-body {
+  background: #00000079;
+}
+.dark .label-btn {
+  color: #faf9f6;
+}
+.dark .apply-btn {
+  margin-right: 7px;
+  background: transparent;
+}
+.dark .apply-btn:hover {
+  margin-right: 7px;
+  background: #c680e5;
+}
+.dark .reset-btn {
+  background: transparent;
+}
+.dark .reset-btn:hover {
+  background: rgb(235, 176, 78);
+}
+/* END DARK MODE */
 </style>

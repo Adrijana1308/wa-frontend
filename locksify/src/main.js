@@ -1,11 +1,11 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
 
-createApp(App).use(router).mount('#app')
+createApp(App).use(router).mount("#app");
 
-const switchElement = document.querySelector('#checkbox')
+const switchElement = document.querySelector("#checkbox");
 
-switchElement.addEventListener('click', () => {
-    document.body.classList.toggle('dark')
-})
+switchElement.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+});
