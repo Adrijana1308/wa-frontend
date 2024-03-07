@@ -19,7 +19,9 @@
               <span class="card-num-rew"> ({{ post.numOfRatings }}) • </span>
               <span class="card-city">{{ post.location }} </span>
             </p>
-            <a href="#" class="btn btn-dark card-btn">See more</a>
+            <router-link :to="'/card/' + post.id" class="btn btn-dark card-btn"
+              >See more</router-link
+            >
           </div>
         </div>
       </div>
@@ -82,6 +84,10 @@ export default {
   width: 100%;
   height: 500px;
   object-fit: cover;
+}
+.card-btn {
+  padding: 10px 20px;
+  font-size: 18px;
 }
 
 /* START DARK MODE */

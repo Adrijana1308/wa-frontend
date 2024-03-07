@@ -265,4 +265,27 @@ export default {
 .reset-btn:hover {
   background: rgb(235, 176, 78);
 }
+
+/* START DARK MODE */
+.dark .card-body {
+  background: #00000079;
+}
+.dark .label-btn {
+  color: #faf9f6;
+}
+.dark .apply-btn {
+  margin-right: 7px;
+  background: transparent;
+}
+.dark .apply-btn:hover {
+  margin-right: 7px;
+  background: #c680e5;
+}
+.dark .reset-btn {
+  background: transparent;
+}
+.dark .reset-btn:hover {
+  background: rgb(235, 176, 78);
+}
+/* END DARK MODE */
 </style>
