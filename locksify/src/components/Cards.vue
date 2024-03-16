@@ -27,31 +27,48 @@
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
 import axios from "axios";
 import Sort from "./Sort.vue";
+import { Service, Posts } from "@/Services/index.js";
 
 export default {
   props: {
     posts: Array,
   },
+  methods: {
+    async getPosts() {
+      this.posts = await Posts.GetPosts();
+    },
+  },
   components: {
     Sort,
   },
-  mounted() {
-    axios
-      .get("/posts")
-      .then((response) => {
-        this.posts = response.data;
-      })
-      .catch((error) => {
-        console.error("Greška prilikom dohvaćanja podataka:", error);
-      });
+  async mounted() {
+    try {
+      await axios.get("http://localhost:3000/posts")
+          .then((response) => {
+            this.posts = response.data;
+          })
+          .catch((error) => {
+            console.error("Greška prilikom dohvaćanja podataka:", error);
+          });
+      await this.getPosts();
+    } catch (error) {
+      console.error("Greška pri dohvaćanju postova:", error);
+    }
+  },
+  data() {
+    return {
+      Posts: [],
+    };
   },
 };
 </script>
+
 
 <style scoped lang="scss">
 .cards {
