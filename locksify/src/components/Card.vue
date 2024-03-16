@@ -33,12 +33,14 @@
       </p>
       <h3 class="hours-title">Work hours:</h3>
       <p class="hours">{{ post.open }} - {{ post.close }}</p>
-      <button type="submit" class="book-button">Book now!</button>
+      <a href="#services" class="book-button-link">
+        <button type="submit" class="book-button">Book now!</button></a
+      >
     </div>
     <div class="card-img">
       <img :src="post.source" class="c-img" alt="..." />
     </div>
-    <div class="hairstyles">
+    <div id="services" class="hairstyles">
       <div class="hair-container">
         <h3 class="hair-title">Services</h3>
         <button @click="selectCategory('short')" class="select-button">
@@ -153,6 +155,7 @@ export default {
   },
 };
 </script>
+
 <style setup>
 .vc-container {
   font-family: "Poppins", sans-serif;
@@ -201,7 +204,7 @@ export default {
   grid-auto-rows: minmax(100px, auto);
   margin: 2% auto;
   font-family: "Poppins", sans-serif;
-  max-width: 70%;
+  max-width: 80%;
 }
 .card-rating {
   grid-column: 1 / 3;
@@ -213,8 +216,9 @@ export default {
   display: flex;
   justify-content: space-evenly;
   font-size: 25px;
-  min-width: 50%;
+  min-width: 35%;
 }
+
 .dot {
   padding-left: 7px;
   padding-right: 7px;
@@ -259,10 +263,13 @@ export default {
   border-radius: 10px;
   padding: 15px 30px;
   margin-top: 5%;
-  margin-left: 25%;
-  margin-right: 25%;
+  width: 50%;
   font-family: "Poppins", sans-serif;
   font-size: 19px;
+}
+.book-button-link {
+  text-decoration: none;
+  color: #fff;
 }
 .card-img {
   grid-column: 1 / 3;
