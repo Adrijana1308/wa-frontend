@@ -122,6 +122,7 @@ const disabledDates = ref([
 import axios from "axios";
 import { VCalendar, Calendar, DatePicker } from "v-calendar";
 import "v-calendar/style.css";
+import { Service, Posts } from "@/Services/index.js";
 
 export default {
   components: {
@@ -136,7 +137,7 @@ export default {
     };
   },
   mounted() {
-    const postId = this.$route.params.id;
+    const postId = this.$route.params._id;
 
     axios
       .get(`http://localhost:3000/posts/${postId}`)

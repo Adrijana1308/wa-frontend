@@ -22,7 +22,7 @@ const routes = [
       import(/* webpackChunkName: "login" */ "../views/SignUpView.vue"),
   },
   {
-    path: "/card/:id",
+    path: "/card/:_id",
     name: "card",
     component: Card,
     props: true,

@@ -2,7 +2,7 @@
   <div class="cards">
     <Sort />
     <div class="row row-cols-1 row-cols-md-3 g-4">
-      <div class="col" v-for="post in posts" :key="post.id">
+      <div class="col" v-for="post in posts" :key="post._id">
         <div class="card h-100">
           <img :src="post.source" class="card-img-top" alt="Frizerski salon" />
           <div class="card-body">
@@ -19,7 +19,7 @@
               <span class="card-num-rew"> ({{ post.numOfRatings }}) • </span>
               <span class="card-city">{{ post.location }} </span>
             </p>
-            <router-link :to="'/card/' + post.id" class="btn btn-dark card-btn"
+            <router-link :to="'/card/' + post._id" class="btn btn-dark card-btn"
               >See more</router-link
             >
           </div>
@@ -27,7 +27,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -49,13 +48,14 @@ export default {
   },
   async mounted() {
     try {
-      await axios.get("http://localhost:3000/posts")
-          .then((response) => {
-            this.posts = response.data;
-          })
-          .catch((error) => {
-            console.error("Greška prilikom dohvaćanja podataka:", error);
-          });
+      await axios
+        .get("http://localhost:3000/posts")
+        .then((response) => {
+          this.posts = response.data;
+        })
+        .catch((error) => {
+          console.error("Greška prilikom dohvaćanja podataka:", error);
+        });
       await this.getPosts();
     } catch (error) {
       console.error("Greška pri dohvaćanju postova:", error);
@@ -68,7 +68,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped lang="scss">
 .cards {
