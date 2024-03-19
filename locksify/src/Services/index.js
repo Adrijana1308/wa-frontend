@@ -9,6 +9,16 @@ let Service = axios.create({
 //objekt koji sadrzi metode za backend i pozive posta
 
 let Posts = {
+  _posts: [], // Privatno polje za pohranu postova
+
+  getPosts() {
+    return this._posts;
+  },
+
+  setPosts(posts) {
+    // Setter za postavljanje vrijednosti za _posts
+    this._posts = posts;
+  },
   async add(post) {
     try {
       return Service.post("/GetPosts", post);
@@ -47,9 +57,10 @@ let Posts = {
   async GetPosts() {
     let response = await Service.get("/posts");
     let data = response.data;
+
     data = data.map((doc) => {
       return {
-        id: doc._id,
+        _id: doc._id,
         source: doc.source,
         name: doc.name,
         location: doc.location,
@@ -58,9 +69,29 @@ let Posts = {
         numOfRatings: doc.numOfRatings,
         rating: doc.rating,
         hairstyles: doc.hairstyles,
+        hairstyles_short: doc.hairstyles.short,
+        hairstyles_short_type: doc.hairstyles.short.type || null,
+        hairstyles_short_price: doc.hairstyles.short.price || null,
+        hairstyles_short_duration: doc.hairstyles.short.duration || null,
       };
     });
     return data;
+  },
+  async getAllRatings() {
+    try {
+      let response = await Service.get("/posts");
+      let data = response.data;
+
+      // Mapiranje ID-ja i ocjena iz postova
+      let ratings = data.map((doc) => ({
+        _id: doc._id,
+        rating: doc.rating,
+      }));
+      return ratings;
+    } catch (error) {
+      console.error("Greška u dohvaćanju ocjena:", error);
+      throw error;
+    }
   },
 };
 

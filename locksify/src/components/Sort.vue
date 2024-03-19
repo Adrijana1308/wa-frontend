@@ -150,7 +150,9 @@
           </label>
         </div>
         <div class="dicision-btns">
-          <button class="apply-btn rounded border">Apply changes</button>
+          <button class="apply-btn rounded border" @click="applyFilters">
+            Apply changes
+          </button>
           <button class="reset-btn rounded border" @click="resetFilters">
             Reset
           </button>
@@ -161,6 +163,9 @@
 </template>
 
 <script>
+import axios from "axios";
+import { Posts } from "@/Services"; // Uvozite objekt Posts iz vaših usluga
+
 export default {
   data() {
     return {
@@ -173,9 +178,20 @@ export default {
       shortHairStylesChecked: false,
       longHairStylesChecked: false,
       mediumHairStylesChecked: false,
+      posts: [],
     };
   },
   methods: {
+    fetchData() {
+      axios
+        .get("http://localhost:3000/posts")
+        .then((response) => {
+          this.posts = response.data; // Spremite dohvaćene postove
+        })
+        .catch((error) => {
+          console.error("Greška prilikom dohvaćanja podataka:", error);
+        });
+    },
     handleCheckboxChange(option) {
       if (option === "highestRating" && this.highestRatingChecked) {
         this.lowestRatingChecked = false;
@@ -203,6 +219,154 @@ export default {
         this.longHairStylesChecked = false;
       }
     },
+
+    async applyFilters() {
+      try {
+        // Dohvaćanje svih postova
+        let allPosts = await Posts.GetPosts();
+
+        // Funkcija za usporedbu po ocjeni (najviše do najmanje)
+        const compareByRatingDesc = (postA, postB) => {
+          return (postB.rating || 0) - (postA.rating || 0);
+        };
+
+        // Funkcija za usporedbu po ocjeni (najmanje do najviše)
+        const compareByRatingAsc = (postA, postB) => {
+          return (postA.rating || 0) - (postB.rating || 0);
+        };
+
+        // Funkcija za usporedbu po abecednom redu (A-Z)
+        const compareAlphabeticallyAsc = (postA, postB) => {
+          return postA.name.localeCompare(postB.name);
+        };
+
+        // Funkcija za usporedbu po abecednom redu (Z-A)
+        const compareAlphabeticallyDesc = (postA, postB) => {
+          return postB.name.localeCompare(postA.name);
+        };
+
+        // Funkcija za izračun ukupnog broja odabranih frizura za svaki post
+        const calculateTotalHairstyleCount = (post) => {
+          let total = 0;
+          if (this.shortHairStylesChecked) {
+            total += post.hairstyles.short.length;
+          }
+          if (this.mediumHairStylesChecked) {
+            total += post.hairstyles.medium.length;
+          }
+          if (this.longHairStylesChecked) {
+            total += post.hairstyles.long.length;
+          }
+          return total;
+        };
+
+        // Funkcija za usporedbu po ukupnom broju odabranih frizura
+        const compareByTotalHairstyleCount = (postA, postB) => {
+          const countA = calculateTotalHairstyleCount(postA);
+          const countB = calculateTotalHairstyleCount(postB);
+          return countB - countA; // Sortiranje od najvećeg prema najmanjem broju
+        };
+
+        // Funkcija za usporedbu po cijeni ako su vrste frizura iste
+        const compareByPriceIfSameType = (postA, postB) => {
+          const types = ["short", "medium", "long"];
+
+          for (const type of types) {
+            const hairstylesA = postA.hairstyles[type];
+            const hairstylesB = postB.hairstyles[type];
+
+            // Provjera postoji li sadržaj za trenutni tip frizura
+            if (hairstylesA && hairstylesB) {
+              for (let i = 0; i < hairstylesA.length; i++) {
+                const hairstyleA = hairstylesA[i];
+                const hairstyleB = hairstylesB[i];
+
+                // Provjera jesu li obje frizure definirane
+                if (hairstyleA && hairstyleB) {
+                  const priceA = parseFloat(hairstyleA.price);
+                  const priceB = parseFloat(hairstyleB.price);
+
+                  // Provjera jesu li cijene dobro parsirane u brojeve
+                  if (!isNaN(priceA) && !isNaN(priceB)) {
+                    // Usporedba cijena frizura
+                    if (hairstyleA.type === hairstyleB.type) {
+                      const priceComparison = priceA - priceB;
+                      if (priceComparison !== 0) {
+                        return priceComparison;
+                      }
+                    }
+                  } else {
+                    console.error(
+                      "Error: Price is not a valid number for type",
+                      type
+                    );
+                  }
+                }
+              }
+            }
+          }
+
+          return 0;
+        };
+
+        // Primjena sortiranja prema odabranim opcijama
+        allPosts.sort((postA, postB) => {
+          // Inicijalizacija rezultata usporedbe
+          let result = 0;
+
+          // Sortiranje po cijeni ako je odabrano
+          if (this.highestPriceChecked) {
+            result = compareByPriceIfSameType(postA, postB);
+            if (result !== 0) return result * -1; // Sortiranje od najveće prema najmanjoj cijeni
+          } else if (this.lowestPriceChecked) {
+            result = compareByPriceIfSameType(postA, postB);
+            if (result !== 0) return result; // Sortiranje od najmanje prema najvećoj cijeni
+          }
+
+          // Sortiranje po ocjeni ako je odabrano
+          if (this.highestRatingChecked) {
+            result = compareByRatingDesc(postA, postB);
+            if (result !== 0) return result;
+          } else if (this.lowestRatingChecked) {
+            result = compareByRatingAsc(postA, postB);
+            if (result !== 0) return result;
+          }
+
+          // Sortiranje abecedno ako je odabrano
+          if (this.aToZChecked) {
+            result = compareAlphabeticallyAsc(postA, postB);
+            if (result !== 0) return result;
+          } else if (this.zToAChecked) {
+            result = compareAlphabeticallyDesc(postA, postB);
+            if (result !== 0) return result;
+          }
+
+          // Usporedba po ukupnom broju odabranih frizura
+          if (
+            this.shortHairStylesChecked ||
+            this.mediumHairStylesChecked ||
+            this.longHairStylesChecked
+          ) {
+            result = compareByTotalHairstyleCount(postA, postB);
+            if (result !== 0) return result;
+          }
+
+          return result; // Vraćamo 0 ako su objekti jednaki
+        });
+
+        // Emitiranje ažuriranih postova
+        this.$emit("updatePosts", allPosts);
+
+        // Ažuriranje prikazane liste postova
+        this.posts = allPosts;
+      } catch (error) {
+        console.error(
+          "Greška prilikom dohvaćanja i sortiranja postova:",
+          error
+        );
+      }
+    },
+
     resetFilters() {
       this.highestRatingChecked = false;
       this.lowestRatingChecked = false;
@@ -214,6 +378,9 @@ export default {
       this.longHairStylesChecked = false;
       this.mediumHairStylesChecked = false;
     },
+  },
+  mounted() {
+    this.fetchData();
   },
 };
 </script>

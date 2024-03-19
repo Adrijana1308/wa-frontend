@@ -1,12 +1,14 @@
 <template>
   <div class="cards">
-    <Sort />
+    <Sort :posts="posts" @updatePosts="posts = $event" />
+    <!--ovo se nalazilo u " " od @update posts    posts = $event   -->
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col" v-for="post in posts" :key="post._id">
         <div class="card h-100">
           <img :src="post.source" class="card-img-top" alt="Frizerski salon" />
           <div class="card-body">
             <h5 class="card-title">{{ post.name }}</h5>
+
             <p class="card-text">
               <span class="card-rew">
                 {{ post.rating }}
@@ -32,39 +34,39 @@
 <script>
 import axios from "axios";
 import Sort from "./Sort.vue";
-import { Service, Posts } from "@/Services/index.js";
 
 export default {
+  // data() {
+  //   return {
+  //     posts: [],
+  //   };
+  // },
   props: {
     posts: Array,
   },
   methods: {
-    async getPosts() {
-      this.posts = await Posts.GetPosts();
+    async fetchData() {
+      try {
+        const response = await axios.get("http://localhost:3000/posts");
+        console.log(response);
+        this.$emit("update:posts", response.data); // Emitiranje događaja s novim podacima
+        console.log(response.data);
+      } catch (error) {
+        console.error(
+          "Greška prilikom dohvaćanja podataka na Cards.vue:",
+          error
+        );
+      }
     },
+    // updatePosts(updatedPosts) {
+    //   this.posts = updatedPosts;
+    // },
   },
   components: {
     Sort,
   },
-  async mounted() {
-    try {
-      await axios
-        .get("http://localhost:3000/posts")
-        .then((response) => {
-          this.posts = response.data;
-        })
-        .catch((error) => {
-          console.error("Greška prilikom dohvaćanja podataka:", error);
-        });
-      await this.getPosts();
-    } catch (error) {
-      console.error("Greška pri dohvaćanju postova:", error);
-    }
-  },
-  data() {
-    return {
-      Posts: [],
-    };
+  mounted() {
+    this.fetchData();
   },
 };
 </script>
