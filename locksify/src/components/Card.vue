@@ -122,7 +122,6 @@ const disabledDates = ref([
 import axios from "axios";
 import { VCalendar, Calendar, DatePicker } from "v-calendar";
 import "v-calendar/style.css";
-import { Service, Posts } from "@/Services/index.js";
 
 export default {
   components: {
@@ -138,6 +137,7 @@ export default {
   },
   mounted() {
     const postId = this.$route.params._id;
+    console.log("Route params:", this.$route.params);
 
     axios
       .get(`http://localhost:3000/posts/${postId}`)
@@ -146,7 +146,10 @@ export default {
         console.log("Fetched data:", this.post);
       })
       .catch((error) => {
-        console.error("Greška prilikom dohvaćanja podataka:", error);
+        console.error(
+          "Greška prilikom dohvaćanja podataka na Card.vue:",
+          error
+        );
       });
   },
   methods: {

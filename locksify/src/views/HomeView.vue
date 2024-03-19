@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <p class="title">Book local beauty and wellness services</p>
+    <p class="title">Book local beauty and hair care services</p>
     <div class="balls-container">
       <div ref="ball1" class="shadow ball ball1"></div>
       <div ref="ball2" class="shadow ball ball2"></div>
@@ -9,57 +9,96 @@
       <div class="input-container">
         <form class="form" action="/" method="get">
           <i class="bi bi-search"></i>
-          <input type="text" class="search-box" placeholder="Any salon" />
+          <input
+            type="text"
+            class="search-box"
+            v-model="salonName"
+            placeholder="Any name"
+          />
         </form>
       </div>
       <div class="input-container">
         <form class="form" action="/" method="get">
           <i class="bi bi-geo-alt-fill"></i>
-          <input type="text" class="search-box" placeholder="Any location" />
+          <input
+            type="text"
+            class="search-box"
+            v-model="location"
+            placeholder="Any location"
+          />
         </form>
       </div>
       <div class="input-container">
         <form class="form" action="/" method="get">
           <i class="bi bi-calendar"></i>
-          <input type="text" class="search-box" placeholder="Any date" />
+          <input
+            type="text"
+            class="search-box"
+            v-model="date"
+            placeholder="Any date - fix!"
+          />
         </form>
       </div>
       <div class="input-container time">
         <form class="form" action="/" method="get">
           <i class="bi bi-clock-fill"></i>
-          <input type="text" class="search-box" placeholder="Any time" />
+          <input
+            type="text"
+            class="search-box"
+            v-model="time"
+            placeholder="Any time - fix!"
+          />
         </form>
       </div>
       <a href="#cards" class="search-button-link"
-        ><button @click="toggleCards" type="submit" class="search-button">
+        ><button @click="fetchData" type="submit" class="search-button">
           Search
         </button></a
       >
     </div>
-    <p class="salon-p">View over <span> 500 </span> salons on the app!</p>
+    <p class="salon-p">
+      View over <span>{{ salonCount }}</span> salons on the app!
+    </p>
   </div>
-  <Cards id="cards" v-show="showCards" :posts="posts" />
+  <Cards id="cards" :posts="posts" @update:posts="posts = $event" />
 </template>
 
 <script>
 import Cards from "@/components/Cards.vue";
+import Sort from "@/components/Sort.vue";
 import axios from "axios";
 
 export default {
   components: {
     Cards,
+    Sort,
   },
   data() {
     return {
-      showCards: false,
       posts: [],
+      salonName: "",
+      location: "",
+      date: "",
+      time: "",
     };
+  },
+  computed: {
+    salonCount() {
+      return this.posts.length;
+    },
   },
   mounted() {
     this.animateBalls();
     this.fetchData();
   },
   methods: {
+    handleUpdatePosts(updatedPosts) {
+      console.log("Primljeni ažurirani postovi:", updatedPosts);
+      this.posts = updatedPosts;
+    },
+    updatePosts(sortedPosts) {
+      this.posts = sortedPosts;
+    },
     getRandomPosition() {
       const maxX = window.innerWidth - 550;
       const maxY = window.innerHeight - 550;
@@ -89,17 +128,53 @@ export default {
 
       requestAnimationFrame(moveBalls);
     },
-    toggleCards() {
-      this.showCards = !this.showCards;
-    },
     fetchData() {
+      const queryParams = {};
+      if (this.salonName) queryParams.name = this.salonName;
+      if (this.location) queryParams.location = this.location;
+      if (this.date) queryParams.date = this.date;
+      if (this.time) queryParams.time = this.time;
+
       axios
-        .get("http://localhost:3000/posts")
+        .get("http://localhost:3000/posts", { params: queryParams })
         .then((response) => {
-          this.posts = response.data;
+          let filteredPosts = response.data;
+
+          // Filtriranje po imenu salona
+          if (this.salonName) {
+            filteredPosts = filteredPosts.filter((salon) =>
+              salon.name.toLowerCase().includes(this.salonName.toLowerCase())
+            );
+          }
+
+          // Filtriranje po vremenu
+          if (this.time) {
+            filteredPosts = filteredPosts.filter((salon) =>
+              salon.availableTimes.includes(this.time)
+            );
+          }
+
+          // Filtriranje po datumu
+          if (this.date) {
+            filteredPosts = filteredPosts.filter((salon) =>
+              salon.availableDates.includes(this.date)
+            );
+          }
+
+          // Filtriranje po lokaciji
+          if (this.location) {
+            filteredPosts = filteredPosts.filter(
+              (salon) => salon.location === this.location
+            );
+          }
+
+          this.posts = filteredPosts;
         })
         .catch((error) => {
-          console.error("Greška prilikom dohvaćanja podataka:", error);
+          console.error(
+            "Greška prilikom dohvaćanja podataka na Home.vue:",
+            error
+          );
         });
     },
   },
@@ -141,6 +216,7 @@ body {
 .home {
   width: 100%;
   padding: 10%;
+  padding-top: 14%;
   padding-bottom: 0;
   overflow-y: auto;
   transition: transform 0.5s ease-in-out;
