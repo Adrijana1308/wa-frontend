@@ -27,33 +27,7 @@ let Posts = {
       throw error;
     }
   },
-  // async getAll(searchTerm) {
-  //     try {
-  //         let options = {};
-  //
-  //         if (searchTerm) {
-  //             options.params = {
-  //                 title: searchTerm
-  //             };
-  //         }
-  //         let r = await Service.get('/posts', options);
-  //         return r.data.map(doc => {
-  //             return {
-  //                 id: doc._id,
-  //                 source: doc.source,
-  //                 name: doc.name,
-  //                 location: doc.location,
-  //                 date: doc.date,
-  //                 time: doc.time,
-  //                 numOfRatings: doc.numOfRatings,
-  //                 rating: doc.rating
-  //             };
-  //         });
-  //     } catch (error){
-  //         console.error('Greška u dohvaćanju kartica:', error);
-  //         throw error;
-  //     }
-  // }
+
   async GetPosts() {
     let response = await Service.get("/posts");
     let data = response.data;

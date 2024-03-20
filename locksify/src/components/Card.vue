@@ -83,7 +83,15 @@
     </div>
 
     <div class="seven">
-      <span class="card-city">{{ post.location }} </span>
+      <h3 class="hair-title">Appointment details</h3>
+      <p>Picked hairstyle/servise</p>
+      <ul>
+        <li>bla</li>
+        <li>bla</li>
+      </ul>
+      <p>Price: 30€</p>
+      <p>For date: dd/mm/yyyy</p>
+      <p>Time: 09:00 - "duration"</p>
     </div>
   </div>
 
@@ -137,7 +145,6 @@ export default {
   },
   mounted() {
     const postId = this.$route.params._id;
-    console.log("Route params:", this.$route.params);
 
     axios
       .get(`http://localhost:3000/posts/${postId}`)

@@ -1,7 +1,10 @@
 <template>
   <div class="cards">
-    <Sort :posts="posts" @updatePosts="posts = $event" />
-    <!--ovo se nalazilo u " " od @update posts    posts = $event   -->
+    <Sort
+      :searchSalons="searchSalons"
+      :posts="posts"
+      :filteredPosts="filteredPosts"
+    />
     <div class="row row-cols-1 row-cols-md-3 g-4">
       <div class="col" v-for="post in posts" :key="post._id">
         <div class="card h-100">
@@ -32,41 +35,24 @@
 </template>
 
 <script>
-import axios from "axios";
 import Sort from "./Sort.vue";
 
 export default {
-  // data() {
-  //   return {
-  //     posts: [],
-  //   };
-  // },
   props: {
+    searchSalons: Function,
+    filteredPosts: Array,
     posts: Array,
   },
   methods: {
-    async fetchData() {
-      try {
-        const response = await axios.get("http://localhost:3000/posts");
-        console.log(response);
-        this.$emit("update:posts", response.data); // Emitiranje događaja s novim podacima
-        console.log(response.data);
-      } catch (error) {
-        console.error(
-          "Greška prilikom dohvaćanja podataka na Cards.vue:",
-          error
-        );
-      }
+    updateSearchParams(params) {
+      this.searchParams = params;
     },
-    // updatePosts(updatedPosts) {
-    //   this.posts = updatedPosts;
-    // },
   },
   components: {
     Sort,
   },
   mounted() {
-    this.fetchData();
+    debugger;
   },
 };
 </script>
