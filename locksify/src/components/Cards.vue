@@ -5,7 +5,7 @@
       :posts="posts"
       :filteredPosts="filteredPosts"
     />
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-md-3 g-4" v-if="posts && posts.length > 0">
       <div class="col" v-for="post in posts" :key="post._id">
         <div class="card h-100">
           <img :src="post.source" class="card-img-top" alt="Frizerski salon" />
@@ -31,6 +31,9 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      No salons found.
+    </div>
   </div>
 </template>
 
@@ -52,7 +55,17 @@ export default {
     Sort,
   },
   mounted() {
-    debugger;
+    // Log posts to check its contents
+    console.log("Posts:", this.posts);
+    // Ensure each post has a valid _id
+    if (this.posts) {
+      const invalidIds = this.posts.filter(post => !post._id);
+      if (invalidIds.length > 0) {
+        console.error("Posts with invalid _id:", invalidIds);
+      }
+    } else {
+      console.error("Posts array is null or undefined.");
+    }
   },
 };
 </script>
