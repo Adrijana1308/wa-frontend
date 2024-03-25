@@ -65,37 +65,33 @@
       </div>
     </nav>
     <router-view />
-      
   </div>
 </template>
 
 <script>
-
-import {Service, Posts} from '@/Services'
+import { Service, Posts } from "@/Services";
 export default {
   data() {
     return {
       isScrolled: false,
       Posts: [],
-    }
+    };
   },
   methods: {
     handleScroll(event) {
       this.isScrolled = event.deltaY > 0;
     },
-    async getPosts(){
-       this.posts = await Posts.GetPosts()
+    async getPosts() {
+      this.posts = await Posts.GetPosts();
     },
   },
   mounted() {
     window.addEventListener("wheel", this.handleScroll);
     this.getPosts();
-    
   },
   beforeDestroy() {
     window.removeEventListener("wheel", this.handleScroll);
   },
-  
 };
 </script>
 

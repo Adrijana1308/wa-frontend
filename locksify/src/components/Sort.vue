@@ -163,10 +163,18 @@
 </template>
 
 <script>
-import axios from "axios";
-import { Posts } from "@/Services"; // Uvozite objekt Posts iz vaših usluga
-
 export default {
+  props: {
+    filteredPosts: Array,
+    searchSalons: {
+      type: Function,
+      required: true,
+    },
+    posts: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
       highestRatingChecked: false,
@@ -179,19 +187,10 @@ export default {
       longHairStylesChecked: false,
       mediumHairStylesChecked: false,
       posts: [],
+      allPosts: [],
     };
   },
   methods: {
-    fetchData() {
-      axios
-        .get("http://localhost:3000/posts")
-        .then((response) => {
-          this.posts = response.data; // Spremite dohvaćene postove
-        })
-        .catch((error) => {
-          console.error("Greška prilikom dohvaćanja podataka:", error);
-        });
-    },
     handleCheckboxChange(option) {
       if (option === "highestRating" && this.highestRatingChecked) {
         this.lowestRatingChecked = false;
@@ -223,8 +222,7 @@ export default {
     async applyFilters() {
       try {
         // Dohvaćanje svih postova
-        let allPosts = await Posts.GetPosts();
-
+        let allPosts = this.filteredPosts;
         // Funkcija za usporedbu po ocjeni (najviše do najmanje)
         const compareByRatingDesc = (postA, postB) => {
           return (postB.rating || 0) - (postA.rating || 0);
@@ -353,12 +351,7 @@ export default {
 
           return result; // Vraćamo 0 ako su objekti jednaki
         });
-
-        // Emitiranje ažuriranih postova
-        this.$emit("updatePosts", allPosts);
-
-        // Ažuriranje prikazane liste postova
-        this.posts = allPosts;
+        this.filteredPosts.splice(0, this.filteredPosts.length, ...allPosts);
       } catch (error) {
         console.error(
           "Greška prilikom dohvaćanja i sortiranja postova:",
@@ -380,7 +373,7 @@ export default {
     },
   },
   mounted() {
-    this.fetchData();
+    this.applyFilters();
   },
 };
 </script>

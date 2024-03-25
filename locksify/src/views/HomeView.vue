@@ -12,8 +12,9 @@
           <input
             type="text"
             class="search-box"
-            v-model="salonName"
+            v-model="searchParams.salonName"
             placeholder="Any name"
+            @keyup.enter="searchSalons"
           />
         </form>
       </div>
@@ -23,8 +24,9 @@
           <input
             type="text"
             class="search-box"
-            v-model="location"
+            v-model="searchParams.location"
             placeholder="Any location"
+            @keyup.enter="searchSalons"
           />
         </form>
       </div>
@@ -34,8 +36,9 @@
           <input
             type="text"
             class="search-box"
-            v-model="date"
+            v-model="searchParams.date"
             placeholder="Any date - fix!"
+            @keyup.enter="searchSalons"
           />
         </form>
       </div>
@@ -45,13 +48,14 @@
           <input
             type="text"
             class="search-box"
-            v-model="time"
+            v-model="searchParams.time"
             placeholder="Any time - fix!"
+            @keyup.enter="searchSalons"
           />
         </form>
       </div>
       <a href="#cards" class="search-button-link"
-        ><button @click="fetchData" type="submit" class="search-button">
+        ><button @click="searchSalons" type="submit" class="search-button">
           Search
         </button></a
       >
@@ -60,7 +64,12 @@
       View over <span>{{ salonCount }}</span> salons on the app!
     </p>
   </div>
-  <Cards id="cards" :posts="posts" @update:posts="posts = $event" />
+  <Cards
+    :searchSalons="searchSalons"
+    id="cards"
+    :posts="posts"
+    :filteredPosts="filteredPosts"
+  />
 </template>
 
 <script>
@@ -75,11 +84,14 @@ export default {
   },
   data() {
     return {
+      filteredPosts: [],
       posts: [],
-      salonName: "",
-      location: "",
-      date: "",
-      time: "",
+      searchParams: {
+        salonName: "",
+        location: "",
+        date: "",
+        time: "",
+      },
     };
   },
   computed: {
@@ -89,11 +101,21 @@ export default {
   },
   mounted() {
     this.animateBalls();
-    this.fetchData();
+    this.searchSalons();
   },
   methods: {
+    searchSalons() {
+      // Postavite informacije za pretraživanje na one koje je korisnik unio
+      this.salonName = this.searchParams.salonName;
+      this.location = this.searchParams.location;
+
+      this.date = this.searchParams.date;
+      this.time = this.searchParams.time;
+
+      // Ponovno dohvatite podatke
+      this.fetchData();
+    },
     handleUpdatePosts(updatedPosts) {
-      console.log("Primljeni ažurirani postovi:", updatedPosts);
       this.posts = updatedPosts;
     },
     updatePosts(sortedPosts) {
@@ -129,11 +151,12 @@ export default {
       requestAnimationFrame(moveBalls);
     },
     fetchData() {
-      const queryParams = {};
-      if (this.salonName) queryParams.name = this.salonName;
-      if (this.location) queryParams.location = this.location;
-      if (this.date) queryParams.date = this.date;
-      if (this.time) queryParams.time = this.time;
+      const queryParams = {
+        name: this.searchParams.salonName,
+        location: this.searchParams.location,
+        date: this.searchParams.date,
+        time: this.searchParams.time,
+      };
 
       axios
         .get("http://localhost:3000/posts", { params: queryParams })
@@ -164,11 +187,13 @@ export default {
           // Filtriranje po lokaciji
           if (this.location) {
             filteredPosts = filteredPosts.filter(
-              (salon) => salon.location === this.location
+              (salon) =>
+                salon.location.toLowerCase() === this.location.toLowerCase()
             );
           }
 
           this.posts = filteredPosts;
+          this.filteredPosts = filteredPosts;
         })
         .catch((error) => {
           console.error(
