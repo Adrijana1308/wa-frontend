@@ -67,7 +67,13 @@
           <p class="price">€ {{ hairstyle.price }}</p>
         </div>
 
-        <button type="submit" class="select-button">Select</button>
+        <button
+          @click="selectHairstyle(hairstyle)"
+          type="submit"
+          class="select-button"
+        >
+          Select
+        </button>
       </div>
     </div>
 
@@ -76,22 +82,52 @@
         expanded
         v-model="date"
         mode="dateTime"
-        :attributes="attrs"
+        :formatter="customDateFormatter"
+        :attributes="attributes"
         :disabled-dates="disabledDates"
         first-day-of-week="2"
       />
     </div>
 
-    <div class="seven">
+    <div class="appointment">
       <h3 class="hair-title">Appointment details</h3>
-      <p>Picked hairstyle/servise</p>
-      <ul>
-        <li>bla</li>
-        <li>bla</li>
-      </ul>
-      <p>Price: 30€</p>
-      <p>For date: dd/mm/yyyy</p>
-      <p>Time: 09:00 - "duration"</p>
+      <div class="appointmein-details">
+        <div class="appointment-time">
+          <p>Selected date and time: {{ customDateFormatter(date) }}</p>
+        </div>
+        <div class="appointment-price">
+          <p class="appointment-p">Picked hairstyle/servise</p>
+          <ul class="type-selected">
+            <li v-for="(hairstyle, index) in selectedHairstyles" :key="index">
+              <p>{{ hairstyle.type }}</p>
+              <button
+                type="submit"
+                class="remove-button"
+                @click="removeHairstyle(index)"
+              >
+                Remove
+              </button>
+            </li>
+          </ul>
+          <p class="total-price">Total price: € {{ totalPrice }}</p>
+        </div>
+        <div class="buttons">
+          <button
+            @click="confirmSelection"
+            type="submit"
+            class="confirm-button"
+          >
+            Confirm
+          </button>
+          <button
+            type="submit"
+            class="cancel-button"
+            @click="cancelAppointment"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -105,7 +141,48 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+const todos = ref([]);
+
+const attributes = computed(() => [
+  // Attributes for todos
+  ...todos.value.map((todo) => ({
+    dates: todo.dates,
+    dot: {
+      color: todo.color,
+      class: todo.isComplete ? "opacity-75" : "",
+    },
+    // We need to at least pass a truthy value for the popover to appear
+    // Pass an object to customize popover settings like visibility, placement, etc.
+    popover: true,
+    customData: todo,
+  })),
+]);
+
+// Function to get description from appointment details
+const getDescriptionFromAppointment = (selectedHairstyles, totalPrice) => {
+  const selectedServices = selectedHairstyles
+    .map((hairstyle) => hairstyle.type)
+    .join(", ");
+  const totalPriceText = `Total price: € ${totalPrice}`;
+  return `Selected services: ${selectedServices}. ${totalPriceText}`;
+};
+
+const confirmSelection = () => {
+  // Clear existing todos
+  todos.value = [];
+
+  // Create a new todo for the selected date
+  todos.value.push({
+    description: getDescriptionFromAppointment(
+      selectedHairstyles,
+      totalPrice.value
+    ),
+    dates: { selected: date.value }, // Set selected date as dates
+    color: "red", // Set color as desired
+    isComplete: false, // Set completion status as desired
+  });
+};
 
 const date = ref(new Date());
 
@@ -124,6 +201,9 @@ const disabledDates = ref([
     },
   },
 ]);
+const customDateFormatter = (date) => {
+  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+};
 </script>
 
 <script>
@@ -141,6 +221,7 @@ export default {
     return {
       post: null,
       selectedCategory: "short",
+      selectedHairstyles: [],
     };
   },
   mounted() {
@@ -162,6 +243,31 @@ export default {
   methods: {
     selectCategory(category) {
       this.selectedCategory = category;
+    },
+    selectHairstyle(hairstyle) {
+      const alreadySelected = this.selectedHairstyles.some(
+        (selected) => selected.type === hairstyle.type
+      );
+
+      if (alreadySelected) {
+        alert("Već ste odabrali ovaj hairstyle.");
+      } else {
+        this.selectedHairstyles.push(hairstyle);
+      }
+    },
+    removeHairstyle(index) {
+      this.selectedHairstyles.splice(index, 1);
+    },
+    cancelAppointment() {
+      this.selectedHairstyles = [];
+    },
+  },
+  computed: {
+    totalPrice() {
+      return this.selectedHairstyles.reduce(
+        (total, hairstyle) => total + hairstyle.price,
+        0
+      );
     },
   },
 };
@@ -343,7 +449,8 @@ export default {
   font-weight: bolder;
 }
 
-.select-button {
+.select-button,
+.remove-button {
   background-color: transparent;
   border: 2px solid lightgray;
   border-radius: 50px;
@@ -362,11 +469,6 @@ export default {
   grid-row: 8 / 12;
 }
 
-.seven {
-  grid-column: 2 / 4;
-  grid-row: 8 / 12;
-  background: rgba(250, 250, 210, 0.551);
-}
 .c-container {
   display: grid;
   margin-top: 6%;
@@ -379,6 +481,117 @@ export default {
 }
 .c-img {
   max-width: 100%;
+}
+
+.appointment {
+  grid-column: 2 / 4;
+  grid-row: 8 / 12;
+  background: transparent;
+  width: 80%;
+  margin: auto;
+  padding-top: 10px;
+  border-left: 3px solid #d890f5;
+  border-right: 3px solid #d890f5;
+}
+
+.appointmein-details {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+  margin: auto;
+  font-family: "Poppins", sans-serif;
+  max-width: 80%;
+}
+
+.appointment-price {
+  background: white;
+}
+
+.type-selected {
+  font-size: 22px;
+  margin-bottom: auto;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  padding-top: 15px;
+}
+
+.type-selected li {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid lightgray;
+}
+
+.type-selected p {
+  margin-bottom: 0;
+  align-self: center;
+}
+
+.appointment-time {
+  padding-top: 20px;
+  background: white;
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-time p {
+  justify-content: center;
+  display: flex;
+  width: 100%;
+}
+
+.appointment-time button {
+  float: right;
+}
+
+.appointment-p {
+  font-family: "Poppins", sans-serif;
+  font-size: 25px;
+}
+
+.total-price {
+  font-weight: bolder;
+  font-size: 22px;
+  margin-bottom: auto;
+  float: left;
+  margin-left: 30px;
+  padding-top: 10px;
+}
+
+.buttons {
+  display: flex;
+  width: 100%;
+}
+
+.confirm-button {
+  background: #000;
+  border: 1px solid #000;
+  border-radius: 10px;
+  margin-top: 5%;
+  margin-left: 27px;
+  width: 50%;
+  height: 50%;
+  margin-right: 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 19px;
+  color: #fff;
+  justify-self: end;
+}
+.cancel-button {
+  background: lightgray;
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  margin-top: 5%;
+  margin-left: 20px;
+  width: 50%;
+  height: 50%;
+  font-family: "Poppins", sans-serif;
+  font-size: 19px;
+  color: gray;
 }
 
 /* START DARK MODE */
