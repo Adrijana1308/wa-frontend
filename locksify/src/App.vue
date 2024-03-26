@@ -82,7 +82,7 @@ export default {
       this.isScrolled = event.deltaY > 0;
     },
     async getPosts() {
-      this.posts = await Posts.GetPosts();
+      this.posts = await Posts.posts();
     },
   },
   mounted() {

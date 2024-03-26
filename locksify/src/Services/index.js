@@ -21,14 +21,14 @@ let Posts = {
   },
   async add(post) {
     try {
-      return Service.post("/GetPosts", post);
+      return Service.post("/posts", post);
     } catch (error) {
       console.error("Greška u dodavanju kartica:", error);
       throw error;
     }
   },
 
-  async GetPosts() {
+  async posts() {
     let response = await Service.get("/posts");
     let data = response.data;
 
