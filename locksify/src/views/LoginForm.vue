@@ -4,7 +4,12 @@
       <h1 class="heading">Login</h1>
       <p class="Welcome">Welcome back, glad to see you again!</p>
       <form @submit.prevent="login" class="login-form">
-        <input v-model="username" type="text" id="email" placeholder="Email" required>
+        <input 
+        v-model="email" 
+        type="text" 
+        id="email" 
+        placeholder="Email" 
+        required>
         
         <div class="password-container">
           <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
@@ -90,7 +95,7 @@ input{
   color: #000000;
   padding: 15px;
   transition: .5s;
-  text-transform: capitalize;
+  text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -178,11 +183,13 @@ button:hover{
 </style>
 
 <script>
+import { auth } from '@/Services';
+
 export default {
   name: "login",
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
       showPassword: false,
     };
@@ -199,8 +206,14 @@ export default {
         }
       });
     },
-    login() {
-      // Handle login logic here
+    async login() {
+      try {
+        // Handle login logic here
+        let success = await auth.login(this.email, this.password);
+        console.log('Rezultat prijave', success);
+      } catch (error){
+        console.error(error);
+      }
     },
   },
 };

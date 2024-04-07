@@ -69,4 +69,17 @@ let Posts = {
   },
 };
 
-export { Service, Posts };
+let auth = {
+  async login(username, password){
+    let response = await Service.post("/auth", {
+      username: username,
+      password: password,
+    });
+
+    let user = response.data;
+
+    localStorage.setItem('user', user);
+  }, 
+}
+
+export { Service, Posts, auth };
