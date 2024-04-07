@@ -79,14 +79,34 @@
 
     <div class="calendar">
       <DatePicker
-        expanded
         v-model="date"
+        expanded
         mode="dateTime"
         :formatter="customDateFormatter"
         :attributes="attributes"
         :disabled-dates="disabledDates"
-        first-day-of-week="2"
-      />
+        :firstDayOfWeek="2"
+        @click:date="handleDateClick"
+      >
+        <template #day-popover="{ dayTitle, attributes }">
+          <div class="px-2">
+            <div
+              class="text-xs text-gray-700 dark:text-gray-300 font-semibold text-center"
+            >
+              {{ dayTitle }}
+            </div>
+            <ul>
+              <li
+                v-for="{ key, customData } in attributes"
+                :key="key"
+                class="block text-xs text-gray-700 dark:text-gray-300 bg-red-100"
+              >
+                {{ customData.description }}
+              </li>
+            </ul>
+          </div>
+        </template>
+      </DatePicker>
     </div>
 
     <div class="appointment">
@@ -142,57 +162,26 @@
 
 <script setup>
 import { ref, computed } from "vue";
+import { Posts } from "../Services/index.js";
+import axios from "axios";
+
+const bookings = ref([]);
+const descriptionData = ref({});
 const todos = ref([]);
 
-const attributes = computed(() => [
-  // Attributes for todos
-  ...todos.value.map((todo) => ({
-    dates: todo.dates,
-    dot: {
-      color: todo.color,
-      class: todo.isComplete ? "opacity-75" : "",
-    },
-    // We need to at least pass a truthy value for the popover to appear
-    // Pass an object to customize popover settings like visibility, placement, etc.
-    popover: true,
-    customData: todo,
-  })),
-]);
-
-// Function to get description from appointment details
-const getDescriptionFromAppointment = (selectedHairstyles, totalPrice) => {
-  const selectedServices = selectedHairstyles
-    .map((hairstyle) => hairstyle.type)
-    .join(", ");
-  const totalPriceText = `Total price: € ${totalPrice}`;
-  return `Selected services: ${selectedServices}. ${totalPriceText}`;
+// Funkcija za dohvaćanje rezervacija
+const fetchBookings = async () => {
+  try {
+    const data = await Posts.GetBookings();
+    bookings.value = data;
+  } catch (error) {
+    console.error("Greška prilikom dohvaćanja rezervacija:", error);
+  }
 };
 
-const confirmSelection = () => {
-  // Clear existing todos
-  todos.value = [];
-
-  // Create a new todo for the selected date
-  todos.value.push({
-    description: getDescriptionFromAppointment(
-      selectedHairstyles,
-      totalPrice.value
-    ),
-    dates: { selected: date.value }, // Set selected date as dates
-    color: "red", // Set color as desired
-    isComplete: false, // Set completion status as desired
-  });
-};
+fetchBookings();
 
 const date = ref(new Date());
-
-const attrs = ref([
-  {
-    key: "today",
-    highlight: "purple",
-    dates: new Date(),
-  },
-]);
 
 const disabledDates = ref([
   {
@@ -201,8 +190,56 @@ const disabledDates = ref([
     },
   },
 ]);
+
 const customDateFormatter = (date) => {
-  return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  if (date instanceof Date && !isNaN(date)) {
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
+  } else {
+    return "Invalid date"; // Povratna vrijednost ako je date null ili nije valjani datum
+  }
+};
+
+const attributes = computed(() => [
+  ...todos.value.map((todo) => ({
+    dates: todo.dates,
+    dot: {
+      color: todo.color,
+      class: todo.isComplete ? "opacity-75" : "",
+    },
+    popover: true,
+    customData: todo,
+  })),
+]);
+
+// Funkcija koja se poziva kada se promijeni odabrani datum na kalendaru
+const handleDateClick = async (date) => {
+  const formattedDate = customDateFormatter(date); // Formatiranje odabranog datuma koristeći customDateFormatter
+  console.log("Odabrani datum:", formattedDate);
+
+  // Dohvat informacija iz baze podataka na temelju odabranog datuma
+  await fetchDescription(formattedDate);
+};
+
+const formatDate = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  console.log("dan:", day, "mjesec: ", month, "godina: ", year);
+  const formattedDate = `${year}-${month}-${day}`;
+  console.log("Formatirani datum:", formattedDate); // Premještanje console.log izvan return statementa
+  return formattedDate;
+};
+
+const fetchDescription = async (date) => {
+  try {
+    // Dohvat informacija iz baze podataka na temelju datuma
+    const response = await Posts.GetBookingsDate();
+
+    // Ovdje možete ažurirati sučelje s dohvaćenim informacijama
+    console.log("Dohvaćeni podaci za odabrani datum:", response.data);
+  } catch (error) {
+    console.error("Greška prilikom dohvaćanja informacija:", error);
+  }
 };
 </script>
 
@@ -245,6 +282,9 @@ export default {
       this.selectedCategory = category;
     },
     selectHairstyle(hairstyle) {
+      if (!Array.isArray(this.selectedHairstyles)) {
+        this.selectedHairstyles = []; // Ako nije niz, inicijalizirajte ga kao prazan niz
+      }
       const alreadySelected = this.selectedHairstyles.some(
         (selected) => selected.type === hairstyle.type
       );
@@ -260,6 +300,9 @@ export default {
     },
     cancelAppointment() {
       this.selectedHairstyles = [];
+    },
+    confirmSelection() {
+      console.log("Selected hairstyles:", this.selectedHairstyles);
     },
   },
   computed: {
@@ -313,6 +356,7 @@ export default {
   background: #d890f5;
 }
 </style>
+
 <style scoped>
 .wrapper {
   display: grid;
@@ -335,7 +379,6 @@ export default {
   font-size: 25px;
   min-width: 35%;
 }
-
 .dot {
   padding-left: 7px;
   padding-right: 7px;
@@ -404,20 +447,23 @@ export default {
   flex-direction: column;
   align-items: start;
   margin-top: 30px;
-
   margin-bottom: 30px;
 }
+
 .hair-container {
   margin-bottom: 20px;
 }
+
 .hair-container h3 {
   text-align: left;
   margin-bottom: 20px;
 }
+
 .hair-title {
   font-size: 40px;
   font-weight: bolder;
 }
+
 .card-services {
   border-bottom: 1px solid lightgrey;
   margin-top: 10px;

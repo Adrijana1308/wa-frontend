@@ -67,6 +67,27 @@ let Posts = {
       throw error;
     }
   },
+
+  async GetBookings() {
+    try {
+      let response = await Service.get("/bookings");
+      let data = response.data;
+      return data;
+    } catch (error) {
+      console.error("Greška u dohvaćanju rezervacija:", error);
+      throw error;
+    }
+  },
+  async GetBookingsDate() {
+    try {
+      let response = await Service.get("/bookings/:date");
+      let data = response.data;
+      return data;
+    } catch (error) {
+      console.error("Greška u dohvaćanju rezervacija:", error);
+      throw error;
+    }
+  },
 };
 
 export { Service, Posts };
