@@ -55,17 +55,17 @@ export default {
     Sort,
   },
   mounted() {
-    // Log posts to check its contents
-    console.log("Posts:", this.posts);
-    // Ensure each post has a valid _id
-    if (this.posts) {
-      const invalidIds = this.posts.filter(post => !post._id);
-      if (invalidIds.length > 0) {
-        console.error("Posts with invalid _id:", invalidIds);
-      }
-    } else {
-      console.error("Posts array is null or undefined.");
-    }
+    // // Log posts to check its contents
+    // console.log("Posts:", this.posts);
+    // // Ensure each post has a valid _id
+    // if (this.posts) {
+    //   const invalidIds = this.posts.filter(post => !post._id);
+    //   if (invalidIds.length > 0) {
+    // //    console.error("Posts with invalid _id:", invalidIds);
+    //   }
+    // } else {
+    //   console.error("Posts array is null or undefined.");
+    // }
   },
 };
 </script>
