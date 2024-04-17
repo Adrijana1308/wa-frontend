@@ -50,7 +50,7 @@ let Posts = {
         hairstyles_medium: doc.hairstyles.medium || null,
         hairstyles_long: doc.hairstyles.long || null,
         hairstyles_other: doc.hairstyles.other || null,
-        appointments: doc.appointments || null,
+        bookings: doc.bookings || null,
         availability: doc.availability || null,
       };
     });
@@ -74,7 +74,7 @@ let Posts = {
   },
 };
 
-let auth = {
+let Auth = {
   async login(username, password){
     let response = await Service.post("/auth", {
       username: username,
@@ -83,8 +83,30 @@ let auth = {
 
     let user = response.data;
 
-    localStorage.setItem('user', user);
-  }, 
-}
+    localStorage.setItem('user', JSON.stringify(user));
 
-export { Service, Posts, auth };
+    return true;
+  }, 
+  logout(){
+    localStorage.removeItem('user');
+  },
+  getUser(){
+    console.log(localStorage.getItem('user'));
+
+    return JSON.parse(localStorage.getItem('user'));
+  },
+  authenticated(){
+    let user =Auth.getUser();
+    if(user && user.token){
+      return true;
+    }
+    return false;
+  },
+  state: {
+    get authenticated(){
+      return Auth.authenticated();
+    }
+  },
+};
+
+export { Service, Posts, Auth };

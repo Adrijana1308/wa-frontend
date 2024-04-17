@@ -79,7 +79,7 @@
   color: #000000;
   padding: 15px;
   transition: .5s;
-  text-transform: capitalize;
+  text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -183,14 +183,14 @@ button:hover{
 </style>
 
 <script>
-import { auth } from '@/Services';
+import { Auth } from '@/Services';
 
 export default {
   name: "login",
   data() {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       showPassword: false,
     };
   },
@@ -209,8 +209,12 @@ export default {
     async login() {
       try {
         // Handle login logic here
-        let success = await auth.login(this.email, this.password);
+        let success = await Auth.login(this.email, this.password);
         console.log('Rezultat prijave', success);
+        if(success == true){
+          this.$router.push({name: 'home'})
+        }
+
       } catch (error){
         console.error(error);
       }

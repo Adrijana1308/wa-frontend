@@ -54,10 +54,23 @@
                 <router-link to="/">Home</router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/Login">Login</router-link>
+                <router-link 
+                  v-if="!auth.authenticated" 
+                  to="/Login"
+                  >
+                  Login
+              </router-link>
+                <span v-if="auth.authenticated">
+                  <a @click="logout" href="#">Logout</a>
+                </span>
               </li>
               <li class="nav-item">
-                <router-link to="/SignUp">Sign Up</router-link>
+                  <router-link 
+                  v-if="!auth.authenticated" 
+                  to="/SignUp"
+                  >
+                  Sign Up
+              </router-link>
               </li>
             </ul>
           </div>
@@ -69,10 +82,11 @@
 </template>
 
 <script>
-import { Service, Posts } from "@/Services";
+import { Service, Posts, Auth } from "@/Services";
 export default {
   data() {
     return {
+      auth: Auth.state,
       isScrolled: false,
       Posts: [],
     };
@@ -84,6 +98,10 @@ export default {
     async getPosts() {
       this.posts = await Posts.posts();
     },
+    logout(){
+      Auth.logout();
+      this.$router.go();
+    }
   },
   mounted() {
     window.addEventListener("wheel", this.handleScroll);

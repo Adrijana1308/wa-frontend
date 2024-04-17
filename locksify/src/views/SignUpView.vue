@@ -79,7 +79,7 @@
   color: #000000;
   padding: 15px;
   transition: .5s;
-  text-transform: capitalize;
+  text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -95,7 +95,7 @@ input{
   color: #000000;
   padding: 15px;
   transition: .5s;
-  text-transform: capitalize;
+  text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
