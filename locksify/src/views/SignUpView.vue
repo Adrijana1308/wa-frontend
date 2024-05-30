@@ -62,12 +62,6 @@
   border-radius: 15px;
 }
 
-/*.login-form {
-  text-align: left;
-  display: flex;            vidjet cemo kasnije
-  flex-direction: column;
-}*/
-
 .dark input{
   width: 100%;
   height: 35px;
@@ -216,7 +210,7 @@ export default {
         }
       });
     },
-    login() {
+    signup() {
       // Handle login logic here
     },
   },

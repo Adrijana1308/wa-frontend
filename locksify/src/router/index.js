@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import LoginForm from "@/views/LoginForm.vue";
+import signup from "@/views/SignUpView.vue";
 import Card from "@/components/Card.vue";
 import {Auth} from "@/Services";
 
@@ -18,9 +19,8 @@ const routes = [
   },
   {
     path: "/signup",
-    name: "SignUp",
-    component: () =>
-      import(/* webpackChunkName: "login" */ "../views/SignUpView.vue"),
+    name: "signup",
+    component: signup,
   },
   {
     path: "/card/:_id",

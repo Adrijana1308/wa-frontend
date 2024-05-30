@@ -19,7 +19,9 @@
         </div>
         
         <button type="submit">Sign in</button>
-        <button type="submit" class="register"><router-link class="register-link" to="/SignUp">Register now!</router-link></button>
+        <router-link class="register-link" to="/signup">
+        <button type="submit" class="register">Register Now!</button>
+        </router-link>
       </form>
     </div>
   </div>
@@ -218,6 +220,9 @@ export default {
       } catch (error){
         console.error(error);
       }
+    },
+    goToSignup(){
+      this.$router.push('signup')
     },
   },
 };
