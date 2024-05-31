@@ -107,6 +107,19 @@ let Auth = {
       return Auth.authenticated();
     }
   },
+  async signup(username, password){
+    try{
+      let response = await Service.post("/register", {
+        username: username,
+        password: password,
+      });
+      console.log(response.user);
+      return response.user;
+    }catch(error){
+      console.error("Signup error: ", error);
+      throw error;
+    }
+  }
 };
 
 export { Service, Posts, Auth };

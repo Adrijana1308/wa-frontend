@@ -210,8 +210,25 @@ export default {
         }
       });
     },
-    signup() {
+    async signup() {
       // Handle login logic here
+      try{
+        if(this.password !== this.passwordConfirmation){
+          throw new Error("Passowrds do not match!");
+        }
+        // let user = {
+        //   username: this.name,
+        //   email: this.email,
+        //   password: this.password,
+        // };
+        let success = await Auth.register(this.email, this.password);
+        console.log('Signup successful!', success);
+        if(success == true){
+          this.$router.push({name: 'home'});
+        }
+      }catch(error){
+        console.error('Registration error', error)
+      }
     },
   },
 };
