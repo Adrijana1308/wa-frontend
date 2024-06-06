@@ -67,7 +67,7 @@
               <li class="nav-item">
                   <router-link 
                   v-if="!auth.authenticated" 
-                  to="/SignUp"
+                  to="/signup"
                   >
                   Sign Up
               </router-link>
