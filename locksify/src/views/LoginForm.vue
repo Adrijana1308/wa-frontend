@@ -4,7 +4,12 @@
       <h1 class="heading">Login</h1>
       <p class="Welcome">Welcome back, glad to see you again!</p>
       <form @submit.prevent="login" class="login-form">
-        <input v-model="username" type="text" id="email" placeholder="Email" required>
+        <input 
+        v-model="email" 
+        type="text" 
+        id="email" 
+        placeholder="Email" 
+        required>
         
         <div class="password-container">
           <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
@@ -14,7 +19,9 @@
         </div>
         
         <button type="submit">Sign in</button>
-        <button type="submit" class="register"><router-link class="register-link" to="/SignUp">Register now!</router-link></button>
+        <router-link class="register-link" to="/signup">
+        <button type="submit" class="register">Register Now!</button>
+        </router-link>
       </form>
     </div>
   </div>
@@ -74,7 +81,7 @@
   color: #000000;
   padding: 15px;
   transition: .5s;
-  text-transform: capitalize;
+  text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -90,7 +97,7 @@ input{
   color: #000000;
   padding: 15px;
   transition: .5s;
-  text-transform: capitalize;
+  text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -178,12 +185,14 @@ button:hover{
 </style>
 
 <script>
+import { Auth } from '@/Services';
+
 export default {
   name: "login",
   data() {
     return {
-      username: "",
-      password: "",
+      email: '',
+      password: '',
       showPassword: false,
     };
   },
@@ -199,8 +208,21 @@ export default {
         }
       });
     },
-    login() {
-      // Handle login logic here
+    async login() {
+      try {
+        // Handle login logic here
+        let success = await Auth.login(this.email, this.password);
+        console.log('Rezultat prijave', success);
+        if(success == true){
+          this.$router.push({name: 'home'})
+        }
+
+      } catch (error){
+        console.error(error);
+      }
+    },
+    goToSignup(){
+      this.$router.push('signup')
     },
   },
 };

@@ -4,10 +4,11 @@
       <h1 class="heading">Register</h1>
       <p class="Welcome">Welcome, let's get you set up!</p>
       <form @submit.prevent="signup" class="signup-form">
-        <input v-model="name" type="text" id="name" placeholder="Full Name" required>
+        <input v-model="email" type="email" id="email" placeholder="Email" required>
+        
         
         <div class="password-container">
-          <input v-model="email" type="email" id="email" placeholder="Email" required>
+          <input v-model="name" type="text" id="name" placeholder="Full Name" required>
           <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
           <span @click="togglePasswordvisibility" class="password-toggle">
             <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
@@ -62,12 +63,6 @@
   border-radius: 15px;
 }
 
-/*.login-form {
-  text-align: left;
-  display: flex;            vidjet cemo kasnije
-  flex-direction: column;
-}*/
-
 .dark input{
   width: 100%;
   height: 35px;
@@ -79,7 +74,7 @@
   color: #000000;
   padding: 15px;
   transition: .5s;
-  text-transform: capitalize;
+  text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -95,7 +90,7 @@ input{
   color: #000000;
   padding: 15px;
   transition: .5s;
-  text-transform: capitalize;
+  text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
@@ -187,6 +182,7 @@ button:hover{
 </style>
 
 <script>
+import {Auth} from '@/Services';
 export default {
   name: "signup",
   data() {
@@ -216,8 +212,28 @@ export default {
         }
       });
     },
-    login() {
+    async signup() {
       // Handle login logic here
+      try{
+        if(this.password !== this.passwordConfirmation){
+          throw new Error("Passowrds do not match!");
+        }
+        let user = {
+          username: this.email,
+          fullName: this.name,
+          password: this.password,
+        };
+        let success = await Auth.signup(user);
+        console.log('Signup successful!', success);
+        if(success){
+          let loginResponse = await Auth.login(this.email, this.password);
+          if(loginResponse){
+            this.$router.push({name: 'home'});
+          }
+        }
+      }catch(error){
+        console.error('Registration error', error)
+      }
     },
   },
 };

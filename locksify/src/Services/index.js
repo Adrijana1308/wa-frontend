@@ -9,7 +9,7 @@ let Service = axios.create({
 //objekt koji sadrzi metode za backend i pozive posta
 
 let Posts = {
-  _posts: [], // Privatno polje za pohranu postova
+  posts: [], // Privatno polje za pohranu postova
 
   getPosts() {
     return this._posts;
@@ -21,32 +21,37 @@ let Posts = {
   },
   async add(post) {
     try {
-      return Service.post("/GetPosts", post);
+      return Service.post("/posts", post);
     } catch (error) {
       console.error("Greška u dodavanju kartica:", error);
       throw error;
     }
   },
 
-  async GetPosts() {
+  async posts() {
     let response = await Service.get("/posts");
     let data = response.data;
 
     data = data.map((doc) => {
       return {
-        _id: doc._id,
-        source: doc.source,
-        name: doc.name,
-        location: doc.location,
-        date: doc.date,
-        time: doc.time,
-        numOfRatings: doc.numOfRatings,
-        rating: doc.rating,
-        hairstyles: doc.hairstyles,
-        hairstyles_short: doc.hairstyles.short,
+        _id: doc._id || null,
+        source: doc.source || null,
+        name: doc.name || null,
+        location: doc.location || null,
+        date: doc.date || null,
+        time: doc.time || null,
+        numOfRatings: doc.numOfRatings || null,
+        rating: doc.rating || null,
+        hairstyles: doc.hairstyles || null,
+        hairstyles_short: doc.hairstyles.short || null,
         hairstyles_short_type: doc.hairstyles.short.type || null,
         hairstyles_short_price: doc.hairstyles.short.price || null,
         hairstyles_short_duration: doc.hairstyles.short.duration || null,
+        hairstyles_medium: doc.hairstyles.medium || null,
+        hairstyles_long: doc.hairstyles.long || null,
+        hairstyles_other: doc.hairstyles.other || null,
+        bookings: doc.bookings || null,
+        availability: doc.availability || null,
       };
     });
     return data;
@@ -90,4 +95,53 @@ let Posts = {
   },
 };
 
-export { Service, Posts };
+let Auth = {
+  async login(username, password){
+    let response = await Service.post("/auth", {
+      username: username,
+      password: password,
+    });
+
+    let user = response.data;
+
+    localStorage.setItem('user', JSON.stringify(user));
+
+    return true;
+  }, 
+  logout(){
+    localStorage.removeItem('user');
+  },
+  getUser(){
+    console.log(localStorage.getItem('user'));
+
+    return JSON.parse(localStorage.getItem('user'));
+  },
+  authenticated(){
+    let user = Auth.getUser();
+    if(user && user.token){
+      return true;
+    }
+    return false;
+  },
+  state: {
+    get authenticated(){
+      return Auth.authenticated();
+    }
+  },
+  async signup(user){
+    try{
+      let response = await Service.post("/register", user);
+      if(response.data && response.data.id){
+        return true;
+      }
+      //throw new Error("Signup failed");
+      console.log(response.data);
+      return response.data;
+    }catch(error){
+      console.error("Signup error: ", error);
+      throw error;
+    }
+  }
+};
+
+export { Service, Posts, Auth };
