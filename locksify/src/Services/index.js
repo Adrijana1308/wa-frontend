@@ -96,7 +96,7 @@ let Auth = {
     return JSON.parse(localStorage.getItem('user'));
   },
   authenticated(){
-    let user =Auth.getUser();
+    let user = Auth.getUser();
     if(user && user.token){
       return true;
     }
@@ -107,14 +107,15 @@ let Auth = {
       return Auth.authenticated();
     }
   },
-  async signup(username, password){
+  async signup(user){
     try{
-      let response = await Service.post("/register", {
-        username: username,
-        password: password,
-      });
-      console.log(response.user);
-      return response.user;
+      let response = await Service.post("/register", user);
+      if(response.data && response.data.id){
+        return true;
+      }
+      //throw new Error("Signup failed");
+      console.log(response.data);
+      return response.data;
     }catch(error){
       console.error("Signup error: ", error);
       throw error;
