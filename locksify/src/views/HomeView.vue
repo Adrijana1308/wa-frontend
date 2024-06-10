@@ -247,7 +247,7 @@ body {
   transition: transform 0.5s ease-in-out;
 }
 .title {
-  font-size: 110px;
+  font-size: 90px;
   padding: 10px;
   padding-top: 0;
   text-shadow: 1px 1px 2px #fff;
