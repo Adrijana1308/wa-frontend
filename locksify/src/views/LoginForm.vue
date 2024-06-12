@@ -215,8 +215,8 @@ export default {
         console.log('Rezultat prijave', success);
         if(success == true){
           this.$router.push({name: 'home'})
-        }
-
+          }
+          
       } catch (error){
         console.error(error);
       }

@@ -5,6 +5,7 @@ import LoginForm from "@/views/LoginForm.vue";
 import signup from "@/views/SignUpView.vue";
 import Card from "@/components/Card.vue";
 import {Auth} from "@/Services";
+import BusinessFeatureTest from "@/components/BusinessFeatureTest.vue";
 
 const routes = [
   {
@@ -28,6 +29,12 @@ const routes = [
     component: Card,
     props: true,
   },
+  { // Dodano za potrebe testa
+    path: "/business-feature-test",
+    name: "business-feature-test",
+    component: BusinessFeatureTest,
+    meta: {requiresAuth: true, requiresBusiness: true},
+  },
 ];
 
 const router = createRouter({
@@ -45,6 +52,12 @@ router.beforeEach((to, from, next) => {
   if(needLogin && !user){
     next("/login");
     return 
+  }
+
+  if(to.matched.some(record => record.meta.requiresBusiness)){
+    if(user && user.userType !== "business"){
+      return next("/home");
+    }
   }
   next();
 })

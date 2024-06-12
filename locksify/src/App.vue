@@ -49,28 +49,32 @@
             ></button>
           </div>
           <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" key="auth.authenticate">
               <li class="nav-item">
                 <router-link to="/">Home</router-link>
               </li>
               <li class="nav-item">
                 <router-link 
-                  v-if="!auth.authenticated" 
+                  v-if="!isAuthenticated" 
                   to="/Login"
                   >
                   Login
               </router-link>
-                <span v-if="auth.authenticated">
+                <span v-if="isAuthenticated">
                   <a @click="logout" href="#">Logout</a>
                 </span>
               </li>
               <li class="nav-item">
                   <router-link 
-                  v-if="!auth.authenticated" 
+                  v-if="!isAuthenticated" 
                   to="/signup"
                   >
                   Sign Up
               </router-link>
+              </li>
+              <li class="nav-item">
+                <!-- Dodano za test , kasnije brisi -->
+                <router-link v-if="isBusinessUser && isAuthenticated" to="/business-feature-test" id="business">Business Feature</router-link> 
               </li>
             </ul>
           </div>
@@ -83,32 +87,48 @@
 
 <script>
 import { Service, Posts, Auth } from "@/Services";
+import { ref, onMounted, onUnmounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import state from "./Services/state.js";
 export default {
-  data() {
-    return {
-      auth: Auth.state,
-      isScrolled: false,
-      Posts: [],
-    };
-  },
-  methods: {
-    handleScroll(event) {
-      this.isScrolled = event.deltaY > 0;
-    },
-    async getPosts() {
-      this.posts = await Posts.posts();
-    },
-    logout(){
-      Auth.logout();
-      this.$router.go();
+  setup(){
+    const router = useRouter();
+    const isScrolled = ref(false);
+    const posts = ref([]);
+
+    const isAuthenticated = computed(() => state.getters.isAuthenticated.value);
+    const isBusinessUser = computed(() => state.getters.isBusinessUser.value);
+
+    const handleScroll = (event) => {
+      isScrolled.value =event.deltaY > 0;
     }
-  },
-  mounted() {
-    window.addEventListener("wheel", this.handleScroll);
-    this.getPosts();
-  },
-  beforeDestroy() {
-    window.removeEventListener("wheel", this.handleScroll);
+
+    const getPosts = async () => {
+      posts.value = await Posts.posts();
+    }
+
+    const logout = () => {
+      Auth.logout();
+      router.go();
+    };
+
+    onMounted(() => {
+      window.addEventListener('wheel', handleScroll);
+      Auth.authenticated(); // Initialize the authentication state
+      getPosts();
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('wheel', handleScroll);
+    });
+
+    return {
+      isScrolled,
+      isAuthenticated,
+      isBusinessUser,
+      logout,
+      posts
+    };
   },
 };
 </script>

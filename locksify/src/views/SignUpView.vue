@@ -18,8 +18,14 @@
           <span @click="togglePasswordConfirmationvisibility" class="passwordConf-toggle">
             <i :class="['bi', showPasswordConfirmation ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
           </span>
-          
         </div>
+
+        <select class="userType" v-model="userType">
+          <option disabled value="">Select account type</option>
+          <option value="customer">Customer</option>
+          <option value="business">Business</option>
+        </select>
+
         <button type="submit" class="register">Sign Up!</button>
       </form>
     </div>
@@ -179,6 +185,38 @@ button:hover{
   box-sizing: border-box;
 }
 
+.userType{
+  width: 100%;
+  height: 35px;
+  display: block;
+  margin: 20px auto;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 1);
+  border: none;
+  color: #000000;
+  padding-left: 10px;
+  transition: .5s;
+  text-transform: none;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.dark .userType{
+  width: 100%;
+  height: 35px;
+  display: block;
+  margin: 20px auto;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: #000000;
+  padding-left: 10px;
+  transition: .5s;
+  text-transform: none;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
 </style>
 
 <script>
@@ -191,6 +229,7 @@ export default {
       email: "",
       password: "",
       passwordConfirmation: "",
+      userType: "",
       showPassword: false,
       showPasswordConfirmation: false,
     };
@@ -213,15 +252,17 @@ export default {
       });
     },
     async signup() {
-      // Handle login logic here
+      // Handle registration logic here
       try{
         if(this.password !== this.passwordConfirmation){
-          throw new Error("Passowrds do not match!");
+          alert("Passowrds do not match!");
+          return;
         }
         let user = {
           username: this.email,
           fullName: this.name,
           password: this.password,
+          userType: this.userType,
         };
         let success = await Auth.signup(user);
         console.log('Signup successful!', success);

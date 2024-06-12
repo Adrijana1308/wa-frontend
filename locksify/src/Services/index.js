@@ -1,4 +1,5 @@
 import axios from "axios";
+import state from "./state";
 
 //instanciranje axiosa za potrebe backenda
 let Service = axios.create({
@@ -82,30 +83,42 @@ let Auth = {
     });
 
     let user = response.data;
-
     localStorage.setItem('user', JSON.stringify(user));
+    state.actions.setUser(user);
 
     return true;
   }, 
   logout(){
     localStorage.removeItem('user');
+    state.actions.clearUser();
   },
   getUser(){
-    console.log(localStorage.getItem('user'));
-
+    // console.log(localStorage.getItem('user')); ako mi ikad za sad treba...
     return JSON.parse(localStorage.getItem('user'));
   },
   authenticated(){
     let user = Auth.getUser();
     if(user && user.token){
+      state.actions.setUser(user);
       return true;
     }
+    state.actions.clearUser();
     return false;
   },
+  // isBusinessUser(){
+  //   let user = Auth.getUser();
+  //   if(user && user.isBusinessUser){      mozda ne treba??? brisati ako radi!!!!
+  //     return true;
+  //   }
+  //   return false;
+  // },
   state: {
     get authenticated(){
       return Auth.authenticated();
-    }
+    },
+    // get isBusinessUser(){
+    //   return Auth.isBusinessUser();
+    // }
   },
   async signup(user){
     try{
