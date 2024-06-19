@@ -30,8 +30,8 @@ const routes = [
     props: true,
   },
   { // Dodano za potrebe testa
-    path: "/business-feature-test",
-    name: "business-feature-test",
+    path: "/business-feature",
+    name: "business-feature",
     component: BusinessFeatureTest,
     meta: {requiresAuth: true, requiresBusiness: true},
   },

@@ -74,7 +74,7 @@
               </li>
               <li class="nav-item">
                 <!-- Dodano za test , kasnije brisi -->
-                <router-link v-if="isBusinessUser && isAuthenticated" to="/business-feature-test" id="business">Business Feature</router-link> 
+                <router-link v-if="isBusinessUser && isAuthenticated" to="/business-feature" id="business">Create a post</router-link> 
               </li>
             </ul>
           </div>
@@ -99,19 +99,23 @@ export default {
     const isAuthenticated = computed(() => state.getters.isAuthenticated.value);
     const isBusinessUser = computed(() => state.getters.isBusinessUser.value);
 
+    // Hook to handle scrolling
     const handleScroll = (event) => {
       isScrolled.value =event.deltaY > 0;
     }
 
+    // Fetch posts when component is mounted
     const getPosts = async () => {
       posts.value = await Posts.posts();
     }
 
+    // Logout function
     const logout = () => {
       Auth.logout();
       router.go();
     };
 
+    // Mount and unmount lifecycle hooks
     onMounted(() => {
       window.addEventListener('wheel', handleScroll);
       Auth.authenticated(); // Initialize the authentication state
