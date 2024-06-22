@@ -6,6 +6,7 @@ import signup from "@/views/SignUpView.vue";
 import Card from "@/components/Card.vue";
 import {Auth} from "@/Services";
 import BusinessFeatureTest from "@/components/BusinessFeatureTest.vue";
+import EditPost from "@/components/EditPost.vue";
 
 const routes = [
   {
@@ -35,6 +36,18 @@ const routes = [
     component: BusinessFeatureTest,
     meta: {requiresAuth: true, requiresBusiness: true},
   },
+  {
+    path: "/edit-post/:postId",
+    name: "EditPost",
+    component: EditPost,
+    meta: {requiresAuth: true},
+  },
+  // {
+  //   path: "/profile",
+  //   name: "profile",
+  //   component: () => import("../views/ProfileView.vue"),
+  //   meta: {requiresAuth: true},
+  // },
 ];
 
 const router = createRouter({
