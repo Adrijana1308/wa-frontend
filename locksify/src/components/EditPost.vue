@@ -6,7 +6,7 @@
         <input v-model="editedPost.location" type="text" placeholder="Location" required />
         <input v-model="editedPost.open" type="time" placeholder="Open Time" required />
         <input v-model="editedPost.close" type="time" placeholder="Close Time" required />
-        <input v-model="editedPost.source" type="text" placeholder="Image URL" required />
+        <input v-model="editedPost.source" type="text" placeholder="Image URL" />
   
         <div class="hairstyles">
           <h3>Hairstyles</h3>
@@ -69,6 +69,8 @@
       };
   
       const submitPost = async () => {
+        console.log("Stisnuo si gumb!");
+        console.log("Editiran novi post: ", editedPost.value);
         try {
           const response = await axios.put(`http://localhost:3000/posts/${props.postId}`, editedPost.value);
           console.log('Post updated successfully:', response.data);

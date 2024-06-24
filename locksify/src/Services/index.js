@@ -28,34 +28,38 @@ let Posts = {
       throw error;
     }
   },
-
   async posts() {
-    let response = await Service.get("/posts");
-    let data = response.data;
+    try{
+      let response = await Service.get("/posts");
+      let data = response.data;
 
-    data = data.map((doc) => {
-      return {
-        _id: doc._id || null,
-        source: doc.source || null,
-        name: doc.name || null,
-        location: doc.location || null,
-        date: doc.date || null,
-        time: doc.time || null,
-        numOfRatings: doc.numOfRatings || null,
-        rating: doc.rating || null,
-        hairstyles: doc.hairstyles || null,
-        hairstyles_short: doc.hairstyles.short || null,
-        hairstyles_short_type: doc.hairstyles.short.type || null,
-        hairstyles_short_price: doc.hairstyles.short.price || null,
-        hairstyles_short_duration: doc.hairstyles.short.duration || null,
-        hairstyles_medium: doc.hairstyles.medium || null,
-        hairstyles_long: doc.hairstyles.long || null,
-        hairstyles_other: doc.hairstyles.other || null,
-        bookings: doc.bookings || null,
-        availability: doc.availability || null,
-      };
-    });
-    return data;
+      data = data.map((doc) => {
+        return {
+          _id: doc._id || null,
+          source: doc.source || null,
+          name: doc.name || null,
+          location: doc.location || null,
+          date: doc.date || null,
+          time: doc.time || null,
+          numOfRatings: doc.numOfRatings || null,
+          rating: doc.rating || null,
+          hairstyles: doc.hairstyles || null,
+          hairstyles_short: doc.hairstyles.short || null,
+          hairstyles_short_type: doc.hairstyles.short.type || null,
+          hairstyles_short_price: doc.hairstyles.short.price || null,
+          hairstyles_short_duration: doc.hairstyles.short.duration || null,
+          hairstyles_medium: doc.hairstyles.medium || null,
+          hairstyles_long: doc.hairstyles.long || null,
+          hairstyles_other: doc.hairstyles.other || null,
+          bookings: doc.bookings || null,
+          availability: doc.availability || null,
+        };
+      });
+      return data;
+    } catch(error) {
+      console.log("Greška u dohvaćanju kartica", error);
+      throw error;
+    }
   },
   async getAllRatings() {
     try {
