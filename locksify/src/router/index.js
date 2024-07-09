@@ -6,6 +6,7 @@ import signup from "@/views/SignUpView.vue";
 import Card from "@/components/Card.vue";
 import {Auth} from "@/Services";
 import BusinessFeatureTest from "@/components/BusinessFeatureTest.vue";
+import Edit from "@/components/Edit.vue";
 
 const routes = [
   {
@@ -29,12 +30,18 @@ const routes = [
     component: Card,
     props: true,
   },
-  { // Dodano za potrebe testa
+  { // Sada se zapravo zove Create post :D
     path: "/business-feature",
     name: "business-feature",
     component: BusinessFeatureTest,
     meta: {requiresAuth: true, requiresBusiness: true},
   },
+  {
+    path: "/edit/:id",
+    name: "edit",
+    component: Edit,
+    meta: {requiresAuth: true, requiresBusiness: true},
+  }
 ];
 
 const router = createRouter({
@@ -47,7 +54,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const publicSites = ["/home", "/login", "/signup"];
   const needLogin = !publicSites.includes(to.path);
-  const user = Auth.getUser();
+  //const user = Auth.getUser();
 
   if(needLogin && !user){
     next("/login");

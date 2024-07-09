@@ -126,6 +126,7 @@ export default {
       window.removeEventListener('wheel', handleScroll);
     });
 
+
     return {
       isScrolled,
       isAuthenticated,
