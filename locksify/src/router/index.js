@@ -54,7 +54,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const publicSites = ["/home", "/login", "/signup"];
   const needLogin = !publicSites.includes(to.path);
-  //const user = Auth.getUser();
+  const user = Auth.getUser();
 
   if(needLogin && !user){
     next("/login");

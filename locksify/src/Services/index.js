@@ -60,7 +60,7 @@ let Posts = {
   async getAllRatings() {
     try {
       let response = await Service.get("/posts");
-      let data = response.data;
+      //let data = response.data;
 
       // Mapiranje ID-ja i ocjena iz postova
       let ratings = data.map((doc) => ({
@@ -91,6 +91,14 @@ let Posts = {
       return data;
     } catch (error) {
       console.error("Greška u dohvaćanju rezervacija:", error);
+      throw error;
+    }
+  },
+  async bookAppointment(appointment) {
+    try {
+      return Service.post("/bookings", appointment);
+    } catch (error) {
+      console.error("Greška u dodavanju rezervacija:", error);
       throw error;
     }
   },

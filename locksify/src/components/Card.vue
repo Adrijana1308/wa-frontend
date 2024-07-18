@@ -111,12 +111,12 @@
 
     <div class="appointment">
       <h3 class="hair-title">Appointment details</h3>
-      <div class="appointmein-details">
+      <div class="appointment-details">
         <div class="appointment-time">
           <p>Selected date and time: {{ customDateFormatter(date) }}</p>
         </div>
         <div class="appointment-price">
-          <p class="appointment-p">Picked hairstyle/servise</p>
+          <p class="appointment-p">Picked hairstyle/service</p>
           <ul class="type-selected">
             <li v-for="(hairstyle, index) in selectedHairstyles" :key="index">
               <p>{{ hairstyle.type }}</p>
@@ -163,13 +163,34 @@
 <script setup>
 import { ref, computed } from "vue";
 import { Posts } from "../Services/index.js";
-import axios from "axios";
+import { VCalendar, Calendar, DatePicker } from "v-calendar";
+import "v-calendar/style.css";
 
+const post = ref(null);
+const categories = ref(["short", "medium", "long", "other"]);
+const selectedCategory = ref(null);
+const selectedHairstyles = ref([]);
+const date = ref(new Date());
 const bookings = ref([]);
 const descriptionData = ref({});
 const todos = ref([]);
+const disabledDates = ref([
+  {
+    repeat: {
+      weekdays: [1],
+    },
+  },
+]);
 
-// Funkcija za dohvaćanje rezervacija
+const fetchPost = async () => {
+  try {
+    const response = await Posts.GetPost(); // Adjust this to your actual fetching method
+    post.value = response.data;
+  } catch (error) {
+    console.error('Error fetching post data:', error);
+  }
+};
+
 const fetchBookings = async () => {
   try {
     const data = await Posts.GetBookings();
@@ -181,21 +202,11 @@ const fetchBookings = async () => {
 
 fetchBookings();
 
-const date = ref(new Date());
-
-const disabledDates = ref([
-  {
-    repeat: {
-      weekdays: [1],
-    },
-  },
-]);
-
 const customDateFormatter = (date) => {
   if (date instanceof Date && !isNaN(date)) {
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   } else {
-    return "Invalid date"; // Povratna vrijednost ako je date null ili nije valjani datum
+    return "Invalid date";
   }
 };
 
@@ -211,12 +222,9 @@ const attributes = computed(() => [
   })),
 ]);
 
-// Funkcija koja se poziva kada se promijeni odabrani datum na kalendaru
 const handleDateClick = async (date) => {
-  const formattedDate = customDateFormatter(date); // Formatiranje odabranog datuma koristeći customDateFormatter
-  console.log("Odabrani datum:", formattedDate);
-
-  // Dohvat informacija iz baze podataka na temelju odabranog datuma
+  const formattedDate = customDateFormatter(date);
+  console.log("Selected date:", formattedDate);
   await fetchDescription(formattedDate);
 };
 
@@ -224,97 +232,75 @@ const formatDate = (date) => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  console.log("dan:", day, "mjesec: ", month, "godina: ", year);
   const formattedDate = `${year}-${month}-${day}`;
-  console.log("Formatirani datum:", formattedDate); // Premještanje console.log izvan return statementa
   return formattedDate;
 };
 
 const fetchDescription = async (date) => {
   try {
-    // Dohvat informacija iz baze podataka na temelju datuma
     const response = await Posts.GetBookingsDate();
-
-    // Ovdje možete ažurirati sučelje s dohvaćenim informacijama
-    console.log("Dohvaćeni podaci za odabrani datum:", response.data);
+    console.log("Dohvaćeni podaci za odabrani datum: ", response.data);
   } catch (error) {
-    console.error("Greška prilikom dohvaćanja informacija:", error);
+    console.error("Greska prilikom dohvacanja informacija: ", error);
   }
 };
-</script>
 
-<script>
-import axios from "axios";
-import { VCalendar, Calendar, DatePicker } from "v-calendar";
-import "v-calendar/style.css";
+const selectCategory = (category) => {
+  selectedCategory.value = category;
+};
 
-export default {
-  components: {
-    VCalendar,
-    DatePicker,
-    Calendar,
-  },
-  data() {
-    return {
-      post: null,
-      selectedCategory: "short",
-      selectedHairstyles: [],
-    };
-  },
-  mounted() {
-    const postId = this.$route.params._id;
+const selectHairstyle = (hairstyle) => {
+  if (!Array.isArray(selectedHairstyles.value)) {
+    selectedHairstyles.value = [];
+  }
+  const alreadySelected = selectedHairstyles.value.some(
+    (selected) => selected.type === hairstyle.type
+  );
+  if (alreadySelected) {
+    alert("Već ste odabrali ovaj hairstyle.");
+  } else {
+    selectedHairstyles.value.push(hairstyle);
+  }
+};
 
-    axios
-      .get(`http://localhost:3000/posts/${postId}`)
-      .then((response) => {
-        this.post = response.data;
-        console.log("Fetched data:", this.post);
-      })
-      .catch((error) => {
-        console.error(
-          "Greška prilikom dohvaćanja podataka na Card.vue:",
-          error
-        );
-      });
-  },
-  methods: {
-    selectCategory(category) {
-      this.selectedCategory = category;
-    },
-    selectHairstyle(hairstyle) {
-      if (!Array.isArray(this.selectedHairstyles)) {
-        this.selectedHairstyles = []; // Ako nije niz, inicijalizirajte ga kao prazan niz
-      }
-      const alreadySelected = this.selectedHairstyles.some(
-        (selected) => selected.type === hairstyle.type
-      );
+const removeHairstyle = (index) => {
+  selectedHairstyles.value.splice(index, 1);
+};
 
-      if (alreadySelected) {
-        alert("Već ste odabrali ovaj hairstyle.");
-      } else {
-        this.selectedHairstyles.push(hairstyle);
-      }
-    },
-    removeHairstyle(index) {
-      this.selectedHairstyles.splice(index, 1);
-    },
-    cancelAppointment() {
-      this.selectedHairstyles = [];
-    },
-    confirmSelection() {
-      console.log("Selected hairstyles:", this.selectedHairstyles);
-    },
-  },
-  computed: {
-    totalPrice() {
-      return this.selectedHairstyles.reduce(
-        (total, hairstyle) => total + hairstyle.price,
-        0
-      );
-    },
-  },
+const totalPrice = computed(() => {
+  return selectedHairstyles.value.reduce((total, hairstyle) => {
+    return total + hairstyle.price;
+  }, 0);
+});
+
+const confirmSelection = async () => {
+  if (selectedHairstyles.value.length === 0) {
+    alert("Please select at least one hairstyle.");
+    return;
+  }
+
+  const appointmentData = {
+    date: formatDate(date.value),
+    time: date.value.toLocaleTimeString(),
+    salon_id: post.value._id,
+    description: selectedHairstyles.value.map((hairstyle) => hairstyle.type).join(", "),
+  };
+
+  try {
+    await Posts.bookAppointment(appointmentData);
+    alert("Appointment booked successfully!");
+  } catch (error) {
+    console.error("Error booking appointment:", error);
+    alert("There was an error booking your appointment.");
+  }
+};
+
+const cancelAppointment = () => {
+  selectedHairstyles.value = [];
+  date.value = new Date();
 };
 </script>
+
 
 <style setup>
 .vc-container {
