@@ -1,5 +1,5 @@
 import axios from "axios";
-import state from "./state";
+import store from "./state.js";
 
 //instanciranje axiosa za potrebe backenda
 let Service = axios.create({
@@ -78,7 +78,7 @@ let Posts = {
     }
   },
 
-  async GetBookings() {
+  async getBookings() {
     try {
       let response = await Service.get("/bookings");
       let data = response.data;
@@ -101,64 +101,55 @@ let Posts = {
 };
 
 let Auth = {
-  async login(username, password){
-    let response = await Service.post("/auth", {
-      username: username,
-      password: password,
-    });
+  async login(username, password) {
+    try {
+      let response = await Service.post("/auth", {
+        username: username,
+        password: password,
+      });
 
-    let user = response.data;
-    localStorage.setItem('user', JSON.stringify(user));
-    state.actions.setUser(user);
+      let user = response.data;
+      store.commit('setUser', user); // Use Vuex mutation to set user
+      return true;
+    } catch (error) {
+      console.error("Login error:", error);
+      return false;
+    }
+  },
 
-    return true;
-  }, 
-  logout(){
-    localStorage.removeItem('user');
-    state.actions.clearUser();
+  logout() {
+    store.commit('clearUser'); // Use Vuex mutation to clear user
   },
-  getUser(){
-    // console.log(localStorage.getItem('user')); ako mi ikad za sad treba...
-    return JSON.parse(localStorage.getItem('user'));
+
+  getUser() {
+    const user = store.getters.getuser; // Get user from Vuex store
+    console.log('Retrieved user from Vuex: OVO SAM U INDEX.JS SERVIS... ', user);
+    return user;
   },
-  authenticated(){
-    let user = Auth.getUser();
-    if(user && user.token){
-      state.actions.setUser(user);
+
+  authenticated() {
+    let user = this.getUser();
+    if (user && user.token) {
+      store.commit('setUser', user);
       return true;
     }
-    state.actions.clearUser();
+    store.commit('clearUser');
     return false;
   },
-  // isBusinessUser(){
-  //   let user = Auth.getUser();
-  //   if(user && user.isBusinessUser){      mozda ne treba??? brisati ako radi!!!!
-  //     return true;
-  //   }
-  //   return false;
-  // },
-  state: {
-    get authenticated(){
-      return Auth.authenticated();
-    },
-    // get isBusinessUser(){
-    //   return Auth.isBusinessUser();
-    // }
-  },
-  async signup(user){
-    try{
+
+  async signup(user) {
+    try {
       let response = await Service.post("/register", user);
-      if(response.data && response.data.id){
+      if (response.data && response.data.id) {
         return true;
       }
-      //throw new Error("Signup failed");
       console.log(response.data);
       return response.data;
-    }catch(error){
-      console.error("Signup error: ", error);
+    } catch (error) {
+      console.error("Signup error:", error);
       throw error;
     }
-  }
+  },
 };
 
 export { Service, Posts, Auth };

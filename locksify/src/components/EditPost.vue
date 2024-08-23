@@ -1,99 +1,97 @@
 <template>
-    <div class="edit-post">
-      <h1>Edit Post</h1>
-      <form @submit.prevent="submitPost">
-        <input v-model="editedPost.name" type="text" placeholder="Salon Name" required />
-        <input v-model="editedPost.location" type="text" placeholder="Location" required />
-        <input v-model="editedPost.open" type="time" placeholder="Open Time" required />
-        <input v-model="editedPost.close" type="time" placeholder="Close Time" required />
-        <input v-model="editedPost.source" type="text" placeholder="Image URL" />
-  
-        <div class="hairstyles">
-          <h3>Hairstyles</h3>
-          <div v-for="(type, index) in hairTypes" :key="index">
-            <h4>{{ type.charAt(0).toUpperCase() + type.slice(1) }}</h4>
-            <div v-for="(hairstyle, idx) in editedPost.hairstyles[type]" :key="idx">
-              <input v-model="hairstyle.type" type="text" placeholder="Type" required />
-              <input v-model.number="hairstyle.price" type="number" placeholder="Price" required />
-              <input v-model.number="hairstyle.duration" type="number" placeholder="Duration (minutes)" required />
-            </div>
-            <button type="button" @click="addHairstyle(type)">Add {{ type }} Hairstyle</button>
+  <div class="edit-post">
+    <h1>Edit Post</h1>
+    <form @submit.prevent="submitPost">
+      <input v-model="editedPost.name" type="text" placeholder="Salon Name" required />
+      <input v-model="editedPost.location" type="text" placeholder="Location" required />
+      <input v-model="editedPost.open" type="time" placeholder="Open Time" required />
+      <input v-model="editedPost.close" type="time" placeholder="Close Time" required />
+      <input v-model="editedPost.source" type="text" placeholder="Image URL" />
+
+      <div class="hairstyles">
+        <h3>Hairstyles</h3>
+        <div v-for="(type, index) in hairTypes" :key="index">
+          <h4>{{ type.charAt(0).toUpperCase() + type.slice(1) }}</h4>
+          <div v-for="(hairstyle, idx) in editedPost.hairstyles[type]" :key="idx">
+            <input v-model="hairstyle.type" type="text" placeholder="Type" required />
+            <input v-model.number="hairstyle.price" type="number" placeholder="Price" required />
+            <input v-model.number="hairstyle.duration" type="number" placeholder="Duration (minutes)" required />
           </div>
+          <button type="button" @click="addHairstyle(type)">Add {{ type }} Hairstyle</button>
         </div>
-  
-        <button type="submit">Save Changes</button>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  import { ref, onMounted } from 'vue';
-  import axios from 'axios';
-  
-  export default {
-    name: 'EditPost',
-    props: {
-      postId: {
-        type: String,
-        required: true
-      }
-    },
-    setup(props) {
-      const editedPost = ref({
-        name: '',
-        location: '',
-        open: '',
-        close: '',
-        source: '',
-        hairstyles: {
-          short: [],
-          medium: [],
-          long: [],
-          other: []
-        }
-      });
-  
-      const hairTypes = ['short', 'medium', 'long', 'other'];
-  
-      const fetchPostDetails = async () => {
-        try {
-          const response = await axios.get(`http://localhost:3000/posts/${props.postId}`);
-          editedPost.value = response.data; // Assuming the response data structure matches editedPost
-        } catch (error) {
-          console.error('Error fetching post details:', error);
-        }
-      };
-  
-      const addHairstyle = (type) => {
-        editedPost.value.hairstyles[type].push({ type: '', price: 0, duration: 0 });
-      };
-  
-      const submitPost = async () => {
-        console.log("Stisnuo si gumb!");
-        console.log("Editiran novi post: ", editedPost.value);
-        try {
-          const response = await axios.put(`http://localhost:3000/posts/${props.postId}`, editedPost.value);
-          console.log('Post updated successfully:', response.data);
-          // Optionally, you can emit an event or perform navigation after successful operation
-        } catch (error) {
-          console.error('Error submitting post:', error);
-        }
-      };
-  
-      // Fetch post details when component is mounted
-      onMounted(() =>{
-        fetchPostDetails();
-      })
-  
-      return {
-        editedPost,
-        hairTypes,
-        addHairstyle,
-        submitPost
-      };
+      </div>
+
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</template>
+
+<script>
+import { ref, onMounted } from 'vue';
+import { mapActions } from 'vuex'; // Import mapActions to handle Vuex actions
+import { Posts } from '../Services/index.js';
+
+export default {
+  name: 'EditPost',
+  props: {
+    postId: {
+      type: String,
+      required: true
     }
-  };
-  </script>
+  },
+  setup(props, { emit }) {
+    const editedPost = ref({
+      name: '',
+      location: '',
+      open: '',
+      close: '',
+      source: '',
+      hairstyles: {
+        short: [],
+        medium: [],
+        long: [],
+        other: []
+      }
+    });
+
+    const hairTypes = ['short', 'medium', 'long', 'other'];
+
+    const fetchPostDetails = async () => {
+      try {
+        const response = await Posts.getPostById(props.postId);
+        editedPost.value = response.data;
+      } catch (error) {
+        console.error('Error fetching post details:', error);
+      }
+    };
+
+    const addHairstyle = (type) => {
+      editedPost.value.hairstyles[type].push({ type: '', price: 0, duration: 0 });
+    };
+
+    const submitPost = async () => {
+      try {
+        const response = await Posts.updatePost(props.postId, editedPost.value);
+        console.log('Post updated successfully:', response.data);
+        emit('postUpdated', response.data); // Emit event after successful update
+      } catch (error) {
+        console.error('Error submitting post:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchPostDetails();
+    });
+
+    return {
+      editedPost,
+      hairTypes,
+      addHairstyle,
+      submitPost,
+    };
+  }
+};
+</script>
   
   <style scoped>
   .edit-post {

@@ -26,7 +26,7 @@
             </p>
             <router-link :to="'/card/' + post._id" class="btn btn-dark card-btn">See more</router-link>
             <!-- Show edit button only if current user is the owner -->
-             <router-link v-if="isOwner(post.userId)" :to="'/edit-post/' + post._id" @click="editPost(post)" class="btn btn-primary">Edit</router-link>
+            <router-link v-if="isOwner(post.userId)" :to="'/edit-post/' + post._id" @click="editPost(post)" class="btn btn-primary">Edit</router-link>
           </div>
         </div>
       </div>
@@ -41,19 +41,22 @@
 <script>
 import Sort from "./Sort.vue";
 import EditPost from "./EditPost.vue";
+import { mapGetters } from 'vuex';
 
 export default {
   props: {
     searchSalons: Function,
     filteredPosts: Array,
     posts: Array,
-    UserId: String
   },
   data(){
     return {
       showEditModal: false, // Control whether to show the edit modal
-      editPostId: null // Track ID of the post being edit
+      editPostId: null // Track ID of the post being edited
     }
+  },
+  computed: {
+    ...mapGetters(['currentUserId']),
   },
   methods: {
     updateSearchParams(params) {
@@ -66,29 +69,15 @@ export default {
       // Show the edit modal and set id of the post to be edited
       this.showEditModal = true;
       this.editPostId = post._id;
-      
     },
     closeEditModal(){
       this.showEditModal = false;
-      this.editPostId = null; // Reset the editPostid after closing the modal
+      this.editPostId = null; // Reset the editPostId after closing the modal
     }
   },
   components: {
     Sort,
     EditPost, // Register EditPost component
-  },
-  mounted() {
-    // // Log posts to check its contents
-    // console.log("Posts:", this.posts);
-    // // Ensure each post has a valid _id
-    // if (this.posts) {
-    //   const invalidIds = this.posts.filter(post => !post._id);
-    //   if (invalidIds.length > 0) {
-    // //    console.error("Posts with invalid _id:", invalidIds);
-    //   }
-    // } else {
-    //   console.error("Posts array is null or undefined.");
-    // }
   },
 };
 </script>

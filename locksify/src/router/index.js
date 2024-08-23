@@ -7,6 +7,7 @@ import Card from "@/components/Card.vue";
 import {Auth} from "@/Services";
 import BusinessFeatureTest from "@/components/BusinessFeatureTest.vue";
 import EditPost from "@/components/EditPost.vue";
+import store from "@/Services/state.js"
 
 const routes = [
   {
@@ -58,17 +59,25 @@ const router = createRouter({
 // Interceptor logic
 /* U ovom slučaju, interceptiramo sve rute, ako je korisnik ulogiran */
 router.beforeEach((to, from, next) => {
-  const publicSites = ["/home", "/login", "/signup"];
+  const publicSites = ["/login", "/signup"];
   const needLogin = !publicSites.includes(to.path);
   const user = Auth.getUser();
+  const isAuthenticated = store.getters.isAuthenticated;
+  console.log('User from Auth.getUser():', user);
+
+  console.log('Navigating to:', to.path);
+  console.log('User:', user);
+  console.log('Is authenticated:', isAuthenticated);
 
   if(needLogin && !user){
+    console.log('Redirecting to login...');
     next("/login");
     return 
   }
 
   if(to.matched.some(record => record.meta.requiresBusiness)){
     if(user && user.userType !== "business"){
+      console.log('User is not business user, redirecting to home')
       return next("/home");
     }
   }

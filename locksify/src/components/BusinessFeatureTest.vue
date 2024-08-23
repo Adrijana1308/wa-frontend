@@ -26,59 +26,48 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-export default {
-  name: 'CreatePost',
-  setup() {
-    const name = ref('');
-    const location = ref('');
-    const open = ref('');
-    const close = ref('');
-    const source = ref('');
-    const hairTypes = ['short', 'medium', 'long', 'other'];
-    const hairstyles = ref({
-      short: [],
-      medium: [],
-      long: [],
-      other: []
-    });
+const store = useStore();
+const router = useRouter();
 
-    const addHairstyle = (type) => {
-      hairstyles.value[type].push({ type: '', price: 0, duration: 0 });
-    };
+const name = ref('');
+const location = ref('');
+const open = ref('');
+const close = ref('');
+const source = ref('');
+const hairTypes = ['short', 'medium', 'long', 'other'];
+const hairstyles = ref({
+  short: [],
+  medium: [],
+  long: [],
+  other: []
+});
 
-    const createPost = async () => {
-      const postData = {
-        name: name.value,
-        location: location.value,
-        open: open.value,
-        close: close.value,
-        source: source.value,
-        hairstyles: hairstyles.value
-      };
+const addHairstyle = (type) => {
+  hairstyles.value[type].push({ type: '', price: 0, duration: 0 });
+};
 
-      try {
-        const response = await axios.post('http://localhost:3000/posts', postData);
-        console.log('Post created successfully:', response.data);
-      } catch (error) {
-        console.error('Error creating post:', error);
-      }
-    };
+const createPost = async () => {
+  const postData = {
+    name: name.value,
+    location: location.value,
+    open: open.value,
+    close: close.value,
+    source: source.value,
+    hairstyles: hairstyles.value,
+    userId: store.getters.currentUserId, // Attach current user ID to the post
+  };
 
-    return {
-      name,
-      location,
-      open,
-      close,
-      source,
-      hairTypes,
-      hairstyles,
-      addHairstyle,
-      createPost
-    };
+  try {
+    const response = await store.dispatch('Posts/add', postData);
+    console.log('Post created successfully:', response);
+    router.push({ name: 'home' }); // Redirect to home after successful post creation
+  } catch (error) {
+    console.error('Error creating post:', error);
   }
 };
 </script>

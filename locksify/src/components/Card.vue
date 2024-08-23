@@ -34,8 +34,8 @@
       <h3 class="hours-title">Work hours:</h3>
       <p class="hours">{{ post.open }} - {{ post.close }}</p>
       <a href="#services" class="book-button-link">
-        <button type="submit" class="book-button">Book now!</button></a
-      >
+        <button type="submit" class="book-button">Book now!</button>
+      </a>
     </div>
     <div class="card-img">
       <img :src="post.source" class="c-img" alt="..." />
@@ -116,7 +116,7 @@
           <p>Selected date and time: {{ customDateFormatter(date) }}</p>
         </div>
         <div class="appointment-price">
-          <p class="appointment-p">Picked hairstyle/servise</p>
+          <p class="appointment-p">Picked hairstyle/service</p>
           <ul class="type-selected">
             <li v-for="(hairstyle, index) in selectedHairstyles" :key="index">
               <p>{{ hairstyle.type }}</p>
@@ -161,159 +161,114 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { useStore } from "vuex";
 import { Posts } from "../Services/index.js";
 import axios from "axios";
+import { DatePicker } from 'v-calendar';
+import 'v-calendar/dist/style.css';
 
+
+
+const store = useStore();
+const route = useRoute();
+
+const post = ref(null);
+const selectedCategory = ref("short");
+const selectedHairstyles = ref([]);
 const bookings = ref([]);
-const descriptionData = ref({});
-const todos = ref([]);
+const date = ref(new Date());
+const disabledDates = ref([]);
 
-// Funkcija za dohvaćanje rezervacija
-const fetchBookings = async () => {
+const postId = computed(() => route.params._id);
+const currentUserId = computed(() => store.getters.currentUserId);
+
+const fetchPostDetails = async () => {
   try {
-    const data = await Posts.GetBookings();
-    bookings.value = data;
+    const response = await axios.get(`http://localhost:3000/posts/${postId.value}`);
+    post.value = response.data;
   } catch (error) {
-    console.error("Greška prilikom dohvaćanja rezervacija:", error);
+    console.error("Error fetching post details:", error);
   }
 };
 
-fetchBookings();
+const fetchBookings = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/bookings');
+    bookings.value = Array.isArray(response.data) ? response.data : [];
+  } catch (error) {
+    console.error("Error fetching bookings:", error);
+  }
+};
 
-const date = ref(new Date());
+onMounted(() => {
+  fetchPostDetails();
+  fetchBookings();
+});
 
-const disabledDates = ref([
-  {
-    repeat: {
-      weekdays: [1],
-    },
-  },
-]);
+const isOwner = computed(() => post.value && post.value.userId === currentUserId);
+
+const selectCategory = (category) => {
+  selectedCategory.value = category;
+};
+
+const selectHairstyle = (hairstyle) => {
+  if (!selectedHairstyles.value.some(selected => selected.type === hairstyle.type)) {
+    selectedHairstyles.value.push(hairstyle);
+  } else {
+    alert("This hairstyle is already selected.");
+  }
+};
+
+const removeHairstyle = (index) => {
+  selectedHairstyles.value.splice(index, 1);
+};
+
+const cancelAppointment = () => {
+  selectedHairstyles.value = [];
+};
+
+const confirmSelection = () => {
+  console.log("Selected hairstyles:", selectedHairstyles.value);
+};
 
 const customDateFormatter = (date) => {
-  if (date instanceof Date && !isNaN(date)) {
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-  } else {
-    return "Invalid date"; // Povratna vrijednost ako je date null ili nije valjani datum
-  }
+  return date instanceof Date && !isNaN(date)
+    ? `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`
+    : "Invalid date";
 };
 
 const attributes = computed(() => [
-  ...todos.value.map((todo) => ({
-    dates: todo.dates,
-    dot: {
-      color: todo.color,
-      class: todo.isComplete ? "opacity-75" : "",
+  ...bookings.value.map(booking => ({
+    key: booking._id, // Use a unique key for each booking
+    dates: new Date(booking.date), // Assume bookings have a `date` field
+    customData: booking,
+    highlight: { color: booking.color || 'blue' }, // Use a highlight attribute with color
+    popover: {
+      label: `Booking: ${booking.description}`,
     },
-    popover: true,
-    customData: todo,
   })),
 ]);
 
-// Funkcija koja se poziva kada se promijeni odabrani datum na kalendaru
 const handleDateClick = async (date) => {
-  const formattedDate = customDateFormatter(date); // Formatiranje odabranog datuma koristeći customDateFormatter
-  console.log("Odabrani datum:", formattedDate);
-
-  // Dohvat informacija iz baze podataka na temelju odabranog datuma
+  const formattedDate = customDateFormatter(date);
+  console.log("Selected date:", formattedDate);
   await fetchDescription(formattedDate);
-};
-
-const formatDate = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  console.log("dan:", day, "mjesec: ", month, "godina: ", year);
-  const formattedDate = `${year}-${month}-${day}`;
-  console.log("Formatirani datum:", formattedDate); // Premještanje console.log izvan return statementa
-  return formattedDate;
 };
 
 const fetchDescription = async (date) => {
   try {
-    // Dohvat informacija iz baze podataka na temelju datuma
-    const response = await Posts.GetBookingsDate();
-
-    // Ovdje možete ažurirati sučelje s dohvaćenim informacijama
-    console.log("Dohvaćeni podaci za odabrani datum:", response.data);
+    const response = await axios.get(`http://localhost:3000/bookings/${date}`);
+    console.log("Fetched data for selected date:", response.data);
   } catch (error) {
-    console.error("Greška prilikom dohvaćanja informacija:", error);
+    console.error("Error fetching data:", error);
   }
 };
-</script>
 
-<script>
-import axios from "axios";
-import { VCalendar, Calendar, DatePicker } from "v-calendar";
-import "v-calendar/style.css";
-
-export default {
-  components: {
-    VCalendar,
-    DatePicker,
-    Calendar,
-  },
-  data() {
-    return {
-      post: null,
-      selectedCategory: "short",
-      selectedHairstyles: [],
-    };
-  },
-  mounted() {
-    const postId = this.$route.params._id;
-
-    axios
-      .get(`http://localhost:3000/posts/${postId}`)
-      .then((response) => {
-        this.post = response.data;
-        console.log("Fetched data:", this.post);
-      })
-      .catch((error) => {
-        console.error(
-          "Greška prilikom dohvaćanja podataka na Card.vue:",
-          error
-        );
-      });
-  },
-  methods: {
-    selectCategory(category) {
-      this.selectedCategory = category;
-    },
-    selectHairstyle(hairstyle) {
-      if (!Array.isArray(this.selectedHairstyles)) {
-        this.selectedHairstyles = []; // Ako nije niz, inicijalizirajte ga kao prazan niz
-      }
-      const alreadySelected = this.selectedHairstyles.some(
-        (selected) => selected.type === hairstyle.type
-      );
-
-      if (alreadySelected) {
-        alert("Već ste odabrali ovaj hairstyle.");
-      } else {
-        this.selectedHairstyles.push(hairstyle);
-      }
-    },
-    removeHairstyle(index) {
-      this.selectedHairstyles.splice(index, 1);
-    },
-    cancelAppointment() {
-      this.selectedHairstyles = [];
-    },
-    confirmSelection() {
-      console.log("Selected hairstyles:", this.selectedHairstyles);
-    },
-  },
-  computed: {
-    totalPrice() {
-      return this.selectedHairstyles.reduce(
-        (total, hairstyle) => total + hairstyle.price,
-        0
-      );
-    },
-  },
-};
+const totalPrice = computed(() => {
+  return selectedHairstyles.value.reduce((total, hairstyle) => total + hairstyle.price, 0);
+});
 </script>
 
 <style setup>

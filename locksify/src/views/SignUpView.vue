@@ -5,17 +5,16 @@
       <p class="Welcome">Welcome, let's get you set up!</p>
       <form @submit.prevent="signup" class="signup-form">
         <input v-model="email" type="email" id="email" placeholder="Email" required>
-        
-        
+
         <div class="password-container">
           <input v-model="name" type="text" id="name" placeholder="Full Name" required>
           <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
-          <span @click="togglePasswordvisibility" class="password-toggle">
+          <span @click="togglePasswordVisibility" class="password-toggle">
             <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
           </span>
-          
+
           <input v-model="passwordConfirmation" :type="showPasswordConfirmation ? 'text' : 'password'" id="password-confirmation" name="user-confirmation" placeholder="Confirm Password" required>
-          <span @click="togglePasswordConfirmationvisibility" class="passwordConf-toggle">
+          <span @click="togglePasswordConfirmationVisibility" class="passwordConf-toggle">
             <i :class="['bi', showPasswordConfirmation ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
           </span>
         </div>
@@ -220,9 +219,10 @@ button:hover{
 </style>
 
 <script>
-import {Auth} from '@/Services';
+import { mapActions } from 'vuex';
+
 export default {
-  name: "signup",
+  name: "Signup",
   data() {
     return {
       name: "",
@@ -235,45 +235,39 @@ export default {
     };
   },
   methods: {
-    togglePasswordvisibility(){
+    ...mapActions(['signup', 'login']), // Mapping Vuex actions
+
+    togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
-    togglePasswordConfirmationvisibility() {
+
+    togglePasswordConfirmationVisibility() {
       this.showPasswordConfirmation = !this.showPasswordConfirmation;
     },
-    mounted(){
-      this.$nextTick(() => {
-        const passwordInput = document.getElementById('password');
-        const passwordConfInput = document.getElementById('passwordConfirmation');
-        if(passwordInput && passwordConfInput){
-          passwordInput.setAttribute('autocomplete', 'new-password');
-          passwordConfInput.setAttribute('autocomplete', 'new-password');
-        }
-      });
-    },
+
     async signup() {
-      // Handle registration logic here
-      try{
-        if(this.password !== this.passwordConfirmation){
-          alert("Passowrds do not match!");
+      try {
+        if (this.password !== this.passwordConfirmation) {
+          alert("Passwords do not match!");
           return;
         }
+
         let user = {
           username: this.email,
           fullName: this.name,
           password: this.password,
           userType: this.userType,
         };
-        let success = await Auth.signup(user);
-        console.log('Signup successful!', success);
-        if(success){
-          let loginResponse = await Auth.login(this.email, this.password);
-          if(loginResponse){
-            this.$router.push({name: 'home'});
+
+        let success = await this.signup(user);
+        if (success) {
+          let loginResponse = await this.login({ email: this.email, password: this.password });
+          if (loginResponse) {
+            this.$router.push({ name: 'home' });
           }
         }
-      }catch(error){
-        console.error('Registration error', error)
+      } catch (error) {
+        console.error('Registration error:', error);
       }
     },
   },
