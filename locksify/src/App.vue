@@ -73,7 +73,6 @@
               </router-link>
               </li>
               <li class="nav-item">
-                <!-- Dodano za test , kasnije brisi -->
                 <router-link v-if="isBusinessUser && isAuthenticated" to="/business-feature" id="business">Create a post</router-link> 
               </li>
             </ul>
@@ -86,18 +85,18 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import { Service, Posts, Auth } from "@/Services";
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useRouter } from "vue-router";
-import state from "./Services/state.js";
 export default {
+  computed: {
+      ...mapGetters(['isAuthenticated', 'isBusinessUser', 'currentUserId']),
+    },
   setup(){
     const router = useRouter();
     const isScrolled = ref(false);
     const posts = ref([]);
-
-    const isAuthenticated = computed(() => state.getters.isAuthenticated.value);
-    const isBusinessUser = computed(() => state.getters.isBusinessUser.value);
 
     // Hook to handle scrolling
     const handleScroll = (event) => {
@@ -118,7 +117,6 @@ export default {
     // Mount and unmount lifecycle hooks
     onMounted(() => {
       window.addEventListener('wheel', handleScroll);
-      Auth.authenticated(); // Initialize the authentication state
       getPosts();
     });
 
@@ -128,8 +126,6 @@ export default {
 
     return {
       isScrolled,
-      isAuthenticated,
-      isBusinessUser,
       logout,
       posts
     };

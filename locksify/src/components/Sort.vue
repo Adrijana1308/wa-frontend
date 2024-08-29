@@ -186,7 +186,6 @@ export default {
       shortHairStylesChecked: false,
       longHairStylesChecked: false,
       mediumHairStylesChecked: false,
-      posts: [],
       allPosts: [],
     };
   },

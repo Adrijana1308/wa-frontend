@@ -24,9 +24,9 @@
               <span class="card-num-rew"> ({{ post.numOfRatings }}) • </span>
               <span class="card-city">{{ post.location }} </span>
             </p>
-            <router-link :to="'/card/' + post._id" class="btn btn-dark card-btn"
-              >See more</router-link
-            >
+            <router-link :to="'/card/' + post._id" class="btn btn-dark card-btn">See more</router-link>
+            <!-- Show edit button only if current user is the owner -->
+            <router-link v-if="isOwner(post.userId)" :to="'/edit-post/' + post._id" @click="editPost(post)" class="btn btn-primary">Edit</router-link>
           </div>
         </div>
       </div>
@@ -34,11 +34,14 @@
     <div v-else>
       No salons found.
     </div>
+    <EditPost v-if="showEditModal" :postId="editPostId" @close="closeEditModal"/>
   </div>
 </template>
 
 <script>
 import Sort from "./Sort.vue";
+import EditPost from "./EditPost.vue";
+import { mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -46,26 +49,45 @@ export default {
     filteredPosts: Array,
     posts: Array,
   },
+  data(){
+    return {
+      showEditModal: false, // Control whether to show the edit modal
+      editPostId: null // Track ID of the post being edited
+    }
+  },
+  computed: {
+    ...mapGetters(['currentUserId']),
+    ...mapGetters(['posts']),
+  },
   methods: {
     updateSearchParams(params) {
       this.searchParams = params;
     },
+    isOwner(userId){
+      console.log('Comparing userId: ', userId, 'with currentUserId: ', this.currentUserId);
+      return userId === this.currentUserId;
+    },
+    editPost(post){
+      // Show the edit modal and set id of the post to be edited
+      this.showEditModal = true;
+      this.editPostId = post._id;
+    },
+    closeEditModal(){
+      this.showEditModal = false;
+      this.editPostId = null; // Reset the editPostId after closing the modal
+    },
+    handleUpdatePost(updatedPost) {
+    const index = this.posts.findIndex(post => post._id === updatedPost._id);
+    if (index !== -1) {
+      this.$set(this.posts, index, updatedPost);
+      this.$set(this.filteredPosts, index, updatedPost);
+    }
+    this.closeEditModal(); // Close the modal after updating
+    },
   },
   components: {
     Sort,
-  },
-  mounted() {
-    // // Log posts to check its contents
-    // console.log("Posts:", this.posts);
-    // // Ensure each post has a valid _id
-    // if (this.posts) {
-    //   const invalidIds = this.posts.filter(post => !post._id);
-    //   if (invalidIds.length > 0) {
-    // //    console.error("Posts with invalid _id:", invalidIds);
-    //   }
-    // } else {
-    //   console.error("Posts array is null or undefined.");
-    // }
+    EditPost, // Register EditPost component
   },
 };
 </script>

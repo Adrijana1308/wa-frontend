@@ -7,58 +7,54 @@
     </div>
     <div class="search-container">
       <div class="input-container">
-        <form class="form" action="/" method="get">
+        <form class="form" @submit.prevent="searchSalons">
           <i class="bi bi-search"></i>
           <input
             type="text"
             class="search-box"
             v-model="searchParams.salonName"
             placeholder="Any name"
-            @keyup.enter="searchSalons"
           />
         </form>
       </div>
       <div class="input-container">
-        <form class="form" action="/" method="get">
+        <form class="form" @submit.prevent="searchSalons">
           <i class="bi bi-geo-alt-fill"></i>
           <input
             type="text"
             class="search-box"
             v-model="searchParams.location"
             placeholder="Any location"
-            @keyup.enter="searchSalons"
           />
         </form>
       </div>
       <div class="input-container">
-        <form class="form" action="/" method="get">
+        <form class="form" @submit.prevent="searchSalons">
           <i class="bi bi-calendar"></i>
           <input
             type="text"
             class="search-box"
             v-model="searchParams.date"
             placeholder="Any date - fix!"
-            @keyup.enter="searchSalons"
           />
         </form>
       </div>
       <div class="input-container time">
-        <form class="form" action="/" method="get">
+        <form class="form" @submit.prevent="searchSalons">
           <i class="bi bi-clock-fill"></i>
           <input
             type="text"
             class="search-box"
             v-model="searchParams.time"
             placeholder="Any time - fix!"
-            @keyup.enter="searchSalons"
           />
         </form>
       </div>
-      <a href="#cards" class="search-button-link"
-        ><button @click="searchSalons" type="submit" class="search-button">
+      <a href="#cards" class="search-button-link">
+        <button @click="searchSalons" type="submit" class="search-button">
           Search
-        </button></a
-      >
+        </button>
+      </a>
     </div>
     <p class="salon-p">
       View over <span>{{ salonCount }}</span> salons on the app!
@@ -74,13 +70,12 @@
 
 <script>
 import Cards from "@/components/Cards.vue";
-import Sort from "@/components/Sort.vue";
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
     Cards,
-    Sort,
   },
   data() {
     return {
@@ -98,21 +93,15 @@ export default {
     salonCount() {
       return this.posts.length;
     },
+    ...mapGetters(['posts']),
   },
   mounted() {
+    this.fetchData();
     this.animateBalls();
     this.searchSalons();
   },
   methods: {
     searchSalons() {
-      // Postavite informacije za pretraživanje na one koje je korisnik unio
-      this.salonName = this.searchParams.salonName;
-      this.location = this.searchParams.location;
-
-      this.date = this.searchParams.date;
-      this.time = this.searchParams.time;
-
-      // Ponovno dohvatite podatke
       this.fetchData();
     },
     handleUpdatePosts(updatedPosts) {
@@ -125,8 +114,8 @@ export default {
       const maxX = window.innerWidth - 550;
       const maxY = window.innerHeight - 550;
 
-      const randomX = Math.random() * (maxX - 0) + 0;
-      const randomY = Math.random() * (maxY - 0) + 0;
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
 
       return { x: randomX, y: randomY };
     },
@@ -151,44 +140,36 @@ export default {
       requestAnimationFrame(moveBalls);
     },
     fetchData() {
-      const queryParams = {
-        name: this.searchParams.salonName,
-        location: this.searchParams.location,
-        date: this.searchParams.date,
-        time: this.searchParams.time,
-      };
-
       axios
-        .get("http://localhost:3000/posts", { params: queryParams })
+        .get("http://localhost:3000/posts", { params: this.searchParams })
         .then((response) => {
           let filteredPosts = response.data;
 
-          // Filtriranje po imenu salona
-          if (this.salonName) {
+          if (this.searchParams.salonName) {
             filteredPosts = filteredPosts.filter((salon) =>
-              salon.name.toLowerCase().includes(this.salonName.toLowerCase())
+              salon.name
+                .toLowerCase()
+                .includes(this.searchParams.salonName.toLowerCase())
             );
           }
 
-          // Filtriranje po vremenu
-          if (this.time) {
+          if (this.searchParams.time) {
             filteredPosts = filteredPosts.filter((salon) =>
-              salon.availableTimes.includes(this.time)
+              salon.availableTimes.includes(this.searchParams.time)
             );
           }
 
-          // Filtriranje po datumu
-          if (this.date) {
+          if (this.searchParams.date) {
             filteredPosts = filteredPosts.filter((salon) =>
-              salon.availableDates.includes(this.date)
+              salon.availableDates.includes(this.searchParams.date)
             );
           }
 
-          // Filtriranje po lokaciji
-          if (this.location) {
+          if (this.searchParams.location) {
             filteredPosts = filteredPosts.filter(
               (salon) =>
-                salon.location.toLowerCase() === this.location.toLowerCase()
+                salon.location.toLowerCase() ===
+                this.searchParams.location.toLowerCase()
             );
           }
 
@@ -196,10 +177,7 @@ export default {
           this.filteredPosts = filteredPosts;
         })
         .catch((error) => {
-          console.error(
-            "Greška prilikom dohvaćanja podataka na Home.vue:",
-            error
-          );
+          console.error("Error fetching data in HomeView.vue:", error);
         });
     },
   },

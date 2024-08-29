@@ -26,59 +26,52 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-export default {
-  name: 'CreatePost',
-  setup() {
-    const name = ref('');
-    const location = ref('');
-    const open = ref('');
-    const close = ref('');
-    const source = ref('');
-    const hairTypes = ['short', 'medium', 'long', 'other'];
-    const hairstyles = ref({
-      short: [],
-      medium: [],
-      long: [],
-      other: []
-    });
+const store = useStore();
+const router = useRouter();
 
-    const addHairstyle = (type) => {
-      hairstyles.value[type].push({ type: '', price: 0, duration: 0 });
-    };
+const name = ref('');
+const location = ref('');
+const open = ref('');
+const close = ref('');
+const source = ref('');
+const hairTypes = ['short', 'medium', 'long', 'other'];
+const hairstyles = ref({
+  short: [],
+  medium: [],
+  long: [],
+  other: []
+});
 
-    const createPost = async () => {
-      const postData = {
-        name: name.value,
-        location: location.value,
-        open: open.value,
-        close: close.value,
-        source: source.value,
-        hairstyles: hairstyles.value
-      };
+const addHairstyle = (type) => {
+  hairstyles.value[type].push({ type: '', price: 0, duration: 0 });
+};
 
-      try {
-        const response = await axios.post('http://localhost:3000/posts', postData);
-        console.log('Post created successfully:', response.data);
-      } catch (error) {
-        console.error('Error creating post:', error);
-      }
-    };
+const createPost = async () => {
+  // const userId = store.getters.currentUserId;
+ // console.log("Current user ID:", userId);
 
-    return {
-      name,
-      location,
-      open,
-      close,
-      source,
-      hairTypes,
-      hairstyles,
-      addHairstyle,
-      createPost
-    };
+  const postData = {
+    name: name.value,
+    location: location.value,
+    open: open.value,
+    close: close.value,
+    source: source.value,
+    hairstyles: hairstyles.value,
+    userId: store.getters.currentuserId, // Attach current user ID to the post
+  };
+
+  try {
+    const response = await store.dispatch('add', postData);
+    console.log('Post created successfully:', response);
+    await store.dispatch('fetchPosts');
+    router.push({ name: 'home' }); // Redirect to home after successful post creation
+  } catch (error) {
+    console.error('Error creating post:', error);
   }
 };
 </script>
@@ -86,14 +79,16 @@ export default {
 <style scoped>
 .create-post-container {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 140px auto;
   padding: 20px;
-  background: #f9f9f9;
+  background: blanchedalmond;
+  border: 10px solid #d890f530;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 form {
+  margin: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -107,15 +102,17 @@ input {
 
 button {
   padding: 10px;
-  background: #007bff;
-  color: white;
+  background: #d890f530;
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 button:hover {
-  background: #0056b3;
+  color: rgba(0, 0, 0, 1);
+  transform: scale(1.1);
+  transition: .1s ease-in-out;
 }
 
 .hairstyles {

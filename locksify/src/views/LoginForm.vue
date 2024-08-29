@@ -3,24 +3,33 @@
     <div class="login-window">
       <h1 class="heading">Login</h1>
       <p class="Welcome">Welcome back, glad to see you again!</p>
-      <form @submit.prevent="login" class="login-form">
+      <form @submit.prevent="performLogin" class="login-form">
         <input 
-        v-model="email" 
-        type="text" 
-        id="email" 
-        placeholder="Email" 
-        required>
+          v-model="email" 
+          type="text" 
+          id="email" 
+          placeholder="Email" 
+          required
+        />
         
         <div class="password-container">
-          <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
-          <span @click="togglePasswordvisibility" class="password-toggle">
+          <input 
+            v-model="password" 
+            :type="showPassword ? 'text' : 'password'" 
+            id="password" 
+            name="user-password" 
+            placeholder="Password" 
+            autocomplete="nope" 
+            required
+          />
+          <span @click="togglePasswordVisibility" class="password-toggle">
             <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
           </span>
         </div>
         
         <button type="submit">Sign in</button>
         <router-link class="register-link" to="/signup">
-        <button type="submit" class="register">Register Now!</button>
+          <button type="button" class="register">Register Now!</button>
         </router-link>
       </form>
     </div>
@@ -185,10 +194,10 @@ button:hover{
 </style>
 
 <script>
-import { Auth } from '@/Services';
+import { mapActions } from 'vuex';
 
 export default {
-  name: "login",
+  name: "Login",
   data() {
     return {
       email: '',
@@ -197,33 +206,32 @@ export default {
     };
   },
   methods: {
-    togglePasswordvisibility(){
+    ...mapActions(['login']), // Mapping the login action from Vuex
+
+    togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
-    mounted(){
-      this.$nextTick(() => {
-        const passwordInput = document.getElementById('password');
-        if(passwordInput){
-          passwordInput.setAttribute('autocomplete', 'off');
-        }
-      });
-    },
-    async login() {
+
+    async performLogin() { // Renamed from `login` to `performLogin`
       try {
-        // Handle login logic here
-        let success = await Auth.login(this.email, this.password);
-        console.log('Rezultat prijave', success);
-        if(success == true){
-          this.$router.push({name: 'home'})
-          }
-          
-      } catch (error){
-        console.error(error);
+        const success = await this.login({ email: this.email, password: this.password });
+        console.log('Login success:', success);
+        console.log('Is authenticated:', this.$store.getters.isAuthenticated)
+        if (success) {
+          this.$router.push({ name: 'home' });
+        }
+      } catch (error) {
+        console.error('Login error:', error);
       }
     },
-    goToSignup(){
-      this.$router.push('signup')
-    },
+  },
+  mounted() {
+    this.$nextTick(() => {
+      const passwordInput = document.getElementById('password');
+      if (passwordInput) {
+        passwordInput.setAttribute('autocomplete', 'off');
+      }
+    });
   },
 };
 </script>

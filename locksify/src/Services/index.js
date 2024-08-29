@@ -1,10 +1,22 @@
 import axios from "axios";
-import state from "./state";
+import store from "./state.js";
+import { update } from "lodash";
 
 //instanciranje axiosa za potrebe backenda
 let Service = axios.create({
   baseURL: "http://localhost:3000/",
   timeout: 5000,
+});
+
+Service.interceptors.request.use(
+  (config) => {
+  const token = store.getters.getuser?.token;
+  if(token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
 });
 
 //objekt koji sadrzi metode za backend i pozive posta
@@ -28,34 +40,38 @@ let Posts = {
       throw error;
     }
   },
-
   async posts() {
-    let response = await Service.get("/posts");
-    let data = response.data;
+    try{
+      let response = await Service.get("/posts");
+      let data = response.data;
 
-    data = data.map((doc) => {
-      return {
-        _id: doc._id || null,
-        source: doc.source || null,
-        name: doc.name || null,
-        location: doc.location || null,
-        date: doc.date || null,
-        time: doc.time || null,
-        numOfRatings: doc.numOfRatings || null,
-        rating: doc.rating || null,
-        hairstyles: doc.hairstyles || null,
-        hairstyles_short: doc.hairstyles.short || null,
-        hairstyles_short_type: doc.hairstyles.short.type || null,
-        hairstyles_short_price: doc.hairstyles.short.price || null,
-        hairstyles_short_duration: doc.hairstyles.short.duration || null,
-        hairstyles_medium: doc.hairstyles.medium || null,
-        hairstyles_long: doc.hairstyles.long || null,
-        hairstyles_other: doc.hairstyles.other || null,
-        bookings: doc.bookings || null,
-        availability: doc.availability || null,
-      };
-    });
-    return data;
+      data = data.map((doc) => {
+        return {
+          _id: doc._id || null,
+          source: doc.source || null,
+          name: doc.name || null,
+          location: doc.location || null,
+          date: doc.date || null,
+          time: doc.time || null,
+          numOfRatings: doc.numOfRatings || null,
+          rating: doc.rating || null,
+          hairstyles: doc.hairstyles || null,
+          hairstyles_short: doc.hairstyles.short || null,
+          hairstyles_short_type: doc.hairstyles.short.type || null,
+          hairstyles_short_price: doc.hairstyles.short.price || null,
+          hairstyles_short_duration: doc.hairstyles.short.duration || null,
+          hairstyles_medium: doc.hairstyles.medium || null,
+          hairstyles_long: doc.hairstyles.long || null,
+          hairstyles_other: doc.hairstyles.other || null,
+          bookings: doc.bookings || null,
+          availability: doc.availability || null,
+        };
+      });
+      return data;
+    } catch(error) {
+      console.log("Greška u dohvaćanju kartica", error);
+      throw error;
+    }
   },
   async getAllRatings() {
     try {
@@ -73,8 +89,7 @@ let Posts = {
       throw error;
     }
   },
-
-  async GetBookings() {
+  async getBookings() {
     try {
       let response = await Service.get("/bookings");
       let data = response.data;
@@ -94,67 +109,76 @@ let Posts = {
       throw error;
     }
   },
+  async getPostById(postId){
+    try{
+      const response = await Service.get(`/posts/${postId}`);
+      return response.data;
+    } catch (error){
+      console.error("Error fetching post by ID: ", error);
+      throw error;
+    }
+  },
+  async updatePost(postId, updatedData){
+    try{
+      const response = await Service.put(`/posts/${postId}`, updatedData);
+      return response.data;
+    } catch(error) {
+      console.error("Error fetching post by ID: ", error);
+      throw error;
+    }
+  },
 };
 
 let Auth = {
-  async login(username, password){
-    let response = await Service.post("/auth", {
-      username: username,
-      password: password,
-    });
+  async login(username, password) {
+    try {
+      let response = await Service.post("/auth", {
+        username: username,
+        password: password,
+      });
 
-    let user = response.data;
-    localStorage.setItem('user', JSON.stringify(user));
-    state.actions.setUser(user);
+      let user = response.data;
+      store.commit('setUser', user); // Use Vuex mutation to set user
+      return true;
+    } catch (error) {
+      console.error("Login error:", error);
+      return false;
+    }
+  },
 
-    return true;
-  }, 
-  logout(){
-    localStorage.removeItem('user');
-    state.actions.clearUser();
+  logout() {
+    store.commit('clearUser'); // Use Vuex mutation to clear user
   },
-  getUser(){
-    // console.log(localStorage.getItem('user')); ako mi ikad za sad treba...
-    return JSON.parse(localStorage.getItem('user'));
+
+  getUser() {
+    const user = store.getters.getuser; // Get user from Vuex store
+    console.log('Retrieved user from Vuex: OVO SAM U INDEX.JS SERVIS... ', user);
+    return user;
   },
-  authenticated(){
-    let user = Auth.getUser();
-    if(user && user.token){
-      state.actions.setUser(user);
+
+  authenticated() {
+    let user = this.getUser();
+    if (user && user.token) {
+      store.commit('setUser', user);
       return true;
     }
-    state.actions.clearUser();
+    store.commit('clearUser');
     return false;
   },
-  // isBusinessUser(){
-  //   let user = Auth.getUser();
-  //   if(user && user.isBusinessUser){      mozda ne treba??? brisati ako radi!!!!
-  //     return true;
-  //   }
-  //   return false;
-  // },
-  state: {
-    get authenticated(){
-      return Auth.authenticated();
-    },
-    // get isBusinessUser(){
-    //   return Auth.isBusinessUser();
-    // }
-  },
-  async signup(user){
-    try{
+
+  async signup(user) {
+    try {
       let response = await Service.post("/register", user);
-      if(response.data && response.data.id){
+      if (response.data && response.data.id) {
         return true;
       }
-      //throw new Error("Signup failed");
       console.log(response.data);
       return response.data;
-    }catch(error){
-      console.error("Signup error: ", error);
+    } catch (error) {
+      console.error("Signup error:", error);
       throw error;
     }
-  }
+  },
 };
 
 export { Service, Posts, Auth };
