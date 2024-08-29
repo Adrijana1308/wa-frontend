@@ -57,12 +57,14 @@ export default {
   },
   computed: {
     ...mapGetters(['currentUserId']),
+    ...mapGetters(['posts']),
   },
   methods: {
     updateSearchParams(params) {
       this.searchParams = params;
     },
     isOwner(userId){
+      console.log('Comparing userId: ', userId, 'with currentUserId: ', this.currentUserId);
       return userId === this.currentUserId;
     },
     editPost(post){
@@ -73,7 +75,15 @@ export default {
     closeEditModal(){
       this.showEditModal = false;
       this.editPostId = null; // Reset the editPostId after closing the modal
+    },
+    handleUpdatePost(updatedPost) {
+    const index = this.posts.findIndex(post => post._id === updatedPost._id);
+    if (index !== -1) {
+      this.$set(this.posts, index, updatedPost);
+      this.$set(this.filteredPosts, index, updatedPost);
     }
+    this.closeEditModal(); // Close the modal after updating
+    },
   },
   components: {
     Sort,

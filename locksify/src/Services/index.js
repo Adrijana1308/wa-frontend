@@ -1,10 +1,22 @@
 import axios from "axios";
 import store from "./state.js";
+import { update } from "lodash";
 
 //instanciranje axiosa za potrebe backenda
 let Service = axios.create({
   baseURL: "http://localhost:3000/",
   timeout: 5000,
+});
+
+Service.interceptors.request.use(
+  (config) => {
+  const token = store.getters.getuser?.token;
+  if(token) {
+    config.headers['Authorization'] = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
 });
 
 //objekt koji sadrzi metode za backend i pozive posta
@@ -77,7 +89,6 @@ let Posts = {
       throw error;
     }
   },
-
   async getBookings() {
     try {
       let response = await Service.get("/bookings");
@@ -95,6 +106,24 @@ let Posts = {
       return data;
     } catch (error) {
       console.error("Greška u dohvaćanju rezervacija:", error);
+      throw error;
+    }
+  },
+  async getPostById(postId){
+    try{
+      const response = await Service.get(`/posts/${postId}`);
+      return response.data;
+    } catch (error){
+      console.error("Error fetching post by ID: ", error);
+      throw error;
+    }
+  },
+  async updatePost(postId, updatedData){
+    try{
+      const response = await Service.put(`/posts/${postId}`, updatedData);
+      return response.data;
+    } catch(error) {
+      console.error("Error fetching post by ID: ", error);
       throw error;
     }
   },

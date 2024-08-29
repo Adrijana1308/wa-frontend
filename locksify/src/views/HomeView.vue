@@ -71,6 +71,7 @@
 <script>
 import Cards from "@/components/Cards.vue";
 import axios from "axios";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -92,8 +93,10 @@ export default {
     salonCount() {
       return this.posts.length;
     },
+    ...mapGetters(['posts']),
   },
   mounted() {
+    this.fetchData();
     this.animateBalls();
     this.searchSalons();
   },

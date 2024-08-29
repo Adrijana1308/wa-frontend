@@ -58,8 +58,8 @@ export default {
 
     const fetchPostDetails = async () => {
       try {
-        const response = await Posts.getPostById(props.postId);
-        editedPost.value = response.data;
+        const postData = await Posts.getPostById(props.postId);
+        editedPost.value = postData;
       } catch (error) {
         console.error('Error fetching post details:', error);
       }
@@ -73,7 +73,8 @@ export default {
       try {
         const response = await Posts.updatePost(props.postId, editedPost.value);
         console.log('Post updated successfully:', response.data);
-        emit('postUpdated', response.data); // Emit event after successful update
+        emit('postUpdated', response); // Emit event after successful update
+        router.push({name: 'home'});
       } catch (error) {
         console.error('Error submitting post:', error);
       }
@@ -96,14 +97,16 @@ export default {
   <style scoped>
   .edit-post {
     max-width: 600px;
-    margin: 0 auto;
+    margin: 140px auto;
     padding: 20px;
-    background: #f9f9f9;
+    background: blanchedalmond;
+    border: 10px solid #d890f530;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   }
   
   form {
+    margin: 20px;
     display: flex;
     flex-direction: column;
   }
@@ -117,7 +120,7 @@ export default {
   
   button {
     padding: 10px;
-    background: #007bff;
+    background: #d890f530;
     color: white;
     border: none;
     border-radius: 4px;

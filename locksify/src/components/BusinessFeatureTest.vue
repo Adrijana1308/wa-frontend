@@ -52,6 +52,9 @@ const addHairstyle = (type) => {
 };
 
 const createPost = async () => {
+  // const userId = store.getters.currentUserId;
+ // console.log("Current user ID:", userId);
+
   const postData = {
     name: name.value,
     location: location.value,
@@ -59,12 +62,13 @@ const createPost = async () => {
     close: close.value,
     source: source.value,
     hairstyles: hairstyles.value,
-    userId: store.getters.currentUserId, // Attach current user ID to the post
+    userId: store.getters.currentuserId, // Attach current user ID to the post
   };
 
   try {
-    const response = await store.dispatch('Posts/add', postData);
+    const response = await store.dispatch('add', postData);
     console.log('Post created successfully:', response);
+    await store.dispatch('fetchPosts');
     router.push({ name: 'home' }); // Redirect to home after successful post creation
   } catch (error) {
     console.error('Error creating post:', error);
@@ -75,14 +79,16 @@ const createPost = async () => {
 <style scoped>
 .create-post-container {
   max-width: 600px;
-  margin: 0 auto;
+  margin: 140px auto;
   padding: 20px;
-  background: #f9f9f9;
+  background: blanchedalmond;
+  border: 10px solid #d890f530;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 form {
+  margin: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -96,15 +102,17 @@ input {
 
 button {
   padding: 10px;
-  background: #007bff;
-  color: white;
+  background: #d890f530;
+  color: black;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 button:hover {
-  background: #0056b3;
+  color: rgba(0, 0, 0, 1);
+  transform: scale(1.1);
+  transition: .1s ease-in-out;
 }
 
 .hairstyles {

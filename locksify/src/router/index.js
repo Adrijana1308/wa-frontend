@@ -42,6 +42,7 @@ const routes = [
     name: "EditPost",
     component: EditPost,
     meta: {requiresAuth: true},
+    props: true,
   },
   // {
   //   path: "/profile",
