@@ -56,7 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentUserId']),
+    ...mapGetters(['currentUserId', 'isSuperAdmin', 'userType']),
     //...mapGetters(['posts']),
   },
   methods: {
@@ -64,8 +64,10 @@ export default {
       this.searchParams = params;
     },
     isOwner(userId){
-      console.log('Comparing userId: ', userId, 'with currentUserId: ', this.currentUserId);
-      return userId === this.currentUserId;
+      if(!userId || !this.currentUserId){
+        return false;
+      }
+      return userId === this.currentUserId || this.isSuperAdmin;
     },
     editPost(post){
       // Show the edit modal and set id of the post to be edited
@@ -126,6 +128,14 @@ export default {
 }
 .card-btn {
   padding: 10px 20px;
+  font-size: 18px;
+}
+.btn-primary {
+  margin-left: 5px;
+  background: #e9aaf1dc;
+  color: #000;
+  outline: none;
+  outline-width: none;
   font-size: 18px;
 }
 
