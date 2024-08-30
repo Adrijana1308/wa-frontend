@@ -52,9 +52,6 @@ const addHairstyle = (type) => {
 };
 
 const createPost = async () => {
-  // const userId = store.getters.currentUserId;
- // console.log("Current user ID:", userId);
-
   const postData = {
     name: name.value,
     location: location.value,
@@ -101,6 +98,7 @@ input {
 }
 
 button {
+  margin: 7px;
   padding: 10px;
   background: #d890f530;
   color: black;
