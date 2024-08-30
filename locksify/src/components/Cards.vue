@@ -57,7 +57,7 @@ export default {
   },
   computed: {
     ...mapGetters(['currentUserId']),
-    ...mapGetters(['posts']),
+    //...mapGetters(['posts']),
   },
   methods: {
     updateSearchParams(params) {

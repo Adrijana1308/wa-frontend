@@ -93,7 +93,7 @@ export default {
     salonCount() {
       return this.posts.length;
     },
-    ...mapGetters(['posts']),
+    //...mapGetters(['posts']),
   },
   mounted() {
     this.fetchData();

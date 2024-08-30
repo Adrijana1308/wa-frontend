@@ -5,7 +5,7 @@ import { update } from "lodash";
 //instanciranje axiosa za potrebe backenda
 let Service = axios.create({
   baseURL: "http://localhost:3000/",
-  timeout: 5000,
+  timeout: 60000,
 });
 
 Service.interceptors.request.use(
