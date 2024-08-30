@@ -119,17 +119,20 @@ export default {
   }
   
   button {
+    margin: 7px;
     padding: 10px;
     background: #d890f530;
-    color: white;
+    color: black;
     border: none;
     border-radius: 4px;
     cursor: pointer;
   }
   
   button:hover {
-    background: #0056b3;
-  }
+  color: rgba(0, 0, 0, 1);
+  transform: scale(1.1);
+  transition: .1s ease-in-out;
+}
   
   .hairstyles {
     margin-top: 20px;
