@@ -91,9 +91,10 @@ export default {
   },
   computed: {
     salonCount() {
-      return this.posts.length;
+      return this.filteredPosts.length;
     },
-    ...mapGetters(['posts']),
+    //...mapGetters(['posts']),
+
   },
   mounted() {
     this.fetchData();

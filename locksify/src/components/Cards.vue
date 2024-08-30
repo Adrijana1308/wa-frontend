@@ -130,6 +130,14 @@ export default {
   padding: 10px 20px;
   font-size: 18px;
 }
+.btn-primary {
+  margin-left: 5px;
+  background: #e9aaf1dc;
+  color: #000;
+  outline: none;
+  outline-width: none;
+  font-size: 18px;
+}
 
 /* START DARK MODE */
 .dark .card {
