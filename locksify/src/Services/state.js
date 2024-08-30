@@ -7,6 +7,7 @@ const store = createStore({
         user: JSON.parse(localStorage.getItem('user')) || null,
         isAuthenticated: !!localStorage.getItem('user'),
         isBusinessUser: JSON.parse(localStorage.getItem('user'))?.userType === 'business' || false,
+        isSuperAdmin: JSON.parse(localStorage.getItem('user'))?.role === 'superadmin' || false,
         token: null,
         posts:[],
     },
@@ -23,6 +24,7 @@ const store = createStore({
             state.user = user;
             state.isAuthenticated = !!user;
             state.isBusinessUser = user?.userType === 'business';
+            state.isSuperAdmin = user?.role === 'superadmin';
             if(user){
                 localStorage.setItem('user', JSON.stringify(user));
             } else {
@@ -33,6 +35,7 @@ const store = createStore({
             state.user = null;
             state.isAuthenticated = false;
             state.isBusinessUser = false;
+            state.isSuperAdmin = false;
             localStorage.removeItem('user');
         },
     },
@@ -81,6 +84,7 @@ const store = createStore({
         getuser: (state) => state.user,
         isAuthenticated: (state) => state.isAuthenticated,
         isBusinessUser: (state) => state.isBusinessUser,
+        isSuperAdmin: (state) => state.isSuperAdmin,
         currentUserId: (state) => state.user?._id || null,
         posts: (state) => state.posts,
     },

@@ -73,7 +73,7 @@
               </router-link>
               </li>
               <li class="nav-item">
-                <router-link v-if="isBusinessUser && isAuthenticated" to="/business-feature" id="business">Create a post</router-link> 
+                <router-link v-if="(isBusinessUser || isSuperAdmin) && isAuthenticated" to="/business-feature" id="business">Create a post</router-link> 
               </li>
             </ul>
           </div>
@@ -91,7 +91,7 @@ import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useRouter } from "vue-router";
 export default {
   computed: {
-      ...mapGetters(['isAuthenticated', 'isBusinessUser', 'currentUserId']),
+      ...mapGetters(['isAuthenticated', 'isBusinessUser', 'currentUserId', 'isSuperAdmin', 'userType']),
     },
   setup(){
     const router = useRouter();

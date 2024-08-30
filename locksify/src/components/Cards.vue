@@ -56,16 +56,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentUserId']),
-    ...mapGetters(['posts']),
+    ...mapGetters(['currentUserId', 'isSuperAdmin', 'userType']),
+    //...mapGetters(['posts']),
   },
   methods: {
     updateSearchParams(params) {
       this.searchParams = params;
     },
     isOwner(userId){
-      console.log('Comparing userId: ', userId, 'with currentUserId: ', this.currentUserId);
-      return userId === this.currentUserId;
+      if(!userId || !this.currentUserId){
+        return false;
+      }
+      return userId === this.currentUserId || this.isSuperAdmin;
     },
     editPost(post){
       // Show the edit modal and set id of the post to be edited
