@@ -139,13 +139,38 @@
           >
             Confirm
           </button>
-          <button
-            type="submit"
-            class="cancel-button"
-            @click="cancelAppointment"
-          >
-            Cancel
-          </button>
+        </div>
+        <div>
+          <div class="booking-dropdown">
+            <label for="bookingDropdown">Select a Booking:</label>
+            <select id="bookingDropdown" v-model="selectedBooking">
+              <option
+                v-for="booking in sortedBookings"
+                :key="booking._id"
+                :value="booking"
+              >
+                {{ formatBooking(booking) }}
+              </option>
+            </select>
+
+            <div v-if="selectedBooking" class="selected-booking">
+              <h3>Selected Booking Details:</h3>
+              <p>Service: {{ selectedBooking.service }}</p>
+              <p>Date: {{ selectedBooking.date }}</p>
+              <p>
+                Time: {{ selectedBooking.startTime }} -
+                {{ selectedBooking.endTime }}
+              </p>
+              <p>Customer: {{ selectedBooking.customerName || "N/A" }}</p>
+              <button
+                v-if="canCancel(selectedBooking)"
+                type="submit"
+                @click="cancelBooking(selectedBooking._id)"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -166,10 +191,9 @@ import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { Posts } from "../Services/index.js";
 import axios from "axios";
-import { DatePicker } from 'v-calendar';
-import 'v-calendar/dist/style.css';
-
-
+import { DatePicker } from "v-calendar";
+import "v-calendar/dist/style.css";
+import { _ } from "core-js";
 
 const store = useStore();
 const route = useRoute();
@@ -180,13 +204,41 @@ const selectedHairstyles = ref([]);
 const bookings = ref([]);
 const date = ref(new Date());
 const disabledDates = ref([]);
+const selectedBooking = ref(null);
 
 const postId = computed(() => route.params._id);
 const currentUserId = computed(() => store.getters.currentUserId);
 
+const sortedBookings = computed(() => {
+  return bookings.value.sort((a, b) => {
+    const dateA = new Date(`${a.date} ${a.startTime}`);
+    const dateB = new Date(`${b.date} ${b.startTime}`);
+    return dateA - dateB;
+  });
+});
+
+const formatBooking = (booking) => {
+  return `${booking.date} | ${booking.startTime} - ${booking.endTime} | ${booking.service}`;
+};
+
+// const toggleDetails = (index) => {
+//     // If already selected, close it by setting selectedIndex to null
+//     openIndex.value = openIndex.value === index ? null : index;
+// };
+
+const canCancel = (booking) => {
+  return (
+    booking.userId === currentUserId.value ||
+    post.value.userId === currentUserId.value ||
+    store.getters.isSuperAdmin
+  );
+};
+
 const fetchPostDetails = async () => {
   try {
-    const response = await axios.get(`http://localhost:3000/posts/${postId.value}`);
+    const response = await axios.get(
+      `http://localhost:3000/posts/${postId.value}`
+    );
     post.value = response.data;
   } catch (error) {
     console.error("Error fetching post details:", error);
@@ -195,7 +247,9 @@ const fetchPostDetails = async () => {
 
 const fetchBookings = async () => {
   try {
-    const response = await axios.get('http://localhost:3000/bookings');
+    const response = await axios.get("http://localhost:3000/bookings", {
+      // params: {salonId: post.value._id}
+    });
     bookings.value = Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error("Error fetching bookings:", error);
@@ -207,14 +261,20 @@ onMounted(() => {
   fetchBookings();
 });
 
-const isOwner = computed(() => post.value && post.value.userId === currentUserId);
+const isOwner = computed(
+  () => post.value && post.value.userId === currentUserId
+);
 
 const selectCategory = (category) => {
   selectedCategory.value = category;
 };
 
 const selectHairstyle = (hairstyle) => {
-  if (!selectedHairstyles.value.some(selected => selected.type === hairstyle.type)) {
+  if (
+    !selectedHairstyles.value.some(
+      (selected) => selected.type === hairstyle.type
+    )
+  ) {
     selectedHairstyles.value.push(hairstyle);
   } else {
     alert("This hairstyle is already selected.");
@@ -225,12 +285,22 @@ const removeHairstyle = (index) => {
   selectedHairstyles.value.splice(index, 1);
 };
 
-const cancelAppointment = () => {
-  selectedHairstyles.value = [];
-};
-
 const confirmSelection = () => {
-  console.log("Selected hairstyles:", selectedHairstyles.value);
+  if (selectedHairstyles.value.length === 0) {
+    alert("Please select at least one hairstyle before confirming.");
+    return;
+  }
+
+  if (!date.value) {
+    alert("Please select a date and time for your appointment.");
+    return;
+  }
+
+  try {
+    confirmBooking();
+  } catch (error) {
+    console.error("Error confirming booking");
+  }
 };
 
 const customDateFormatter = (date) => {
@@ -239,17 +309,22 @@ const customDateFormatter = (date) => {
     : "Invalid date";
 };
 
-const attributes = computed(() => [
-  ...bookings.value.map(booking => ({
-    key: booking._id, // Use a unique key for each booking
-    dates: new Date(booking.date), // Assume bookings have a `date` field
-    customData: booking,
-    highlight: { color: booking.color || 'blue' }, // Use a highlight attribute with color
-    popover: {
-      label: `Booking: ${booking.description}`,
-    },
-  })),
-]);
+const attributes = computed(() => {
+  // Ensure no phantom bookings are rendered by checking the correct salon ID and date format
+  return bookings.value
+    .filter((booking) => booking.salonId === post.value._id)
+    .map((booking) => ({
+      key: booking._id,
+      dates: new Date(booking.date),
+      customData: booking,
+      highlight: { color: "blue" },
+      popover: {
+        label: `Booking: ${booking.service} - ${
+          booking.customerName || "Unknown"
+        }`,
+      },
+    }));
+});
 
 const handleDateClick = async (date) => {
   const formattedDate = customDateFormatter(date);
@@ -267,8 +342,120 @@ const fetchDescription = async (date) => {
 };
 
 const totalPrice = computed(() => {
-  return selectedHairstyles.value.reduce((total, hairstyle) => total + hairstyle.price, 0);
+  return selectedHairstyles.value.reduce(
+    (total, hairstyle) => total + hairstyle.price,
+    0
+  );
 });
+
+const calculateEndTime = (startTime, duration) => {
+  const startDate = new Date(Date.parse(startTime));
+  if (isNaN(startDate)) {
+    return "Invalid Date"; // Return a fallback if the start time is invalid
+  }
+  const endDate = new Date(startDate);
+  endDate.setMinutes(startDate.getMinutes() + duration);
+  return endDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+};
+
+const formatDate = (date) => {
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+
+  return `${day}.${month}.${year}.`;
+};
+
+const confirmBooking = async () => {
+  try {
+    const selectedService = selectedHairstyles.value
+      .map((h) => h.type)
+      .join(", ");
+
+    // Start time format
+    const startTime = date.value.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+
+    // Date format DD/MM/YY
+    const formattedDate = formatDate(date.value);
+
+    const duration = selectedHairstyles.value.reduce(
+      (total, h) => total + h.duration,
+      0
+    );
+    const endTime = calculateEndTime(date.value, duration);
+
+    const bookingData = {
+      salonId: post.value._id,
+      userId: currentUserId.value,
+      customerName: store.getters.getuser.fullName,
+      date: formattedDate,
+      startTime,
+      service: selectedService,
+      endTime,
+    };
+
+    console.log("Booking data: ", bookingData);
+
+    const response = await axios.post(
+      "http://localhost:3000/bookings",
+      bookingData
+    );
+
+    if (response.data.success) {
+      alert("Booking confirmed! Confirmation email sent.");
+      fetchBookings();
+    } else {
+      alert("Booking failed: " + response.data.error);
+    }
+  } catch (error) {
+    console.error("Error confirming booking:", error);
+    alert("An error occured while confimring your booking!");
+  }
+};
+
+const cancelBooking = async (bookingId) => {
+  console.log("Booking ID to cancel:", bookingId);
+  const token = store.getters.token; // Log the booking ID
+  if (!bookingId) {
+    alert("Booking ID is not available.");
+    return;
+  }
+
+  const confirmation = confirm("Are you sure you want to cancel this booking?");
+  if (!confirmation) return;
+
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/bookings/${bookingId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      alert("Booking canceled successfully.");
+      selectedBooking.value = null;
+      // Optionally refresh bookings after canceling
+      await fetchBookings();
+    } else {
+      alert("Failed to cancel booking.");
+    }
+  } catch (error) {
+    console.error("Error canceling booking:", error);
+    alert("An error occurred while canceling the booking.");
+  }
+};
 </script>
 
 <style setup>
@@ -314,6 +501,8 @@ const totalPrice = computed(() => {
 
 <style scoped>
 .wrapper {
+  overflow-y: auto;
+  padding: 20px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
@@ -322,6 +511,91 @@ const totalPrice = computed(() => {
   font-family: "Poppins", sans-serif;
   max-width: 80%;
 }
+
+.booking-dropdown {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f4f4f9;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Light shadow for depth */
+}
+
+.booking-dropdown label {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  display: block;
+  color: #333;
+}
+
+.booking-dropdown select {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+.booking-dropdown select:focus {
+  outline: none;
+  border-color: #007bff; /* Border change on focus */
+}
+
+.booking-dropdown option {
+  padding: 10px;
+  font-size: 16px;
+}
+
+/* Selected Booking Details */
+.selected-booking {
+  margin-top: 15px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow for separation */
+}
+
+.selected-booking h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.selected-booking p {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* Clean, large red cancel button */
+.selected-booking button {
+  display: inline-block;
+  padding: 12px 20px; /* Bigger size */
+  background-color: #ff4d4d; /* Brighter red */
+  color: white;
+  border: none;
+  border-radius: 6px; /* Rounded corners */
+  font-size: 16px; /* Slightly larger font */
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+  margin-top: 10px;
+}
+
+.selected-booking button:hover {
+  background-color: #e60000; /* Darker red on hover */
+}
+
 .card-rating {
   grid-column: 1 / 3;
   grid-row: 2;
@@ -565,6 +839,7 @@ const totalPrice = computed(() => {
 
 .buttons {
   display: flex;
+  justify-content: center;
   width: 100%;
 }
 

@@ -3,19 +3,59 @@
     <div class="login-window">
       <h1 class="heading">Register</h1>
       <p class="Welcome">Welcome, let's get you set up!</p>
-      <form @submit.prevent="signup" class="signup-form">
-        <input v-model="email" type="email" id="email" placeholder="Email" required>
+      <form @submit.prevent="handleSignup" class="signup-form">
+        <input
+          v-model="email"
+          type="email"
+          id="email"
+          placeholder="Email"
+          required
+        />
 
         <div class="password-container">
-          <input v-model="name" type="text" id="name" placeholder="Full Name" required>
-          <input v-model="password" :type="showPassword ? 'text' : 'password'" id="password" name="user-password" placeholder="Password" autocomplete="nope" required>
+          <input
+            v-model="name"
+            type="text"
+            id="name"
+            placeholder="Full Name"
+            required
+          />
+          <input
+            v-model="password"
+            :type="showPassword ? 'text' : 'password'"
+            id="password"
+            name="user-password"
+            placeholder="Password"
+            autocomplete="nope"
+            required
+          />
           <span @click="togglePasswordVisibility" class="password-toggle">
-            <i :class="['bi', showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
+            <i
+              :class="[
+                'bi',
+                showPassword ? 'bi-eye-fill' : 'bi-eye-slash-fill',
+              ]"
+            ></i>
           </span>
 
-          <input v-model="passwordConfirmation" :type="showPasswordConfirmation ? 'text' : 'password'" id="password-confirmation" name="user-confirmation" placeholder="Confirm Password" required>
-          <span @click="togglePasswordConfirmationVisibility" class="passwordConf-toggle">
-            <i :class="['bi', showPasswordConfirmation ? 'bi-eye-fill' : 'bi-eye-slash-fill']"></i>
+          <input
+            v-model="passwordConfirmation"
+            :type="showPasswordConfirmation ? 'text' : 'password'"
+            id="password-confirmation"
+            name="user-confirmation"
+            placeholder="Confirm Password"
+            required
+          />
+          <span
+            @click="togglePasswordConfirmationVisibility"
+            class="passwordConf-toggle"
+          >
+            <i
+              :class="[
+                'bi',
+                showPasswordConfirmation ? 'bi-eye-fill' : 'bi-eye-slash-fill',
+              ]"
+            ></i>
           </span>
         </div>
 
@@ -30,21 +70,102 @@
     </div>
   </div>
 </template>
-<style scoped>
 
+<script>
+import { mapActions } from "vuex";
+
+export default {
+  name: "Signup",
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: "",
+      passwordConfirmation: "",
+      userType: "",
+      showPassword: false,
+      showPasswordConfirmation: false,
+    };
+  },
+  methods: {
+    ...mapActions(["signup", "login"]), // Mapping Vuex actions
+
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword;
+    },
+
+    togglePasswordConfirmationVisibility() {
+      this.showPasswordConfirmation = !this.showPasswordConfirmation;
+    },
+
+    async handleSignup() {
+      try {
+        if (
+          !this.email ||
+          !this.password ||
+          !this.passwordConfirmation ||
+          !this.userType ||
+          !this.name
+        ) {
+          alert("All fields are required.");
+          return;
+        }
+
+        if (this.password !== this.passwordConfirmation) {
+          alert("Passwords do not match!");
+          return;
+        }
+
+        let user = {
+          username: this.email,
+          fullName: this.name,
+          password: this.password,
+          userType: this.userType,
+        };
+
+        console.log("User data to send:", user);
+
+        let success = await this.signup(user);
+        if (success) {
+          let loginResponse = await this.login({
+            email: this.email,
+            password: this.password,
+          });
+          if (loginResponse) {
+            this.$router.push({ name: "home" });
+          }
+        } else {
+          alert("Signup failed. Please try again.");
+        }
+      } catch (error) {
+        console.error("Registration error:", error);
+        alert("An error occurred during registration. Please try again later.");
+      }
+    },
+  },
+};
+</script>
+
+<style scoped>
 @keyframes pulse {
-  0% {transform: scale(1);}
-  50% {transform: scale(1.1);}
-  100% {transform: scale(1);}
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
-.login-container{
+.login-container {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
 
-.dark .login-container{
+.dark .login-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,14 +174,19 @@
 
 .dark .login-window {
   padding: 90px;
-  background-color: rgba(173, 216, 230, 0.1); /* Adjust the color and opacity as needed */
+  background-color: rgba(
+    173,
+    216,
+    230,
+    0.1
+  ); /* Adjust the color and opacity as needed */
   border: rgba(173, 216, 230, 0.1);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px); /* Adjust the blur radius as needed */
   border-radius: 15px;
 }
 
-.login-window{
+.login-window {
   padding: 90px;
   background-color: blanchedalmond;
   border: 10px solid #d890f530;
@@ -68,7 +194,7 @@
   border-radius: 15px;
 }
 
-.dark input{
+.dark input {
   width: 100%;
   height: 35px;
   display: block;
@@ -78,13 +204,13 @@
   border: none;
   color: #000000;
   padding: 15px;
-  transition: .5s;
+  transition: 0.5s;
   text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-input{
+input {
   width: 100%;
   height: 35px;
   display: block;
@@ -94,31 +220,31 @@ input{
   border: none;
   color: #000000;
   padding: 15px;
-  transition: .5s;
+  transition: 0.5s;
   text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-input:hover{
+input:hover {
   color: rgba(0, 0, 0, 1);
   transform: scale(1.1);
-  transition: .1s ease-in-out;
+  transition: 0.1s ease-in-out;
   line-height: 1;
 }
 
-.dark input:hover{
+.dark input:hover {
   color: rgba(0, 0, 0, 1);
   transform: scale(1.1);
-  transition: .1s ease-in-out;
+  transition: 0.1s ease-in-out;
   line-height: 1;
 }
 
-.dark input::placeholder{
+.dark input::placeholder {
   color: black;
 }
 
-input::placeholder{
+input::placeholder {
   color: black;
 }
 
@@ -129,7 +255,7 @@ button {
   padding: 15px;
   border: none;
   border-radius: 5px;
-  transition: .5s;
+  transition: 0.5s;
   text-align: center;
 }
 
@@ -137,17 +263,17 @@ button {
   background-color: #d890f530;
 }
 
-.dark .register{
+.dark .register {
   background-color: #a570ef;
 }
 
-button:hover{
+button:hover {
   color: black;
   transform: scale(1.1);
-  transition: .1s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
-.register:hover{
+.register:hover {
   color: black;
   animation: pulse 1s infinite;
 }
@@ -179,12 +305,12 @@ button:hover{
   box-sizing: border-box;
 }
 
-#password-confirmation{
+#password-confirmation {
   padding-right: 20%;
   box-sizing: border-box;
 }
 
-.userType{
+.userType {
   width: 100%;
   height: 35px;
   display: block;
@@ -194,13 +320,13 @@ button:hover{
   border: none;
   color: #000000;
   padding-left: 10px;
-  transition: .5s;
+  transition: 0.5s;
   text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
 
-.dark .userType{
+.dark .userType {
   width: 100%;
   height: 35px;
   display: block;
@@ -210,66 +336,9 @@ button:hover{
   border: none;
   color: #000000;
   padding-left: 10px;
-  transition: .5s;
+  transition: 0.5s;
   text-transform: none;
   overflow: hidden;
   box-sizing: border-box;
 }
-
 </style>
-
-<script>
-import { mapActions } from 'vuex';
-
-export default {
-  name: "Signup",
-  data() {
-    return {
-      name: "",
-      email: "",
-      password: "",
-      passwordConfirmation: "",
-      userType: "",
-      showPassword: false,
-      showPasswordConfirmation: false,
-    };
-  },
-  methods: {
-    ...mapActions(['signup', 'login']), // Mapping Vuex actions
-
-    togglePasswordVisibility() {
-      this.showPassword = !this.showPassword;
-    },
-
-    togglePasswordConfirmationVisibility() {
-      this.showPasswordConfirmation = !this.showPasswordConfirmation;
-    },
-
-    async signup() {
-      try {
-        if (this.password !== this.passwordConfirmation) {
-          alert("Passwords do not match!");
-          return;
-        }
-
-        let user = {
-          username: this.email,
-          fullName: this.name,
-          password: this.password,
-          userType: this.userType,
-        };
-
-        let success = await this.signup(user);
-        if (success) {
-          let loginResponse = await this.login({ email: this.email, password: this.password });
-          if (loginResponse) {
-            this.$router.push({ name: 'home' });
-          }
-        }
-      } catch (error) {
-        console.error('Registration error:', error);
-      }
-    },
-  },
-};
-</script>
