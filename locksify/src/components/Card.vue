@@ -577,23 +577,22 @@ const cancelBooking = async (bookingId) => {
   color: #555;
 }
 
-/* Clean, large red cancel button */
 .selected-booking button {
   display: inline-block;
-  padding: 12px 20px; /* Bigger size */
-  background-color: #ff4d4d; /* Brighter red */
+  padding: 12px 20px;
+  background-color: #ff4d4d;
   color: white;
   border: none;
-  border-radius: 6px; /* Rounded corners */
-  font-size: 16px; /* Slightly larger font */
+  border-radius: 6px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth hover transition */
+  transition: background-color 0.3s ease;
   margin-top: 10px;
 }
 
 .selected-booking button:hover {
-  background-color: #e60000; /* Darker red on hover */
+  background-color: #e60000;
 }
 
 .card-rating {
@@ -625,11 +624,11 @@ const cancelBooking = async (bookingId) => {
   border-radius: 10px;
 }
 .c-title {
-  font-size: 80px;
+  font-size: 60px;
   font-family: "Playfair Display", serif;
 }
 .c-text {
-  font-size: 20px;
+  font-size: 18px;
   padding: 10px;
 }
 .hours-title {
@@ -652,6 +651,7 @@ const cancelBooking = async (bookingId) => {
   border-radius: 10px;
   padding: 15px 30px;
   margin-top: 5%;
+  margin-bottom: 5%;
   width: 50%;
   font-family: "Poppins", sans-serif;
   font-size: 19px;
@@ -677,6 +677,48 @@ const cancelBooking = async (bookingId) => {
   align-items: start;
   margin-top: 30px;
   margin-bottom: 30px;
+}
+
+.dark .hairstyles {
+  background: #000000ad;
+  color: #fff;
+  border-color: #000;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.dark .select-button {
+  color: #fff;
+}
+
+.dark .appointment {
+  background: #000000ad;
+  color: #fff;
+  border-color: #000;
+  border-radius: 10px;
+}
+
+.dark .appointment-time,
+.dark .appointment-price {
+  background: #000000ad;
+  border-color: #000;
+  border-radius: 10px;
+}
+
+.dark .remove-button {
+  color: #fff;
+}
+
+.dark .confirm-button {
+  background: #000000ad;
+  border-color: #fff;
+}
+
+.dark .booking-dropdown {
+  background: #000000ad;
+  border-color: #000;
+  color: #fff;
+  border-radius: 10px;
 }
 
 .hair-container {
@@ -882,4 +924,284 @@ const cancelBooking = async (bookingId) => {
 }
 
 /* END DARK MODE */
+
+/* mali ekrani */
+/* Styles for screens 1024px or smaller */
+@media screen and (max-width: 1024px) {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 100%;
+    margin: 15%;
+  }
+
+  .card-rating,
+  .card-title,
+  .card-img,
+  .hairstyles,
+  .appointment,
+  .calendar {
+    width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .card-text {
+    font-size: 18px;
+  }
+
+  .card-title {
+    text-align: center;
+    padding-top: 5%;
+  }
+
+  .c-title {
+    font-size: 40px;
+  }
+
+  .c-text {
+    font-size: 18px;
+  }
+
+  .hours {
+    font-size: 20px;
+  }
+  .book-button-link {
+    width: 72%;
+    margin: auto;
+  }
+  .book-button {
+    width: 50%;
+    font-size: 18px;
+  }
+
+  .hair-title {
+    font-size: 30px;
+  }
+
+  .hair-info {
+    font-size: 18px;
+  }
+
+  .type {
+    font-size: 18px;
+  }
+
+  .price {
+    font-size: 18px;
+  }
+
+  .calendar,
+  .appointment {
+    width: 90%;
+    margin: auto;
+  }
+
+  .total-price {
+    font-size: 20px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .confirm-button {
+    width: 80%;
+  }
+
+  .select-button {
+    font-size: 15px;
+  }
+
+  .appointment-time,
+  .appointment-p {
+    font-size: 18px;
+  }
+}
+
+/* Styles for screens 768px or smaller */
+@media screen and (max-width: 768px) {
+  .wrapper {
+    margin: 10%; /* Reduce margin for smaller screens */
+  }
+
+  .card-rating,
+  .card-title,
+  .card-img,
+  .hairstyles,
+  .appointment,
+  .calendar {
+    width: 100%;
+    margin-bottom: 20px; /* Reduce space between sections */
+  }
+
+  .card-title {
+    padding-top: 3%; /* Reduce padding for smaller screens */
+  }
+
+  .c-title {
+    font-size: 35px; /* Adjust font size for smaller screens */
+  }
+
+  .c-text {
+    font-size: 16px; /* Adjust text size */
+  }
+
+  .hours {
+    font-size: 18px;
+  }
+
+  .book-button {
+    width: 70%;
+    font-size: 16px;
+  }
+
+  .hair-title {
+    font-size: 28px; /* Slightly smaller titles */
+  }
+
+  .hair-info {
+    font-size: 16px;
+  }
+
+  .type {
+    font-size: 16px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .calendar,
+  .appointment {
+    width: 95%; /* More compact layout */
+  }
+
+  .total-price {
+    font-size: 18px;
+  }
+
+  .confirm-button {
+    width: 100%; /* Full width for buttons */
+    font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 426px) {
+  .wrapper {
+    margin: 20% 8%; /* Reduce margin for smaller screens */
+  }
+
+  .card-rating,
+  .card-title,
+  .card-img,
+  .hairstyles,
+  .appointment,
+  .calendar {
+    width: 100%;
+    margin-bottom: 20px; /* Reduce space between sections */
+  }
+
+  .card-title {
+    padding-top: 3%; /* Reduce padding for smaller screens */
+  }
+
+  .c-title {
+    font-size: 35px; /* Adjust font size for smaller screens */
+  }
+
+  .c-text {
+    font-size: 16px; /* Adjust text size */
+  }
+
+  .hours {
+    font-size: 18px;
+  }
+
+  .book-button {
+    width: 70%;
+    font-size: 16px;
+  }
+
+  .hair-title {
+    font-size: 28px; /* Slightly smaller titles */
+  }
+
+  .hair-info {
+    font-size: 16px;
+  }
+
+  .type {
+    font-size: 16px;
+  }
+
+  .price {
+    font-size: 16px;
+  }
+
+  .calendar,
+  .appointment {
+    width: 95%; /* More compact layout */
+  }
+
+  .total-price {
+    font-size: 18px;
+  }
+
+  .confirm-button {
+    width: 100%; /* Full width for buttons */
+    font-size: 16px;
+  }
+
+  .hair-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(120px, 1fr));
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    padding-bottom: 20px;
+  }
+
+  .hair-title {
+    grid-column: span 2;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    justify-self: center;
+  }
+
+  .select-button {
+    padding: 10px 35px;
+    font-size: 14px; /* Font size for small screens */
+    border-radius: 5px;
+    font-family: "Poppins", sans-serif;
+    width: 100%;
+    max-width: 150px;
+    text-align: center;
+  }
+
+  .card-services > .select-button {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .remove-button {
+    font-size: 14px;
+    border-radius: 5px;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .appointment-time,
+  .appointment-p,
+  .total-price {
+    font-size: 17px;
+  }
+}
+
+/* end mali ekrani */
 </style>
