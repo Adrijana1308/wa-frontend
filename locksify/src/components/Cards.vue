@@ -5,8 +5,11 @@
       :posts="posts"
       :filteredPosts="filteredPosts"
     />
-    <div class="row row-cols-1 row-cols-md-3 g-4" v-if="posts && posts.length > 0">
-      <div class="col" v-for="post in posts" :key="post._id">
+    <div
+      class="row row-cols-1 row-cols-md-3 g-4"
+      v-if="paginatedPosts && paginatedPosts.length > 0"
+    >
+      <div class="col" v-for="post in paginatedPosts" :key="post._id">
         <div class="card h-100">
           <img :src="post.source" class="card-img-top" alt="Frizerski salon" />
           <div class="card-body">
@@ -24,24 +27,67 @@
               <span class="card-num-rew"> ({{ post.numOfRatings }}) • </span>
               <span class="card-city">{{ post.location }} </span>
             </p>
-            <router-link :to="'/card/' + post._id" class="btn btn-dark card-btn">See more</router-link>
+            <router-link :to="'/card/' + post._id" class="btn btn-dark card-btn"
+              >See more</router-link
+            >
             <!-- Show edit button only if current user is the owner -->
-            <router-link v-if="isOwner(post.userId)" :to="'/edit-post/' + post._id" @click="editPost(post)" class="btn btn-primary">Edit</router-link>
+            <router-link
+              v-if="isOwner(post.userId)"
+              :to="'/edit-post/' + post._id"
+              @click="editPost(post)"
+              class="btn btn-primary"
+              >Edit</router-link
+            >
           </div>
         </div>
       </div>
     </div>
-    <div v-else>
-      No salons found.
-    </div>
-    <EditPost v-if="showEditModal" :postId="editPostId" @close="closeEditModal"/>
+    <div v-else>No salons found.</div>
+    <EditPost
+      v-if="showEditModal"
+      :postId="editPostId"
+      @close="closeEditModal"
+    />
+    <!-- Pagination -->
+    <nav class="pagination-nav" aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <a
+            class="page-link"
+            href="#"
+            @click.prevent="changePage(currentPage - 1)"
+            >Previous</a
+          >
+        </li>
+
+        <li
+          v-for="page in totalPages"
+          :key="page"
+          class="page-item"
+          :class="{ active: currentPage === page }"
+        >
+          <a class="page-link" href="#" @click.prevent="changePage(page)">{{
+            page
+          }}</a>
+        </li>
+
+        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+          <a
+            class="page-link"
+            href="#"
+            @click.prevent="changePage(currentPage + 1)"
+            >Next</a
+          >
+        </li>
+      </ul>
+    </nav>
   </div>
 </template>
 
 <script>
 import Sort from "./Sort.vue";
 import EditPost from "./EditPost.vue";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   props: {
@@ -49,42 +95,62 @@ export default {
     filteredPosts: Array,
     posts: Array,
   },
-  data(){
+  data() {
     return {
       showEditModal: false, // Control whether to show the edit modal
-      editPostId: null // Track ID of the post being edited
-    }
+      editPostId: null, // Track ID of the post being edited
+      currentPage: 1, // Track the current page
+      postsPerPage: 9,
+    };
   },
   computed: {
-    ...mapGetters(['currentUserId', 'isSuperAdmin', 'userType']),
+    ...mapGetters(["currentUserId", "isSuperAdmin", "userType"]),
     //...mapGetters(['posts']),
+    // Total number of pages
+    totalPages() {
+      return Math.ceil(this.filteredPosts.length / this.postsPerPage);
+    },
+
+    // Paginated posts based on the current page
+    paginatedPosts() {
+      const start = (this.currentPage - 1) * this.postsPerPage;
+      const end = start + this.postsPerPage;
+      return this.filteredPosts.slice(start, end);
+    },
   },
   methods: {
     updateSearchParams(params) {
       this.searchParams = params;
     },
-    isOwner(userId){
-      if(!userId || !this.currentUserId){
+    isOwner(userId) {
+      if (!userId || !this.currentUserId) {
         return false;
       }
       return userId === this.currentUserId || this.isSuperAdmin;
     },
-    editPost(post){
+    editPost(post) {
       // Show the edit modal and set id of the post to be edited
       this.showEditModal = true;
       this.editPostId = post._id;
     },
-    closeEditModal(){
+    closeEditModal() {
       this.showEditModal = false;
       this.editPostId = null; // Reset the editPostId after closing the modal
     },
     handleUpdatePost(updatedPost) {
-    const index = this.posts.findIndex(post => post._id === updatedPost._id);
-    if (index !== -1) {
-      this.$set(this.posts, index, updatedPost);
-      this.$set(this.filteredPosts, index, updatedPost);
-    }
-    this.closeEditModal(); // Close the modal after updating
+      const index = this.posts.findIndex(
+        (post) => post._id === updatedPost._id
+      );
+      if (index !== -1) {
+        this.$set(this.posts, index, updatedPost);
+        this.$set(this.filteredPosts, index, updatedPost);
+      }
+      this.closeEditModal(); // Close the modal after updating
+    },
+    changePage(page) {
+      if (page >= 1 && page <= this.totalPages) {
+        this.currentPage = page;
+      }
     },
   },
   components: {
@@ -137,6 +203,24 @@ export default {
   outline: none;
   outline-width: none;
   font-size: 18px;
+}
+
+.pagination-nav {
+  margin-top: 5%;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #e9aaf1dc; /* Change background color */
+  border-color: #e9aaf1dc; /* Change border color */
+  color: white; /* Change text color */
+}
+
+.pagination .page-item .page-link {
+  color: #2c3e50; /* Default page link color */
+}
+
+.pagination .page-item .page-link:hover {
+  background-color: #f0f0f0; /* Hover effect */
 }
 
 /* START DARK MODE */

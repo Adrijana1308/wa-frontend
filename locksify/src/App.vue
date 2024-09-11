@@ -49,31 +49,33 @@
             ></button>
           </div>
           <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3" key="auth.authenticate">
+            <ul
+              class="navbar-nav justify-content-end flex-grow-1 pe-3"
+              key="auth.authenticate"
+            >
               <li class="nav-item">
                 <router-link to="/">Home</router-link>
               </li>
               <li class="nav-item">
-                <router-link 
-                  v-if="!isAuthenticated" 
-                  to="/Login"
-                  >
+                <router-link v-if="!isAuthenticated" to="/Login">
                   Login
-              </router-link>
+                </router-link>
                 <span v-if="isAuthenticated">
                   <a @click="logout" href="#">Logout</a>
                 </span>
               </li>
               <li class="nav-item">
-                  <router-link 
-                  v-if="!isAuthenticated" 
-                  to="/signup"
-                  >
+                <router-link v-if="!isAuthenticated" to="/signup">
                   Sign Up
-              </router-link>
+                </router-link>
               </li>
               <li class="nav-item">
-                <router-link v-if="(isBusinessUser || isSuperAdmin) && isAuthenticated" to="/business-feature" id="business">Create a post</router-link> 
+                <router-link
+                  v-if="(isBusinessUser || isSuperAdmin) && isAuthenticated"
+                  to="/business-feature"
+                  id="business"
+                  >Create a post</router-link
+                >
               </li>
             </ul>
           </div>
@@ -85,28 +87,34 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 import { Service, Posts, Auth } from "@/Services";
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { useRouter } from "vue-router";
 export default {
   computed: {
-      ...mapGetters(['isAuthenticated', 'isBusinessUser', 'currentUserId', 'isSuperAdmin', 'userType']),
-    },
-  setup(){
+    ...mapGetters([
+      "isAuthenticated",
+      "isBusinessUser",
+      "currentUserId",
+      "isSuperAdmin",
+      "userType",
+    ]),
+  },
+  setup() {
     const router = useRouter();
     const isScrolled = ref(false);
     const posts = ref([]);
 
     // Hook to handle scrolling
     const handleScroll = (event) => {
-      isScrolled.value =event.deltaY > 0;
-    }
+      isScrolled.value = event.deltaY > 0;
+    };
 
     // Fetch posts when component is mounted
     const getPosts = async () => {
       posts.value = await Posts.posts();
-    }
+    };
 
     // Logout function
     const logout = () => {
@@ -116,18 +124,18 @@ export default {
 
     // Mount and unmount lifecycle hooks
     onMounted(() => {
-      window.addEventListener('wheel', handleScroll);
+      window.addEventListener("wheel", handleScroll);
       getPosts();
     });
 
     onUnmounted(() => {
-      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener("wheel", handleScroll);
     });
 
     return {
       isScrolled,
       logout,
-      posts
+      posts,
     };
   },
 };
@@ -247,15 +255,6 @@ nav {
   bottom: -11px;
 }
 
-.dark {
-  transition: 0.5s;
-  background-size: 400% 400%;
-  height: 100vh;
-  background-image: url(../src/assets/PanoramicPurple.jpeg);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .bi-moon {
   right: 5px;
   bottom: -11px;
@@ -273,8 +272,8 @@ nav {
   background-size: 400% 400%;
   height: 100vh;
   background-image: url(../src/assets/PanoramicPurple.jpeg);
-  background-size: cover;
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .dark > * {
@@ -317,7 +316,6 @@ nav {
 .dark span {
   color: #d890f5;
 }
-
 /* END DARK MODE */
 
 @media (max-width: 768px) {

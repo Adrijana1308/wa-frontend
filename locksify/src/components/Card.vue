@@ -3,13 +3,22 @@
     <div class="card-rating">
       <p class="card-text">
         <span class="card-rat">
-          {{ post.rating }}
+          <!-- Display rating with one decimal place, fallback to 0.0 if rating is not available -->
+          {{ post.rating ? post.rating.toFixed(1) : "0.0" }}
+
+          <!-- Loop through a total of 5 stars, determining if they should be full, half, or empty -->
           <i
-            v-for="index in parseInt(post.rating)"
+            v-for="index in 5"
             :key="index"
-            class="bi bi-star-fill"
+            :class="{
+              'bi bi-star-fill': index <= Math.floor(post.rating || 0), // Full stars
+              'bi bi-star-half':
+                index === Math.ceil(post.rating) && post.rating % 1 !== 0, // Half star
+              'bi bi-star': index > Math.ceil(post.rating || 0), // Empty stars
+            }"
           ></i>
         </span>
+
         <span class="card-num-rew"> ({{ post.numOfRatings }})</span>
         <span class="dot"> • </span>
         <span class="card-city">{{ post.location }}</span>
@@ -24,12 +33,10 @@
       <p class="c-text">
         The place where beauty meets professionalism! Our salon is dedicated to
         providing top-notch hairdressing services, creating unique and modernly
-        styled hairstyles that enhance your natural beauty. Our team of skilled
-        hairdressers is dedicated not only to your appearance but also to your
-        sense of confidence. Whether you seek a refreshing trendy cut, a
-        sophisticated color, or simply the perfect hairstyle that reflects your
-        personality, {{ post.name }} is here to make your hairdressing dreams
-        come true.
+        styled hairstyles that enhance your natural beauty. Whether you seek a
+        refreshing trendy cut, a sophisticated color, or simply the perfect
+        hairstyle that reflects your personality, {{ post.name }} is here to
+        make your hairdressing dreams come true.
       </p>
       <h3 class="hours-title">Work hours:</h3>
       <p class="hours">{{ post.open }} - {{ post.close }}</p>
@@ -107,6 +114,27 @@
           </div>
         </template>
       </DatePicker>
+      <!-- Rating Section -->
+      <div class="rating-section" v-if="!hasRated">
+        <h3 class="rate-title">Rate this Post</h3>
+        <div class="select-rating">
+          <label for="rating">Select a Rating:</label>
+          <select class="selector" v-model="selectedRating">
+            <option :value="1">1 - Poor</option>
+            <option :value="2">2 - Fair</option>
+            <option :value="3">3 - Good</option>
+            <option :value="4">4 - Very Good</option>
+            <option :value="5">5 - Excellent</option>
+          </select>
+          <button @click="submitRating(post._id)" class="rate-button">
+            Submit Rating
+          </button>
+        </div>
+      </div>
+
+      <div v-else>
+        <h3>Thank you for rating this post!</h3>
+      </div>
     </div>
 
     <div class="appointment">
@@ -172,6 +200,11 @@
             </div>
           </div>
         </div>
+        <div v-if="isOwner || isSuperAdmin" class="delete-post-container">
+          <button @click="deletePost(post._id)" class="delete-post-button">
+            Delete Post
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -187,7 +220,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import { Posts } from "../Services/index.js";
 import axios from "axios";
@@ -197,6 +230,7 @@ import { _ } from "core-js";
 
 const store = useStore();
 const route = useRoute();
+const router = useRouter();
 
 const post = ref(null);
 const selectedCategory = ref("short");
@@ -208,6 +242,38 @@ const selectedBooking = ref(null);
 
 const postId = computed(() => route.params._id);
 const currentUserId = computed(() => store.getters.currentUserId);
+const isSuperAdmin = computed(() => store.getters.isSuperAdmin);
+const isOwner = computed(
+  () => post.value && post.value.userId === currentUserId.value
+);
+
+const selectedRating = ref(0);
+const hasRated = ref(false);
+
+const submitRating = async (postId) => {
+  try {
+    const response = await axios.post(
+      `http://localhost:3000/posts/${postId}/rate`,
+      { rating: selectedRating.value },
+      {
+        headers: {
+          Authorization: `Bearer ${store.getters.getuser?.token}`,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      alert("Rating submitted successfully!");
+      hasRated.value = true; // Prevent multiple ratings from the same user
+      fetchPostDetails(); // Refresh post data after rating
+    } else {
+      alert("Failed to submit rating.");
+    }
+  } catch (error) {
+    console.error("Error submitting rating:", error);
+    alert("An error occurred while submitting the rating.");
+  }
+};
 
 const sortedBookings = computed(() => {
   return bookings.value.sort((a, b) => {
@@ -221,10 +287,31 @@ const formatBooking = (booking) => {
   return `${booking.date} | ${booking.startTime} - ${booking.endTime} | ${booking.service}`;
 };
 
-// const toggleDetails = (index) => {
-//     // If already selected, close it by setting selectedIndex to null
-//     openIndex.value = openIndex.value === index ? null : index;
-// };
+const deletePost = async (postId) => {
+  const confirmation = confirm("Are you sure you want to delete this post?");
+  if (!confirmation) return;
+
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/posts/${postId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${store.getters.getuser?.token}`,
+        },
+      }
+    );
+
+    if (response.data.success) {
+      alert("Post deleted successfully.");
+      router.push("/"); // Redirect to home or another page after deletion
+    } else {
+      alert("Failed to delete the post.");
+    }
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    alert("An error occurred while deleting the post.");
+  }
+};
 
 const canCancel = (booking) => {
   return (
@@ -260,10 +347,6 @@ onMounted(() => {
   fetchPostDetails();
   fetchBookings();
 });
-
-const isOwner = computed(
-  () => post.value && post.value.userId === currentUserId
-);
 
 const selectCategory = (category) => {
   selectedCategory.value = category;
@@ -512,12 +595,33 @@ const cancelBooking = async (bookingId) => {
   max-width: 80%;
 }
 
+.delete-post-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.delete-post-button {
+  padding: 12px 20px;
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete-post-button:hover {
+  background-color: darkred;
+}
+
 .booking-dropdown {
   margin-top: 20px;
+  margin-bottom: 20px;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f4f4f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
   width: 100%;
   max-width: 600px;
   margin-left: auto;
@@ -537,7 +641,7 @@ const cancelBooking = async (bookingId) => {
   width: 100%;
   padding: 12px;
   font-size: 16px;
-  border-radius: 6px;
+  border-radius: 0.5rem;
   border: 1px solid #ccc;
   background-color: #fff;
   color: #333;
@@ -554,12 +658,16 @@ const cancelBooking = async (bookingId) => {
   font-size: 16px;
 }
 
+.booking-dropdown > label {
+  font-size: 25px;
+}
+
 /* Selected Booking Details */
 .selected-booking {
   margin-top: 15px;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
   background-color: #ffffff;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow for separation */
 }
@@ -620,11 +728,11 @@ const cancelBooking = async (bookingId) => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid lightgray;
-  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
 }
 .c-title {
-  font-size: 60px;
+  font-size: 50px;
   font-family: "Playfair Display", serif;
 }
 .c-text {
@@ -632,12 +740,13 @@ const cancelBooking = async (bookingId) => {
   padding: 10px;
 }
 .hours-title {
-  margin-top: 15px;
+  margin-top: 10px;
   margin-bottom: 15px;
+  font-size: 20px;
 }
 .hours {
   font-weight: bolder;
-  font-size: 25px;
+  font-size: 20px;
   padding: 10px;
   width: 50%;
   margin: 5px auto;
@@ -677,6 +786,44 @@ const cancelBooking = async (bookingId) => {
   align-items: start;
   margin-top: 30px;
   margin-bottom: 30px;
+}
+
+.rate-title {
+  font-size: 25px;
+  font-weight: bolder;
+}
+
+.selector {
+  margin-top: 5%;
+  padding: 10px;
+  border: 1 px solid #cbd5e1;
+  border-radius: 0.5rem;
+}
+
+.rate-button {
+  background: #000;
+  border: 1px solid #000;
+  border-radius: 10px;
+  margin-top: 5%;
+  padding: 10px 5px;
+  width: 100%;
+  height: 50%;
+  font-family: "Poppins", sans-serif;
+  font-size: 19px;
+  color: #fff;
+}
+
+.select-rating {
+  display: flex;
+  flex-direction: column;
+}
+
+.rating-section {
+  margin: 5% 0%;
+  padding: 8% 5%;
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
 }
 
 .dark .hairstyles {
@@ -731,12 +878,12 @@ const cancelBooking = async (bookingId) => {
 }
 
 .hair-title {
-  font-size: 40px;
+  font-size: 30px;
   font-weight: bolder;
 }
 
 .card-services {
-  border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid #cbd5e1;
   margin-top: 10px;
   width: 100%;
   display: flex;
@@ -769,7 +916,7 @@ const cancelBooking = async (bookingId) => {
 .select-button,
 .remove-button {
   background-color: transparent;
-  border: 2px solid lightgray;
+  border: 2px solid #cbd5e1;
   border-radius: 50px;
   max-height: 50px;
   padding: 10px 25px;
@@ -784,6 +931,7 @@ const cancelBooking = async (bookingId) => {
 .calendar {
   grid-column: 1;
   grid-row: 8 / 12;
+  width: 100%;
 }
 
 .c-container {
@@ -807,8 +955,8 @@ const cancelBooking = async (bookingId) => {
   width: 80%;
   margin: auto;
   padding-top: 10px;
-  border-left: 3px solid #d890f5;
   border-right: 3px solid #d890f5;
+  border-left: 3px solid #d890f5;
 }
 
 .appointmein-details {
@@ -839,7 +987,7 @@ const cancelBooking = async (bookingId) => {
   flex-direction: row;
   margin-bottom: 15px;
   padding-bottom: 15px;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid #cbd5e1;
 }
 
 .type-selected p {
@@ -901,7 +1049,7 @@ const cancelBooking = async (bookingId) => {
 }
 .cancel-button {
   background: lightgray;
-  border: 1px solid lightgray;
+  border: 1px solid #cbd5e1;
   border-radius: 10px;
   margin-top: 5%;
   margin-left: 20px;
@@ -921,6 +1069,16 @@ const cancelBooking = async (bookingId) => {
   background: #000000ad;
   color: #fff;
   border-color: #000;
+}
+
+.dark .booking-dropdown > label {
+  color: #fff;
+}
+
+.dark #bookingDropdown {
+  background: #000000ad;
+  color: #fff;
+  border-color: #fff;
 }
 
 /* END DARK MODE */
