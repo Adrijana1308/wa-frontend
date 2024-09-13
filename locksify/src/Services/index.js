@@ -10,14 +10,16 @@ let Service = axios.create({
 
 Service.interceptors.request.use(
   (config) => {
-  const token = store.getters.getuser?.token;
-  if(token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
+    const token = store.getters.getuser?.token;
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
+);
 
 //objekt koji sadrzi metode za backend i pozive posta
 
@@ -41,7 +43,7 @@ let Posts = {
     }
   },
   async posts() {
-    try{
+    try {
       let response = await Service.get("/posts");
       let data = response.data;
 
@@ -68,7 +70,7 @@ let Posts = {
         };
       });
       return data;
-    } catch(error) {
+    } catch (error) {
       console.log("Greška u dohvaćanju kartica", error);
       throw error;
     }
@@ -109,20 +111,20 @@ let Posts = {
       throw error;
     }
   },
-  async getPostById(postId){
-    try{
+  async getPostById(postId) {
+    try {
       const response = await Service.get(`/posts/${postId}`);
       return response.data;
-    } catch (error){
+    } catch (error) {
       console.error("Error fetching post by ID: ", error);
       throw error;
     }
   },
-  async updatePost(postId, updatedData){
-    try{
+  async updatePost(postId, updatedData) {
+    try {
       const response = await Service.put(`/posts/${postId}`, updatedData);
       return response.data;
-    } catch(error) {
+    } catch (error) {
       console.error("Error fetching post by ID: ", error);
       throw error;
     }
@@ -138,7 +140,7 @@ let Auth = {
       });
 
       let user = response.data;
-      store.commit('setUser', user); // Use Vuex mutation to set user
+      store.commit("setUser", user); // Use Vuex mutation to set user
       return true;
     } catch (error) {
       console.error("Login error:", error);
@@ -147,22 +149,25 @@ let Auth = {
   },
 
   logout() {
-    store.commit('clearUser'); // Use Vuex mutation to clear user
+    store.commit("clearUser"); // Use Vuex mutation to clear user
   },
 
   getUser() {
     const user = store.getters.getuser; // Get user from Vuex store
-    console.log('Retrieved user from Vuex: OVO SAM U INDEX.JS SERVIS... ', user);
+    console.log(
+      "Retrieved user from Vuex: OVO SAM U INDEX.JS SERVIS... ",
+      user
+    );
     return user;
   },
 
   authenticated() {
     let user = this.getUser();
     if (user && user.token) {
-      store.commit('setUser', user);
+      store.commit("setUser", user);
       return true;
     }
-    store.commit('clearUser');
+    store.commit("clearUser");
     return false;
   },
 
