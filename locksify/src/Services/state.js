@@ -104,7 +104,7 @@ const store = createStore({
         }
         return false;
       } catch (error) {
-        console.error("Signup error:", error);
+        //console.error("Signup error:", error);
         return false;
       }
     },
