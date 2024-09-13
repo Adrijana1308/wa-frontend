@@ -35,7 +35,7 @@
             type="text"
             class="search-box"
             v-model="searchParams.date"
-            placeholder="Any date - fix!"
+            placeholder="Any date"
           />
         </form>
       </div>
@@ -46,7 +46,7 @@
             type="text"
             class="search-box"
             v-model="searchParams.time"
-            placeholder="Any time - fix!"
+            placeholder="Any time"
           />
         </form>
       </div>
