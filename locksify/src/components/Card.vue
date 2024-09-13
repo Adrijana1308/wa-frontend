@@ -253,7 +253,7 @@ const hasRated = ref(false);
 const submitRating = async (postId) => {
   try {
     const response = await axios.post(
-      `https://wa-backend-c3kr.onrender.com/posts/${postId}/rate`,
+      `http://localhost:3000/posts/${postId}/rate`,
       { rating: selectedRating.value },
       {
         headers: {
@@ -293,7 +293,7 @@ const deletePost = async (postId) => {
 
   try {
     const response = await axios.delete(
-      `https://wa-backend-c3kr.onrender.com/posts/${postId}`,
+      `http://localhost:3000/posts/${postId}`,
       {
         headers: {
           Authorization: `Bearer ${store.getters.getuser?.token}`,
@@ -324,7 +324,7 @@ const canCancel = (booking) => {
 const fetchPostDetails = async () => {
   try {
     const response = await axios.get(
-      `https://wa-backend-c3kr.onrender.com/posts/${postId.value}`
+      `http://localhost:3000/posts/${postId.value}`
     );
     post.value = response.data;
   } catch (error) {
@@ -334,12 +334,9 @@ const fetchPostDetails = async () => {
 
 const fetchBookings = async () => {
   try {
-    const response = await axios.get(
-      "https://wa-backend-c3kr.onrender.com/bookings",
-      {
-        // params: {salonId: post.value._id}
-      }
-    );
+    const response = await axios.get("http://localhost:3000/bookings", {
+      // params: {salonId: post.value._id}
+    });
     bookings.value = Array.isArray(response.data) ? response.data : [];
   } catch (error) {
     console.error("Error fetching bookings:", error);
@@ -420,9 +417,7 @@ const handleDateClick = async (date) => {
 
 const fetchDescription = async (date) => {
   try {
-    const response = await axios.get(
-      `https://wa-backend-c3kr.onrender.com/bookings/${date}`
-    );
+    const response = await axios.get(`http://localhost:3000/bookings/${date}`);
     console.log("Fetched data for selected date:", response.data);
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -494,7 +489,7 @@ const confirmBooking = async () => {
     console.log("Booking data: ", bookingData);
 
     const response = await axios.post(
-      "https://wa-backend-c3kr.onrender.com/bookings",
+      "http://localhost:3000/bookings",
       bookingData
     );
 
@@ -523,7 +518,7 @@ const cancelBooking = async (bookingId) => {
 
   try {
     const response = await axios.delete(
-      `https://wa-backend-c3kr.onrender.com/bookings/${bookingId}`,
+      `http://localhost:3000/bookings/${bookingId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

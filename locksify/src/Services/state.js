@@ -51,7 +51,7 @@ const store = createStore({
       try {
         const token = getters.getuser?.token;
         const response = await axios.post(
-          "https://wa-backend-c3kr.onrender.com/posts",
+          "http://localhost:3000/posts",
           postData,
           {
             headers: {
@@ -67,9 +67,7 @@ const store = createStore({
     },
     async fetcPosts({ commit }) {
       try {
-        const response = await axios.get(
-          "https://wa-backend-c3kr.onrender.com/posts"
-        );
+        const response = await axios.get("http://localhost:3000/posts");
         commit("SET_POST", response.data);
       } catch (error) {
         console.error("Error fetching posts: STATE.JS", error);
@@ -91,7 +89,7 @@ const store = createStore({
     async signup({ commit }, userData) {
       try {
         const response = await axios.post(
-          "https://wa-backend-c3kr.onrender.com/register",
+          "http://localhost:3000/register",
           userData
         );
         if (response.data && response.data.id) {
