@@ -94,6 +94,7 @@ export default {
       return this.filteredPosts.length;
     },
     //...mapGetters(['posts']),
+
   },
   mounted() {
     this.fetchData();
@@ -141,9 +142,7 @@ export default {
     },
     fetchData() {
       axios
-        .get("https://wa-backend-c3kr.onrender.com/posts", {
-          params: this.searchParams,
-        })
+        .get("http://localhost:3000/posts", { params: this.searchParams })
         .then((response) => {
           let filteredPosts = response.data;
 
