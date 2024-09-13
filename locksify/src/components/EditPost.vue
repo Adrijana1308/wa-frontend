@@ -76,7 +76,7 @@ export default {
         const response = await Posts.updatePost(props.postId, editedPost.value);
         console.log('Post updated successfully:', response.data);
         emit('postUpdated', response); // Emit event after successful update
-        router.push({name: 'home'});
+        router.push('/');
       } catch (error) {
         console.error('Error submitting post:', error);
       }
