@@ -4,7 +4,7 @@ import { update } from "lodash";
 
 //instanciranje axiosa za potrebe backenda
 let Service = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "https://wa-backend-c3kr.onrender.com/",
   timeout: 60000,
 });
 
