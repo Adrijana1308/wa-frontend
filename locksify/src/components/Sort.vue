@@ -446,6 +446,7 @@ export default {
 .dark .reset-btn:hover {
   background: rgb(235, 176, 78);
 }
+
 /* END DARK MODE */
 
 @media screen and (max-width: 768px) {
