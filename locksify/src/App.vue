@@ -271,9 +271,13 @@ nav {
   transition: 0.5s;
   background-size: 400% 400%;
   height: 100vh;
-  background-image: url(../src/assets/PanoramicPurple.jpeg);
+  background-image: url(../src/assets/panoramic-purple.jpg);
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+.dark .navbar.scrolled {
+  background-color: #000000ad;
 }
 
 .dark > * {
@@ -294,13 +298,13 @@ nav {
 }
 
 .dark .nav-item a {
-  color: #2c3e50;
+  color: #faf9f6;
 
   .dark .nav-item a {
     color: #2c3e50;
 
     &.router-link-exact-active {
-      color: #cd61f7;
+      color: #a73cd1;
     }
   }
 
@@ -316,6 +320,19 @@ nav {
 .dark span {
   color: #d890f5;
 }
+
+.dark .ball {
+  background: #fff;
+}
+
+.dark .bi-sun {
+  color: #fff;
+}
+
+.dark .toggler {
+  border: 1px solid #fff;
+}
+
 /* END DARK MODE */
 
 @media (max-width: 768px) {

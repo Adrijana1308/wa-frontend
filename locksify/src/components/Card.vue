@@ -3,22 +3,18 @@
     <div class="card-rating">
       <p class="card-text">
         <span class="card-rat">
-          <!-- Display rating with one decimal place, fallback to 0.0 if rating is not available -->
           {{ post.rating ? post.rating.toFixed(1) : "0.0" }}
-
-          <!-- Loop through a total of 5 stars, determining if they should be full, half, or empty -->
           <i
             v-for="index in 5"
             :key="index"
             :class="{
-              'bi bi-star-fill': index <= Math.floor(post.rating || 0), // Full stars
+              'bi bi-star-fill': index <= Math.floor(post.rating || 0),
               'bi bi-star-half':
-                index === Math.ceil(post.rating) && post.rating % 1 !== 0, // Half star
-              'bi bi-star': index > Math.ceil(post.rating || 0), // Empty stars
+                index === Math.ceil(post.rating) && post.rating % 1 !== 0,
+              'bi bi-star': index > Math.ceil(post.rating || 0),
             }"
           ></i>
         </span>
-
         <span class="card-num-rew"> ({{ post.numOfRatings }})</span>
         <span class="dot"> • </span>
         <span class="card-city">{{ post.location }}</span>
@@ -106,15 +102,18 @@
               <li
                 v-for="{ key, customData } in attributes"
                 :key="key"
-                class="block text-xs text-gray-700 dark:text-gray-300 bg-red-100"
+                class="block text-xs text-gray-700 dark:text-gray-300"
               >
-                {{ customData.description }}
+                {{ customData.service }} - {{ customData.customerName }} ({{
+                  customData.startTime
+                }}
+                - {{ customData.endTime }})
               </li>
             </ul>
           </div>
         </template>
       </DatePicker>
-      <!-- Rating Section -->
+
       <div class="rating-section" v-if="!hasRated">
         <h3 class="rate-title">Rate this Post</h3>
         <div class="select-rating">
@@ -208,7 +207,6 @@
       </div>
     </div>
   </div>
-
   <div v-else>
     <div class="d-flex justify-content-center">
       <div class="spinner-border" role="status">
@@ -264,8 +262,8 @@ const submitRating = async (postId) => {
 
     if (response.data.success) {
       alert("Rating submitted successfully!");
-      hasRated.value = true; // Prevent multiple ratings from the same user
-      fetchPostDetails(); // Refresh post data after rating
+      hasRated.value = true;
+      fetchPostDetails();
     } else {
       alert("Failed to submit rating.");
     }
@@ -284,7 +282,9 @@ const sortedBookings = computed(() => {
 });
 
 const formatBooking = (booking) => {
-  return `${booking.date} | ${booking.startTime} - ${booking.endTime} | ${booking.service}`;
+  return `${formatDate(booking.date)} | ${booking.startTime} - ${
+    booking.endTime
+  } | ${booking.service}`;
 };
 
 const deletePost = async (postId) => {
@@ -303,7 +303,7 @@ const deletePost = async (postId) => {
 
     if (response.data.success) {
       alert("Post deleted successfully.");
-      router.push("/"); // Redirect to home or another page after deletion
+      router.push("/");
     } else {
       alert("Failed to delete the post.");
     }
@@ -332,20 +332,33 @@ const fetchPostDetails = async () => {
   }
 };
 
+function parseDateString(dateString) {
+  const [day, month, year] = dateString
+    .split(".")
+    .map((part) => parseInt(part, 10));
+  return new Date(year, month - 1, day);
+}
+
 const fetchBookings = async () => {
   try {
     const response = await axios.get("http://localhost:3000/bookings", {
-      // params: {salonId: post.value._id}
+      params: { salonId: post.value._id },
     });
-    bookings.value = Array.isArray(response.data) ? response.data : [];
+    bookings.value = response.data.map((booking) => {
+      booking.date = parseDateString(booking.date);
+      return booking;
+    });
+    console.log("Bookings fetched:", bookings.value);
   } catch (error) {
     console.error("Error fetching bookings:", error);
   }
 };
 
-onMounted(() => {
-  fetchPostDetails();
-  fetchBookings();
+onMounted(async () => {
+  await fetchPostDetails();
+  if (post.value && post.value._id) {
+    fetchBookings();
+  }
 });
 
 const selectCategory = (category) => {
@@ -393,16 +406,15 @@ const customDateFormatter = (date) => {
 };
 
 const attributes = computed(() => {
-  // Ensure no phantom bookings are rendered by checking the correct salon ID and date format
   return bookings.value
     .filter((booking) => booking.salonId === post.value._id)
     .map((booking) => ({
       key: booking._id,
-      dates: new Date(booking.date),
+      dates: [new Date(booking.date)], // Postavi ispravan datum
       customData: booking,
       highlight: { color: "blue" },
       popover: {
-        label: `Booking: ${booking.service} - ${
+        label: `Service: ${booking.service} - Customer: ${
           booking.customerName || "Unknown"
         }`,
       },
@@ -434,7 +446,7 @@ const totalPrice = computed(() => {
 const calculateEndTime = (startTime, duration) => {
   const startDate = new Date(Date.parse(startTime));
   if (isNaN(startDate)) {
-    return "Invalid Date"; // Return a fallback if the start time is invalid
+    return "Invalid Date";
   }
   const endDate = new Date(startDate);
   endDate.setMinutes(startDate.getMinutes() + duration);
@@ -450,7 +462,6 @@ const formatDate = (date) => {
   const day = String(d.getDate()).padStart(2, "0");
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const year = d.getFullYear();
-
   return `${day}.${month}.${year}.`;
 };
 
@@ -460,14 +471,12 @@ const confirmBooking = async () => {
       .map((h) => h.type)
       .join(", ");
 
-    // Start time format
     const startTime = date.value.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
     });
 
-    // Date format DD/MM/YY
     const formattedDate = formatDate(date.value);
 
     const duration = selectedHairstyles.value.reduce(
@@ -507,7 +516,7 @@ const confirmBooking = async () => {
 
 const cancelBooking = async (bookingId) => {
   console.log("Booking ID to cancel:", bookingId);
-  const token = store.getters.token; // Log the booking ID
+  const token = store.getters.token;
   if (!bookingId) {
     alert("Booking ID is not available.");
     return;
@@ -529,7 +538,6 @@ const cancelBooking = async (bookingId) => {
     if (response.data.success) {
       alert("Booking canceled successfully.");
       selectedBooking.value = null;
-      // Optionally refresh bookings after canceling
       await fetchBookings();
     } else {
       alert("Failed to cancel booking.");

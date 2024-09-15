@@ -94,7 +94,6 @@ export default {
       return this.filteredPosts.length;
     },
     //...mapGetters(['posts']),
-
   },
   mounted() {
     this.fetchData();
