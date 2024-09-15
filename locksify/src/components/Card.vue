@@ -183,7 +183,8 @@
             <div v-if="selectedBooking" class="selected-booking">
               <h3>Selected Booking Details:</h3>
               <p>Service: {{ selectedBooking.service }}</p>
-              <p>Date: {{ selectedBooking.date }}</p>
+              <!-- Formatirani datum prikazan u obliku 11.02.2024. -->
+              <p>Date: {{ formatDate(selectedBooking.date) }}</p>
               <p>
                 Time: {{ selectedBooking.startTime }} -
                 {{ selectedBooking.endTime }}
