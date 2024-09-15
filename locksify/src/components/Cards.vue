@@ -17,9 +17,9 @@
 
             <p class="card-text">
               <span class="card-rew">
-                {{ post.rating }}
+                {{ post.rating ? post.rating.toFixed(1): "0:0" }}
                 <i
-                  v-for="index in parseInt(post.rating)"
+                  v-for="index in Math.floor(post.rating)"
                   :key="index"
                   class="bi bi-star-fill"
                 ></i>
