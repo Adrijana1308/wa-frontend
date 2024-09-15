@@ -102,6 +102,7 @@
 import { ref, onMounted } from "vue";
 import { mapActions } from "vuex"; // Import mapActions to handle Vuex actions
 import { Posts } from "../Services/index.js";
+import { useRouter } from "vue-router";
 
 export default {
   name: "EditPost",
@@ -127,6 +128,7 @@ export default {
     });
 
     const hairTypes = ["short", "medium", "long", "other"];
+    const router = useRouter();
 
     const fetchPostDetails = async () => {
       try {
@@ -208,28 +210,6 @@ button:hover {
   color: rgba(0, 0, 0, 1);
   transform: scale(1.1);
   transition: 0.1s ease-in-out;
-}
-
-.hairstyles {
-  margin-top: 20px;
-}
-
-.hairstyles h4 {
-  margin-bottom: 5px;
-}
-
-.hairstyles div {
-  display: flex;
-  flex-direction: column;
-}
-
-.hairstyles div input {
-  margin-bottom: 5px;
-}
-
-.hairstyles button {
-  align-self: flex-start;
-  margin-top: 10px;
 }
 
 .EditPostLabel {
