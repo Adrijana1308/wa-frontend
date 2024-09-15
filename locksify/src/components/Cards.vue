@@ -17,9 +17,9 @@
 
             <p class="card-text">
               <span class="card-rew">
-                {{ post.rating }}
+                {{ post.rating ? post.rating.toFixed(1): "0:0" }}
                 <i
-                  v-for="index in parseInt(post.rating)"
+                  v-for="index in Math.floor(post.rating)"
                   :key="index"
                   class="bi bi-star-fill"
                 ></i>
@@ -210,22 +210,18 @@ export default {
 }
 
 .pagination .page-item.active .page-link {
-  background-color: #e9aaf1dc; /* Change background color */
-  border-color: #e9aaf1dc; /* Change border color */
-  color: white; /* Change text color */
+  background-color: #e9aaf1dc;
+  border-color: #e9aaf1dc;
+  color: white;
 }
 
 .pagination .page-item .page-link {
-  color: #2c3e50; /* Default page link color */
-}
-
-.pagination .page-item .page-link:hover {
-  background-color: #f0f0f0; /* Hover effect */
+  color: #2c3e50;
 }
 
 /* START DARK MODE */
 .dark .card {
-  background: #000;
+  background: #000000ad;
 }
 
 .dark .card-title {
@@ -237,6 +233,23 @@ export default {
 
 .dark .card-body {
   background: transparent;
+}
+
+.dark .page-link {
+  background: #000000ad;
+  border-color: #000;
+}
+
+.dark .pagination .page-item .page-link[data-v-3d932c3a] {
+  color: #fff;
+}
+
+.dark .page-link:focus {
+  color: #e9aaf1dc;
+}
+
+.dark .card-btn {
+  background: #000;
 }
 
 /* END DARK MODE */

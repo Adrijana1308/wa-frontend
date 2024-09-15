@@ -2,31 +2,49 @@
   <div class="edit-post">
     <h1>Edit Post</h1>
     <form @submit.prevent="submitPost">
+      <label for="editedPostName" class="EditPostLabel">Salon Name</label>
       <input
+        id="editedPostName"
         v-model="editedPost.name"
         type="text"
         placeholder="Salon Name"
         required
       />
+
+      <label for="editedPostLocation" class="EditPostLabel">Location</label>
       <input
+        id="editedPostLocation"
         v-model="editedPost.location"
         type="text"
         placeholder="Location"
         required
       />
+
+      <label for="editedPostOpen" class="EditPostLabel">Open Time</label>
       <input
+        id="editedPostOpen"
         v-model="editedPost.open"
         type="time"
         placeholder="Open Time"
         required
       />
+
+      <label for="editedPostClose" class="EditPostLabel">Close Time</label>
       <input
+        id="editedPostClose"
         v-model="editedPost.close"
         type="time"
         placeholder="Close Time"
         required
       />
-      <input v-model="editedPost.source" type="text" placeholder="Image URL" />
+
+      <label for="editedPostSource" class="EditPostLabel">Image URL</label>
+      <input
+        id="editedPostSource"
+        v-model="editedPost.source"
+        type="text"
+        placeholder="Image URL"
+      />
 
       <div class="hairstyles">
         <h3>Hairstyles</h3>
@@ -36,19 +54,33 @@
             v-for="(hairstyle, idx) in editedPost.hairstyles[type]"
             :key="idx"
           >
+            <label :for="'hairstyleType' + idx" class="EditPostLabel"
+              >Type</label
+            >
             <input
+              :id="'hairstyleType' + idx"
               v-model="hairstyle.type"
               type="text"
               placeholder="Type"
               required
             />
+
+            <label :for="'hairstylePrice' + idx" class="EditPostLabel"
+              >Price</label
+            >
             <input
+              :id="'hairstylePrice' + idx"
               v-model.number="hairstyle.price"
               type="number"
               placeholder="Price"
               required
             />
+
+            <label :for="'hairstyleDuration' + idx" class="EditPostLabel"
+              >Duration (minutes)</label
+            >
             <input
+              :id="'hairstyleDuration' + idx"
               v-model.number="hairstyle.duration"
               type="number"
               placeholder="Duration (minutes)"
@@ -118,7 +150,7 @@ export default {
         const response = await Posts.updatePost(props.postId, editedPost.value);
         console.log("Post updated successfully:", response.data);
         emit("postUpdated", response); // Emit event after successful update
-        router.push("/");
+        router.push({ name: "home" });
       } catch (error) {
         console.error("Error submitting post:", error);
       }
@@ -198,5 +230,32 @@ button:hover {
 .hairstyles button {
   align-self: flex-start;
   margin-top: 10px;
+}
+
+.EditPostLabel {
+  text-align: left;
+  margin-top: 10px;
+}
+
+.dark .edit-post {
+  background: #000000ad;
+  color: #fff;
+  border-color: #000;
+}
+
+.dark .edit-post #editedPostName,
+.dark .edit-post #editedPostLocation,
+.dark .edit-post #editedPostOpen,
+.dark .edit-post #editedPostClose,
+.dark .edit-post #editedPostSource,
+.dark .edit-post #hairstyleType0,
+.dark .edit-post #hairstylePrice0,
+.dark .edit-post #hairstyleDuration0 {
+  background-color: #000000ad;
+  color: #fff;
+}
+
+.dark button {
+  color: #fff;
 }
 </style>
